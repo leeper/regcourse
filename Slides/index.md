@@ -8,8 +8,8 @@ ghurl: https://github.com/leeper/regcourse/tree/gh-pages
 
 Here are drafts of slides. They are not final until after each respective week
 
-|  Intro  |  Lab  |  Review  |
-| :-----: | :---: | :------: |
+|   Intro   |   Lab   |   Review   |
+| :-------: | :-----: | :--------: |
 | [Session 2-1](Session02_01.html) | [Session 2-2](Session02_02.html) | [Session 2-3](Session02_03.html) |
 | [Session 3-1](Session03_01.html) | [Session 3-2](Session03_02.html) | [Session 3-3](Session03_03.html) |
 | [Session 6-1](Session06_01.html) | [Session 6-2](Session06_02.html) | [Session 6-3](Session06_03.html) |
