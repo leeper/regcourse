@@ -305,6 +305,7 @@ Ecological correlation basically mis-weights the individual-level correlations w
  
 .footnote[
 * Wooldridge eq. 2.19 (p.25)<br/>
+
 ** See session 3a w/Rune and C&T 3.3.2 (pp.82-83).
 ]
 
@@ -520,6 +521,7 @@ There also may not actually be an infinite number of cases
 
 .footnote[
 * Wooldridge Fig. 2.8-2.9, pp.50--51<br/>
+
 ** C&T 3.3.4, p.84; Cover this in Session 4
 ]
 
@@ -537,17 +539,19 @@ template: questions
 
   - `\(y|x \sim N(\beta_0 + \beta_1x1 + ..., \sigma^2)\)`
 
-  - This allows us to assume the shape of the sampling distribution of our estimated slope
-    - Which is that `\(\hat{\beta_1} \sim N(\beta_1, var(\hat{\beta_1}))\)`
-    - We don't know `\(var(\beta_1)\)`, so we estimate it by assuming it's `\(var(\hat{\beta_1})\)`
-    - We can then further assume a t-shaped sampling distribution for the mean of that distribution
 
 ???
 
 We assume in the population, `\(y\)` is Normally distributed with a mean that is a function of our regressor(s) and some *constant* variance `\(\sigma^2\)`
 
+- This allows us to assume the shape of the sampling distribution of our estimated slope
+  - Which is that `\(\hat{\beta_1} \sim N(\beta_1, var(\hat{\beta_1}))\)`
+  - We don't know `\(var(\beta_1)\)`, so we estimate it by assuming it's `\(var(\hat{\beta_1})\)`
+  - We can then further assume a t-shaped sampling distribution for the mean of that distribution
+
+
 ---
-## t-tests and p-values
+## *t*-tests and p-values
 
 - What do we do with all these assumptions? Why do we need them?
 
@@ -567,7 +571,7 @@ We assume in the population, `\(y\)` is Normally distributed with a mean that is
   - To conduct the test, we calculate a *t*-statistic (due to assuming a t-distribution) that is the ratio of estimate over SE:
     - `\(t_{\hat{\beta_1}} = \frac{\hat{\beta_1}}{SE_{\hat{\beta_1}}}\)`
 
-  - We then go back to the *t*-distribution function (which is a function that tells us how likely a given `\(t\)`-ratio is)
+  - We then go back to the *t*-distribution function (which is a function that tells us how likely a given *t*-ratio is)
     - Actually we look at the cumulative distribution function (CDF)
 
 ???
@@ -596,7 +600,7 @@ t is actually a family of distributions, but with large *n*, t-distribution is b
 ## P-values
 
  - A small p-value represents:
- > the probability of a t-statistic as extreme as the one we observed, if the null hypothesis was true
+ > the probability of a *t*-statistic as extreme as the one we observed, if the null hypothesis was true
  
  - In the regression context:
  > the probability of a slope as large as the one we observed, given the observed variance in the data and that the null hypothesis was true
@@ -649,14 +653,16 @@ template: questions
 
 
 ---
-## Goodness of fit
+## Regression goodness of fit
 
  - Rarely are we only interested in coefficients
  
  - We also want to know if we have a good model
 
 ---
-## Goodness of fit
+## Regression goodness of fit
+
+Four measures:
 
  - Correlation
 
