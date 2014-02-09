@@ -300,22 +300,24 @@ Ecological correlation basically mis-weights the individual-level correlations w
 .footnote[* Angrist and Pischke ch.3]
   
 
-???
+---
+## Simple bivariate relationship
 
-FIGURE TO SHOW THIS
-
-The least squares method minimizes the Residual Sum of Squares (RSS)
- - This is the sum of squared residuals for each observation (vertical distance between observed value and predicted value)
- - No other method can produce a lower RSS
-
-The RSS plus the ESS (explained sum of squares) is how much total variation there are in the data (Total Sum of Squares)
-
-FIGURE TO SHOW THIS
-  
+![http://i.imgur.com/2fEaBed.png](http://i.imgur.com/2fEaBed.png)
 
 
+---
+## Simple bivariate relationship
 
-  
+![http://i.imgur.com/zxbiTWJ.png](http://i.imgur.com/zxbiTWJ.png)
+
+
+---
+## Simple bivariate relationship
+
+![http://i.imgur.com/s2d9Uxo.png](http://i.imgur.com/s2d9Uxo.png)
+
+
 ---
 ## Systematic versus unsystematic component of the data
 
@@ -327,18 +329,39 @@ FIGURE TO SHOW THIS
 
    - So we always have some "residual" for each observation
 
+???
+
+The least squares method minimizes the Residual Sum of Squares (RSS)
+
+ - This is the sum of squared residuals for each observation (vertical distance between observed value and predicted value)
+
+ - No other method can produce a lower RSS
 
 
 ---
+## Residual sum of squares
+
+![http://i.imgur.com/8V6BdCz.png](http://i.imgur.com/8V6BdCz.png)
 
 
 ???
 
-  - Graphical demonstration of least squares (versus absolute values)
-    - Graph of squares
-    - Sum areas
-    - "Least squares" because no other fit will produce a lower sum of squares
+The least squares method minimizes the Residual Sum of Squares (RSS)
 
+ - This is the sum of squared residuals for each observation (vertical distance between observed value and predicted value)
+
+ - No other method can produce a lower RSS
+
+
+---
+template: questions
+
+
+---
+## So how do we calculate the slope?
+
+Slope coefficient is a ratio of how much of the covariation of X and Y is explained by the variation in X
+ 
 
 ---
 ## Estimating `\(\hat{\beta}_1\)`
@@ -392,7 +415,20 @@ template: questions
    - Divide numerator by denominator
 
 .footnote[Only works for bivariate case; otherwise use matrix algebra]
-  
+
+---
+## Numerator: Covariance of X,Y
+
+![http://i.imgur.com/Lb2qcZj.png](http://i.imgur.com/Lb2qcZj.png)
+
+---
+## Denominator: Variance of X
+
+![http://i.imgur.com/P5fIJsr.png](http://i.imgur.com/P5fIJsr.png)
+
+
+---
+template: questions
 
 ---
 ## Exercise
@@ -454,7 +490,7 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 ---
 ## Exercise
 
-| x | y | `\((x_i-\bar{x})^2\)` | `\((x_i-\bar{x})*(y_i-\bar{y})\)` |
+| x | y | `\((x_i-\bar{x})^2\)` | `\((x_i-\bar{x})(y_i-\bar{y})\)` |
 | ---- | ---- | --- | --- |
 | 1 | 2 | ? | ? |
 | 2 | 5 | ? | ? |
