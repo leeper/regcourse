@@ -232,6 +232,8 @@ The unit equation is an expression of the observed data in terms of those estima
  - Robinson (1950, p.352):
  > Although these studies and score like them depend upon ecological correlations, it is not because their authors are interested in correlations between the properties of areas as such.
  
+---
+## An Aside: Ecological inference
  - Ecological relationships almost always overstate the relationship between X and Y*
  
  - If we have ecological data for an individual-level research question, we need to either:
@@ -256,11 +258,6 @@ Ecological correlation basically mis-weights the individual-level correlations w
 
  - Error term is the deviation of observations from the line (i.e., the unsystematic, unexplained part)
  
- - Consequence: For every level of `\(x\)`, there is only one value of `\(\hat{y}\)`.
-  - This may not match the observed values of `\(y\)` for every observation with that value of `\(x\)`
-  - Ideally, `\(\hat{y}\)` is the conditional mean of `\(y\)`, given `\(x\)`
-  - So we always have some "residual" for each observation
-
 .footnote[* Angrist and Pischke ch.3]
   
 
@@ -269,6 +266,19 @@ Ecological correlation basically mis-weights the individual-level correlations w
 [Figure to show this]
   
   
+---
+## Systematic versus unsystematic component of the data
+
+ - Consequence: For every level of `\(x\)`, there is only one value of `\(\hat{y}\)`.
+
+   - This may not match the observed values of `\(y\)` for every observation with that value of `\(x\)`
+
+   - Ideally, `\(\hat{y}\)` is the conditional mean of `\(y\)`, given `\(x\)`
+
+   - So we always have some "residual" for each observation
+
+
+
 ---
 
 
@@ -293,8 +303,10 @@ Ecological correlation basically mis-weights the individual-level correlations w
 
   - Multivariate regression problems require matrix algebra**
  
-.footnote[* Wooldridge eq. 2.19 (p.25)]
-.footnote[** See session 3a w/Rune and C&T 3.3.2 (pp.82-83).]
+.footnote[
+* Wooldridge eq. 2.19 (p.25)<br/>
+** See session 3a w/Rune and C&T 3.3.2 (pp.82-83).
+]
 
 
 ---
@@ -393,7 +405,7 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 ---
 ## Exercise
 
-| X | Y | `\(X-\bar(X)\)` | `\(Y-\bar(Y)\)` | `\((X-\bar(X))^2\)` | `\((X-\bar(X))*(Y-\bar(Y))\)` |
+| X | Y | `\(X-\bar(X)\)` | `\(Y-\overline(Y)\)` | `\((X-\overline(X))^2\)` | `\((X-\overline(X))*(Y-\overline(Y))\)` |
 | ---- | ---- | --- | --- | --- | --- |
 | 1 | 2 | ? | ? | ? | ? |
 | 2 | 5 | ? | ? | ? | ? |
@@ -403,7 +415,7 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 | 6 | 7 | ? | ? | ? | ? |
 | `\(\bar{x}=3.5\)` | `\(\bar{y}=4.\bar{3}\)` | | | `\(\Sigma(X-\bar(X))^2\)` | `\(\Sigma(X-\bar(X))*(Y-\bar(Y))\)` |
 
-`\(\beta_1 = \frac{\Sigma(X-\bar(X))*(Y-\bar(Y))}{\Sigma(X-\bar(X))^2} = ?\)`
+`\(\beta_1 = \frac{\Sigma(X-\overline(X))(Y-\overline(Y))}{\Sigma(X-\overline(X))^2} = ?\)`
 
 
 ???
@@ -446,7 +458,7 @@ template: residuals
    3. Fundamental randomness
 
 ---
-template: outline1
+template: outline4
 
 
 
@@ -506,8 +518,10 @@ There also may not actually be an infinite number of cases
   
   - When errors are heteroskedastic, we need "robust" SEs**
 
-.footnote[* Wooldridge Fig. 2.8-2.9, pp.50--51]
-.footnote[** C&T 3.3.4, p.84; Cover this in Session 4]
+.footnote[
+* Wooldridge Fig. 2.8-2.9, pp.50--51<br/>
+** C&T 3.3.4, p.84; Cover this in Session 4
+]
 
 
 ---
@@ -523,18 +537,22 @@ template: questions
 
   - `\(y|x \sim N(\beta_0 + \beta_1x1 + ..., \sigma^2)\)`
 
-  - We assume in the population, `\(y\)` is Normally distributed with a mean that is a function of our regressor(s) and some *constant* variance `\(\sigma^2\)`
-
-  - This allows us to assume the shape of the distribution of our estimated slope
-    - Which is that `\(\hat{\beta_1} \sim N(\beta_1, var{\hat{beta_1}})\)`
+  - This allows us to assume the shape of the sampling distribution of our estimated slope
+    - Which is that `\(\hat{\beta_1} \sim N(\beta_1, var(\hat{\beta_1}))\)`
     - We don't know `\(var(\beta_1)\)`, so we estimate it by assuming it's `\(var(\hat{\beta_1})\)`
     - We can then further assume a t-shaped sampling distribution for the mean of that distribution
+
+???
+
+We assume in the population, `\(y\)` is Normally distributed with a mean that is a function of our regressor(s) and some *constant* variance `\(\sigma^2\)`
 
 ---
 ## t-tests and p-values
 
 - What do we do with all these assumptions? Why do we need them?
+
 - The sampling distribution for `\(\beta_1\)` that we just assumed (partially based on our data), allows us to conduct hypothesis tests
+
 - The kinds of hypotheses we can test are of the form:
   - Bivariate: "`\(x\)` has no effect on `\(y\)`"
   - Multivariate: "accounting for the other variables in the model, `\(x\)` has no effect on the expected value of `\(y\)`"
@@ -562,7 +580,7 @@ t is actually a family of distributions, but with large *n*, t-distribution is b
  
  - We can test against any null value
  
- - To do so we simply calculate `\(\frace{\hat{\beta_1} - \alpha}{SE_{\hat{\beta_1}}}\)`, where `\(\alpha\)` is our null hypothesis value
+ - To do so we simply calculate `\(\frac{\hat{\beta_1} - \alpha}{SE_{\hat{\beta_1}}}\)`, where `\(\alpha\)` is our null hypothesis value
  
  - One such hypothesis would be `\(H_0: \beta_1=1\)`, to test whether there is a one-to-one correspondence between `\(x\)` and `\(y\)`
 
@@ -574,6 +592,9 @@ t is actually a family of distributions, but with large *n*, t-distribution is b
 
  - The p-value is the probability of seeing a t-ratio/t-statistic as large or larger than the one we observed in our data
  
+---
+## P-values
+
  - A small p-value represents:
  > the probability of a t-statistic as extreme as the one we observed, if the null hypothesis was true
  
@@ -602,7 +623,9 @@ t is actually a family of distributions, but with large *n*, t-distribution is b
   - Confidence intervals and p-values convey the same information
     - But CIs are on the scale of the statistic of interest (and thus the scale of the original data)
   
-  - If the confidence interval overlaps zero, we would be unable to reject the null the hypothesis
+???
+
+If the confidence interval overlaps zero, we would be unable to reject the null the hypothesis
   
 ---
 ## Confidence intervals
@@ -611,10 +634,14 @@ t is actually a family of distributions, but with large *n*, t-distribution is b
 
   - A confidence interval tells us:
   > Were we to repeat our procedure of sampling, analyzing the sample, and calculating a confidence interval *repeatedly* from the population, a fixed percentage of the resulting intervals would include the true population-level slope.
-
-  - Thus, we can be certain that some percent of the time (the percent being the p-threshold we set in calculating the CI), a given confidence interval includes the true slope
   
   - We cannot say for sure whether the estimated confidence interval *this time* actually includes that true slope
+
+???
+
+- Thus, we can be certain that some percent of the time (the percent being the p-threshold we set in calculating the CI), a given confidence interval includes the true slope
+
+- Need a figure to display this
 
 
 ---
@@ -664,7 +691,7 @@ template: questions
 
   - Literally the squared correlation coefficient
 
-  - `\(R^2 = cor(x,y)^2 = SSE/SST = 1 - \frac{SSR}{SST}\)`
+  - `\(R^2 = cor(x,y)^2 = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}\)`
 
 ]
 
@@ -696,7 +723,7 @@ template: questions
 
  - How far, on average, are the observed `\(y\)` values from their corresponding fitted values `\(\hat{y}\)`
 
- - `\(\hat{\sigma} = \sqrt{\frac{RSS}{n-p}}\)`, where `\(p\)` is number of parameters `\(\beta_0, \beta_1\)`
+ - `\(\hat{\sigma} = \sqrt{\frac{RSS}{n-p}}\)`, where `\(p\)` is number of parameters (e.g., `\(\beta_0, \beta_1\)`)
 
 ]
 
@@ -736,8 +763,14 @@ template: questions
  - It also tests a very uninteresting hypothesis
  
  - But! We can use an F-test to compare "nested" models
- 
 ]
+
+???
+
+We can compare the residual sum of squares (RSS) from two models and see if including additional covariates reduces RSS
+
+Models have to be "nested" and on the exact same set of observations
+
 
 ---
 template: questions
