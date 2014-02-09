@@ -19,49 +19,81 @@ Prior (2005)
 
 
 ---
-## Interpretation of coefficients
-  - General interpretation
-    - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
-    - The size of the effect depends on the units of `\(x\)`
-      - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
-    - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
-      - Better not to think about the point estimates (slopes) but instead the interval
-    - It's not easy to compare substantive size of coefficients unless regressors have comparable units
-      - Otherwise it's apples and oranges comparisons
-      - Sometimes we'll "standardize" variables so that a unit change in the standardized variable `\(x\ast\)` is a standard deviation change in the original variable `\(x\)`
-      - This doesn't solve the comparability problem because it's comparing standardized apples to standardized oranges
-  - Interval
-    - Change in `\(y\)` for a unit-change in `\(x\)`
-  - Indicator variables
-    - Bivariate regression is equivalent to a t-test
-    - Show this graphically
-  - Categorical
-    - Treat as interval
-      - Be cautious about linearity and the Conditional Expectation Function
-      - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
-    - Convert to indicators
-      - A series of pairwise comparisons to a baseline condition
-  - Our interpretations are sample-level interpretations
-    - We need to have a representative sample to make population-level statistical inferences
+name: outline1
+
+## Outline
+
+ 1. Causal inference
+
+--
+name: outline2
+ 2. Model-building
+ 
+--
+name: outline3
+ 3. Multiple linear regression
+ 
+--
+name: outline4
+ 4. Reporting and interpreting regression results
+ 
+
+---
+template: outline1
+
+
+---
+## Causal inference
+
+- Potential outcomes
+
+- Green et al. (2011) from last week
+
+
+- Causal effects
+    - SATE
+    - PATE and sampling
+  
 
 ---
 ## Causal inference
   - When do our statistical inferences have *causal* meaning?
-  - Potential outcomes
-  - Causal effects
-    - SATE
-    - PATE and sampling
-  - Graphs
-  - Five criteria
-    - Relationship
-    - Temporal precedence
-    - No confounding
-    - Plausible mechanism
-    - Level of analysis
-  - Endogeneity
-    - Omitted variables
-    - Measurement error
-  - Post-treatment bias
+
+---
+## Five criteria
+
+  1. Relationship
+  2. Temporal precedence
+  3. No confounding
+  4. Plausible mechanism
+  5. Level of analysis
+
+???
+
+How does regression help us with causal inference?
+
+It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
+
+---
+## Causal models
+
+- Graphs
+- Backdoor criterion
+
+  
+- Endogeneity
+  - Omitted variables
+
+- Measurement error
+
+- Post-treatment bias
+
+  
+  
+
+---
+template: outline4
+
 
 ---
 ## Model Building
@@ -90,6 +122,36 @@ Prior (2005)
       - We can then drop those observations if we're worried about how they influence the model
       - We lose representativeness, but possibly gain a better insight into the shape of the relationships in the reduced dataset
       - There's no perfect rule for the Cook's Distance threshold for excluding an observation but `\(n/4\)` is conventional
+
+
+---
+template: outline4
+
+---
+## Interpretation of coefficients
+  - General interpretation
+    - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
+    - The size of the effect depends on the units of `\(x\)`
+      - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
+    - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
+      - Better not to think about the point estimates (slopes) but instead the interval
+    - It's not easy to compare substantive size of coefficients unless regressors have comparable units
+      - Otherwise it's apples and oranges comparisons
+      - Sometimes we'll "standardize" variables so that a unit change in the standardized variable `\(x\ast\)` is a standard deviation change in the original variable `\(x\)`
+      - This doesn't solve the comparability problem because it's comparing standardized apples to standardized oranges
+  - Interval
+    - Change in `\(y\)` for a unit-change in `\(x\)`
+  - Indicator variables
+    - Bivariate regression is equivalent to a t-test
+    - Show this graphically
+  - Categorical
+    - Treat as interval
+      - Be cautious about linearity and the Conditional Expectation Function
+      - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
+    - Convert to indicators
+      - A series of pairwise comparisons to a baseline condition
+  - Our interpretations are sample-level interpretations
+    - We need to have a representative sample to make population-level statistical inferences
 
 ---
 ## Reporting regression results
