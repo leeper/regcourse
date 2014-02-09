@@ -388,7 +388,7 @@ template: questions
 ---
 ## Exercise
 
-| x | y | `\(x_i-\bar(x)\)` | `\(y_i-\bar(y)\)` |
+| x | y | `\(x_i-\bar{x}\)` | `\(y_i-\bar{y}\)` |
 | ---- | ---- | --- | --- |
 | 1 | 2 | ? | ? |
 | 2 | 5 | ? | ? |
@@ -396,7 +396,7 @@ template: questions
 | 4 | 5 | ? | ? |
 | 5 | 4 | ? | ? |
 | 6 | 7 | ? | ? |
-| `\(\bar{x}=3.5\)` | `\(\bar{y}=4.\bar{3}\)` | | |
+| `\(3.5\)` | `\(4.\bar{3}\)` | | |
 
 ???
 
@@ -406,7 +406,7 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 ---
 ## Exercise
 
-| x | y | `\(x_i-\bar(x)\)` | `\(y_i-\overline(y)\)` | `\((x_i-\overline(x))^2\)` | `\((x_i-\overline(x))*(y_i-\overline(y))\)` |
+| x | y | `\(x_i-\bar{x}\)` | `\(y_i-\bar{y}\)` | `\((x_i-\bar{x})^2\)` | `\((x_i-\bar{x})*(y_i-\bar{y})\)` |
 | ---- | ---- | --- | --- | --- | --- |
 | 1 | 2 | ? | ? | ? | ? |
 | 2 | 5 | ? | ? | ? | ? |
@@ -414,9 +414,9 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 | 4 | 5 | ? | ? | ? | ? |
 | 5 | 4 | ? | ? | ? | ? |
 | 6 | 7 | ? | ? | ? | ? |
-| `\(\bar{x}=3.5\)` | `\(\bar{y}=4.\bar{3}\)` | | | `\(\Sigma(x_i-\bar(x))^2\)` | `\(\Sigma(x_i-\bar(x))*(y_i-\bar(y))\)` |
+| `\(3.5\)` | `\(4.\bar{3}\)` | | | `\(\Sigma(x_i-\bar{x})^2\)` | `\(\Sigma(x_i-\bar{x})*(y_i-\bar{y})\)` |
 
-`\(\beta_1 = \frac{\Sigma(x_i-\overline(x))(y_i-\overline(y))}{\Sigma(x_i-\overline(x))^2} = ?\)`
+`\(\beta_1 = \frac{\Sigma(x_i-\bar{x})(y_i-\bar{y})}{\Sigma(x_i-\bar{x})^2} = ?\)`
 
 
 ???
@@ -438,7 +438,7 @@ name: residuals
 
 --
  
-| X | Y | `\(\hat{y}\)` | `\(u_i\)` |
+| x | y | `\(\hat{y}\)` | `\(u_i\)` |
 | ---- | ---- | --- | --- |
 | 1 | 2 | 2.62 | -0.62 |
 | 2 | 5 | 3.30 | 1.70 |
@@ -457,6 +457,12 @@ template: residuals
    2. Measurement error
   
    3. Fundamental randomness
+
+   
+???
+
+ADD FIGURE SHOWING RESIDUALS
+
 
 ---
 template: outline4
