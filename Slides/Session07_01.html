@@ -1,0 +1,62 @@
+---
+number: 7
+title: Regression with Binary and Ordered Outcomes
+day: 17 marts
+type: lecture
+template: remark
+---
+
+# {{ page.title }} #
+# {{ page.date }} #
+
+???
+Citrin et al. (1997)
+
+---
+## Binary models (continued)
+  - Categorical independent variables
+  - Marginal effects
+  - Interactions
+---
+## Maximum likelihood estimation
+  - (Train ch. 8)
+  - Likelihood function
+    - Set of observed data values
+    - Try to fit a model to those data (i.e., attach parameter estimates to a function relating covariate(s) to outcome)
+    - The likelihood is the probability of observing the data given the parameter estimates
+    - This probability comes from a parametric function (e.g., a normal distribution)
+  - Likelihood maximization
+    - We want to arrive at the parameter estimates that maximize the likelihood
+    - How? Guess!
+      - Start with some kind of guess and calculate the likelihood
+      - Make better and better guesses, until the likelihood doesn't get marginally higher
+      - Example Stata output showing MLE estimate iterations
+    - Example of a maximum likelihood estimate of the mean
+      - The mean has a closed form solution, so this is trivial
+    - Example of a maximum likelihood estimate of a linear model
+      - This is equivalent to the OLS estimate
+---
+## MLE Applications
+  - MLE becomes a general mechanism of estimating parameters
+  - This allows us to estimate all kinds of models
+  - Latent variable
+    - Latent variable which is predicted by our model then translated via a link function
+    - The logic is the same as the binary model, but we now have more categories
+    - Thus we're not trying to figure out `\(Pr(y_i=1)\)`, but `\(Pr(y_i=t)\)` for all categories, `\(t\)`, of the outcome
+      - All probabilities have to sum to 1
+    - This can get very complicated
+  - Other GLMs
+    - Ordered models
+      - Logit
+        - Assumptions
+      - Probit
+        - Assumptions
+    - Count models
+      - Poisson
+      - Quasi-poisson
+      - Negative binomial
+      - Some others (beta-binomial, various zero-inflated models)        
+    - Multinomial models
+      - Logit
+      - Probit
+      - Conditional models

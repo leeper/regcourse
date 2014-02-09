@@ -1,0 +1,46 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[top=0in, bottom=1in, left=1in, right=1in]{geometry}
+
+\title{Essayopgave 1\\Linear Regression and Model-building}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\noindent {\bfseries Due: 28. February at 12:00 to Thomas via email ({\texttt tleeper@ps.au.dk})}
+
+
+\vspace{2em}
+
+\noindent {\em Consider the following hypothesis and analysis plan}:
+
+\begin{quote}
+Compared to non-democracies, democratic states produce better health outcomes for their citizens. This expectation is tested with a large-n analysis of a cross-section of countries.
+\end{quote}
+
+\noindent {\em Your task}:
+\begin{enumerate}
+\item Write a research question, which could be addressed by the above-stated hypothesis and plan of analysis.
+\item Write a short research paper (3--5 pages) that incorporates your research question, the above hypothesis, your operationalizations of ``democracy'' and ``health outcomes,'' the specification of your causal model with a discussion of included variables and how they address concerns about omitted variable bias, and a discussion of your results. You do not need to cite outside literature nor elaborate any theory to justify the provided hypothesis. The paper should include:
+\begin{itemize}
+\item A brief discussion of the measures
+\item Identification of possible confounding variables, which might bias the observed bivariate relationship between X and Y
+\item Graphical and/or correlational methods to test whether any of the putative confounding factors should be in the regression model
+\item A comparison of your full model to a ``reduced'' model with fewer covariates than the full model (e.g., using {\ttfamily nestreg})
+\item A clear interpretation of the size of the relationship (if any) between X and Y
+\end{itemize}
+\item Include your complete Stata do-file for all included analyses as an appendix to the paper. (Note: Use a fixed-width font (e.g., {\ttfamily Courier}) for this appendix to aid readability.)
+\end{enumerate}
+
+\noindent {\em Data}:\\
+Visit the website for The Quality of Government Institute at the University of Gothenburg. There you will find the ``Quality of Government Standard Cross-Section Data.''\footnote{A direct link is: {\texttt http://www.qog.pol.gu.se/data/datadownloads/qogstandarddata/}.} You can download the Stata version of the data (.dta file extension) and a codebook describing the data.
+
+\vspace{1em}
+
+\noindent {\em Variables}:\\
+The hypothesis includes two constructs: democracy and health outcomes. Neither of these constructs has a single clear operationalization. You will have to choose variables included within the QoG dataset to operationalize each. You may want to consider, for democracy, the Freedom House/Polity index ({\bfseries fh\_polity2}, {\bfseries fh\_ipolity2}) or Economist Intelligence Unit Index of Democracy ({\bfseries eiu\_iod}). For health outcomes, you may want to consider infant mortality (e.g., {\bfseries wdi\_mort}) or life expectancy (e.g., {\bfseries wef\_lifexp}). Justify your choice in any case.
+
+
+\end{document}

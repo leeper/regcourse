@@ -1,0 +1,90 @@
+---
+number: 13
+title: Missing Data Imputation
+day: 5 maj
+type: lecture
+template: remark
+---
+
+# {{ page.title }} #
+# {{ page.date }} #
+
+???
+
+Gelman and Hill (529-543)
+King, Honaker, Joseph, and Scheve (2001)
+Gilens (2001)
+Simmons and Hopkins (2003)
+
+
+---
+## Messy data
+  - Most data we work with is organized, cleaned, etc.
+  - In reality, data are never clean
+    - We either have to make them or we get them from someone else
+    - Not clean means badly coded and/or full of missing values
+    - Coding is something we can handle, missing data is a big problem
+  - What do we do when we have missing values?
+---
+## Scaling
+  - We haven't talked a lot about scaling in this class
+  - Scaling is a good example of the problems associated with missing data
+  - How do we build scales with missing values?
+---
+## Complete case analysis
+  - Available case
+    - Remove any observations with missing values for a given analysis
+    - This is "standard" practice
+    - Benefits
+      - Easy
+      - Statistical software defaults to this
+      - Uses as much data as possible for any given analysis
+    - Consequences
+      - Loss of information
+      - Loss of sample representativeness
+      - Analyses are not comparable to one another
+  - Case/listwise deletion
+    - Remove any observations with missing values before all analyses
+    - Benefits
+      - Easy
+      - All analyses are comparable to one another
+    - Consequences
+      - Loss of information (more than available case)
+      - Loss of sample representativeness
+---
+## Single imputation
+  - Rather than discard observations, fill in missing values (once)
+  - This is not common
+  - Benefits
+    - Preserve information and obserations
+    - Preserve sample representativeness
+    - Fairly easy
+  - Consequences
+    - Arbitrary replacement of missing values
+    - Potentially false sense of precision about imputed values
+    - Modifies the features of univariate and multivariate distributions
+      - Might change central tendency (mean, median), variance, etc.
+    - How to calculate standard errors?
+  - Methods
+    - Single value (e.g. zero, mean)
+    - Random
+      - At what proportions?
+      - At what precision?
+    - Hot deck
+---
+## Mutliple imputation
+  - Rather than discard observations, fill in missing values
+  - This is not common, either (but increasingly so)
+  - Create multiple datasets, using different imputations each time
+    - Different algorithms for doing this
+    - Details are not important for us but...
+      - Random imputation
+      - Model-based imputation
+  - Perform analysis on each dataset and aggregate the results
+    - Generate standard errors by aggregating results
+  - Benefits
+    - All the benefits of single imputation
+    - Handle uncertainty about missing values
+  - Consequences
+    - Difficult to analyze
+    - Multiple algorithms to choose from, may produce different results

@@ -1,0 +1,95 @@
+---
+number: 3
+title: Causal Inference and Model Building
+day: 17 februar
+type: lecture
+template: remark
+---
+
+# {{ page.title }} #
+# {{ page.date }} #
+
+???
+
+King, Keohane, and Verba Ch.5 (150-207)
+Wooldridge 178-208 (150-180) (model fit), 217-248 (182-211) (dummy variables), 293-324 (241-272) (further issues)
+Angrist and Pischke Ch.2-3 (11-24, 27-69, 108-110)
+Eveland and Scheufele (2000)
+Prior (2005)
+
+
+---
+## Interpretation of coefficients
+  - General interpretation
+    - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
+    - The size of the effect depends on the units of `\(x\)`
+      - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
+    - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
+      - Better not to think about the point estimates (slopes) but instead the interval
+    - It's not easy to compare substantive size of coefficients unless regressors have comparable units
+      - Otherwise it's apples and oranges comparisons
+      - Sometimes we'll "standardize" variables so that a unit change in the standardized variable `\(x\ast\)` is a standard deviation change in the original variable `\(x\)`
+      - This doesn't solve the comparability problem because it's comparing standardized apples to standardized oranges
+  - Interval
+    - Change in `\(y\)` for a unit-change in `\(x\)`
+  - Indicator variables
+    - Bivariate regression is equivalent to a t-test
+    - Show this graphically
+  - Categorical
+    - Treat as interval
+      - Be cautious about linearity and the Conditional Expectation Function
+      - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
+    - Convert to indicators
+      - A series of pairwise comparisons to a baseline condition
+  - Our interpretations are sample-level interpretations
+    - We need to have a representative sample to make population-level statistical inferences
+
+---
+## Causal inference
+  - When do our statistical inferences have *causal* meaning?
+  - Potential outcomes
+  - Causal effects
+    - SATE
+    - PATE and sampling
+  - Graphs
+  - Five criteria
+    - Relationship
+    - Temporal precedence
+    - No confounding
+    - Plausible mechanism
+    - Level of analysis
+  - Endogeneity
+    - Omitted variables
+    - Measurement error
+  - Post-treatment bias
+
+---
+## Model Building
+  - Identifying the right variables
+    - We can never know the true model
+    - We can only guess at the model, using theory and observable variables
+      - Observable versus unobservable variables; Observed versus unobserved variables
+    - We can tell whether observed variables should be in the model using residual plots
+      - Plot residuals from a partially specified model against an excluded variable
+  - Functional form
+    - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
+    - We can transform variables however we want in order to force a linear relationship
+      - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
+    - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
+      - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
+      - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
+    - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
+  - Influential observations
+    - Some observations have high "leverage," having a dramatic influence on the estimated coefficient(s) in a model
+    - Influential observations are essentially outliers (but they might be multi-dimensional outliers and thus hard to see in a boxplot)
+    - We can estimate Cook's Distance to assess how influential a particular observation is on the results of a regression model
+      - Cook's Distance is calculated by "jacknifing" the regression model
+      - Jacknifing means rerunning the model `\(n\)`-times, leaving out one observation each time
+      - This means we calculate the regression model with all the data, then we compare coefficients from that model to coefficients from the jacknifed models
+      - When the full model and jacknifed models for a particular observation differ greatly, that observation has a high Cook's distance
+      - We can then drop those observations if we're worried about how they influence the model
+      - We lose representativeness, but possibly gain a better insight into the shape of the relationships in the reduced dataset
+      - There's no perfect rule for the Cook's Distance threshold for excluding an observation but `\(n/4\)` is conventional
+
+---
+## Reporting regression results

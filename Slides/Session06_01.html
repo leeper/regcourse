@@ -1,0 +1,61 @@
+---
+number: 6
+title: Regression with Binary Outcome
+day: 10 marts
+type: lecture
+template: remark
+---
+
+# {{ page.title }} #
+# {{ page.date }} #
+
+???
+
+Wooldridge 559-598 (459-497)
+Hobolt (2007)
+Price and Zaller (1993)
+
+
+---
+## Binary outcome
+  - Discrete choice problems
+    - We want to know why some unit ends up in a given category, e.g.:
+      - Whether someone makes a purchase
+      - Whether someone votes
+      - Whether a state has a particular property
+    - We think about latent utilities
+      - Unobservable, but determine whether `\(y_i = 1\)` or `\(y_i = 0\)`
+      - We try to explain the latent variable then translate that explanation into a fitted probability (\)`Pr(y_i=1)\)`) and a predicted value of `\({0,1}\)`
+      - 
+  - Linear probability model
+    - Simplicity
+    - Problems
+      - Nonsensical results
+      - Problematic standard errors
+  - Generalized linear model
+    - Link functions
+      - Convert a linear-in-parameters model into a probability
+      - `\(Pr(yi=1|x) = F(\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ...)\)`
+      - Different kinds of link functions
+    - Logit and probit
+      - Two common link functions for connection our model to the restricted probability range `\([0,1]\)`
+      - Indeed both are very similar and yield similar inferences, except at extremely high or low latent values
+      - Coefficients are not at all comparable, though
+---
+## Goodness of fit
+  - Percent correctly classified
+  - Deviance (Likelihood ratio)
+  - Pseudo-R-squared (not really R-squared)
+---
+## Interpretation and reporting
+  - Coefficients and standard errors
+    - Coefficients in GLMs are not at all like coefficients in OLS
+    - Coefficients across different link functions are not comparable
+    - Hypothesis testing
+      - Test statistic: Wald statistic
+      - p-values
+    - Interpretation
+      - Don't look at the coefficients!
+      - We need predicted probabilities and marginal effects
+  - Predicted probabilities
+  - Marginal effects

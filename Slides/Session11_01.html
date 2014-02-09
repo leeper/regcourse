@@ -1,0 +1,60 @@
+---
+number: 11
+title: Matching Methods
+day: 14 april
+type: lecture
+template: remark
+---
+
+# {{ page.title }} #
+# {{ page.date }} #
+
+???
+
+Rubin (2001)
+Ho, Imai, King, and Stuart (2007)
+Angrist and Pischke (69-91)
+Kam and Palmer (2008)
+Henderson and Chatfield (2011)
+
+
+---
+## Mimic experiment by matching across covariates
+  - Define treatment and control groups
+  - Independence assumption
+    - Achieved by randomization
+  - Conditional ignorability
+    - Not independence (which is not testable)
+  - Trivial example with one covariate
+  - Consequences
+    - Covariate balance across treatment groups
+    - Eliminate covariate non-overlap
+    - Potentially discard a lot of observations
+      - Is this a good thing or a bad thing?
+      - Loss of representativeness
+      - 1-to-1 or 1-to-k or k-to-k matching
+---
+## Problem of dimensionality
+  - As number and levels of covariates increase, too many levels to match at
+  - Solutions
+    - CEM
+    - Propensity score
+    - Mahalanobis distance (we won't discuss this)
+---
+## Propensity score matching
+  - Estimate a logistic regression model
+    - Outcome: treatment variable
+    - Predictors: covariates
+  - Match on the fitted values, as a single covariate
+    - Use either the logit scale or predicted probability
+  - Benefits
+    - Solves the dimensionality problem
+    - Balancing covariates
+  - Consequences
+    - Model dependence!
+    - No guarantee of covariate balance
+---
+## How do we use matched data?
+  - Difference-in-means based on matched data
+    - Weighted difference (ATT/ATC)
+  - Regression on preprocessed data
