@@ -304,7 +304,7 @@ Ecological correlation basically mis-weights the individual-level correlations w
   - Multivariate regression problems require matrix algebra**
  
 .footnote[
-* Wooldridge eq. 2.19 (p.25)<br/>
+* Wooldridge eq. 2.19 (p.25)
 
 ** See session 3a w/Rune and C&T 3.3.2 (pp.82-83).
 ]
@@ -349,7 +349,7 @@ template: questions
 ---
 ## Exercise
 
-| X | Y |
+| x | y |
 | ---- | ---- |
 | 1 | 2 |
 | 2 | 5 |
@@ -362,7 +362,7 @@ template: questions
 ---
 ## Exercise
 
-| X | Y |
+| x | y |
 | ---- | ---- |
 | 1 | 2 |
 | 2 | 5 |
@@ -375,7 +375,7 @@ template: questions
 ---
 ## Exercise
 
-| X | Y |
+| x | y |
 | ---- | ---- |
 | 1 | 2 |
 | 2 | 5 |
@@ -388,7 +388,7 @@ template: questions
 ---
 ## Exercise
 
-| X | Y | `\(X-\bar(X)\)` | `\(Y-\bar(Y)\)` |
+| x | y | `\(x_i-\bar(x)\)` | `\(y_i-\bar(y)\)` |
 | ---- | ---- | --- | --- |
 | 1 | 2 | ? | ? |
 | 2 | 5 | ? | ? |
@@ -406,7 +406,7 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 ---
 ## Exercise
 
-| X | Y | `\(X-\bar(X)\)` | `\(Y-\overline(Y)\)` | `\((X-\overline(X))^2\)` | `\((X-\overline(X))*(Y-\overline(Y))\)` |
+| x | y | `\(x_i-\bar(x)\)` | `\(y_i-\overline(y)\)` | `\((x_i-\overline(x))^2\)` | `\((x_i-\overline(x))*(y_i-\overline(y))\)` |
 | ---- | ---- | --- | --- | --- | --- |
 | 1 | 2 | ? | ? | ? | ? |
 | 2 | 5 | ? | ? | ? | ? |
@@ -414,9 +414,9 @@ Regression equation always runs through the point (\((\bar{x}, \bar{y})\)` becau
 | 4 | 5 | ? | ? | ? | ? |
 | 5 | 4 | ? | ? | ? | ? |
 | 6 | 7 | ? | ? | ? | ? |
-| `\(\bar{x}=3.5\)` | `\(\bar{y}=4.\bar{3}\)` | | | `\(\Sigma(X-\bar(X))^2\)` | `\(\Sigma(X-\bar(X))*(Y-\bar(Y))\)` |
+| `\(\bar{x}=3.5\)` | `\(\bar{y}=4.\bar{3}\)` | | | `\(\Sigma(x_i-\bar(x))^2\)` | `\(\Sigma(x_i-\bar(x))*(y_i-\bar(y))\)` |
 
-`\(\beta_1 = \frac{\Sigma(X-\overline(X))(Y-\overline(Y))}{\Sigma(X-\overline(X))^2} = ?\)`
+`\(\beta_1 = \frac{\Sigma(x_i-\overline(x))(y_i-\overline(y))}{\Sigma(x_i-\overline(x))^2} = ?\)`
 
 
 ???
@@ -520,7 +520,7 @@ There also may not actually be an infinite number of cases
   - When errors are heteroskedastic, we need "robust" SEs**
 
 .footnote[
-* Wooldridge Fig. 2.8-2.9, pp.50--51<br/>
+* Wooldridge Fig. 2.8-2.9, pp.50--51
 
 ** C&T 3.3.4, p.84; Cover this in Session 4
 ]
