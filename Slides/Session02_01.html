@@ -167,15 +167,35 @@ template: outline3
  
 
 ---
+## Why did we read Green et al. (2011)?
+
+What was this article about?
+
+What was its analysis?
+
+???
+
+This article demonstrates the simplest possible use of linear regression
+
+ - Mathematically:
+   - The independent variable is binary: treatment and control
+   - The dependent variable is continuous
+   - (A little fanciness in estimation that isn't important for our purposes)
+
+ - Causally: An experiment, so there are almost no concerns about causal inference
+   - More on this next week
+ 
+
+---
 ## Bivariate regression on an indicator variable
 
  - Experimental data with two groups
  
  - How do we know if there is an effect of the treatment?
  
- - The mean-difference is the same as the slope
+ - The mean-difference is the same as the regression slope
  
- - The t-statistic from a t-test of mean-difference is the same as the t-statistic from a t-test on an OLS slope for a dummy variable
+ - The *t*-statistic from a *t*-test of mean-difference is the same as the *t*-statistic from a *t*-test on an OLS slope for a dummy covariate
  
  
 ???
@@ -184,8 +204,13 @@ MAKE A PLOT OF THIS
 
 Something about slope and `\(\frac{\delta y}{\delta x}\)`
 
-
 Talk about Green et al. (2011)
+
+It would be great if the world was full of randomized, two-group experiments, but it is not:
+  - We often want to look at continuous "treatment" variables
+  - Those treatment variables aren't manipulated or exogeneous
+
+We'll focus on the math of moving to continuous independent variables now, then focus on causality next week
 
 
 ---
@@ -263,7 +288,15 @@ Ecological correlation basically mis-weights the individual-level correlations w
 
 ???
 
-[Figure to show this]
+FIGURE TO SHOW THIS
+
+The least squares method minimizes the Residual Sum of Squares (RSS)
+ - This is the sum of squared residuals for each observation (vertical distance between observed value and predicted value)
+ - No other method can produce a lower RSS
+
+The RSS plus the ESS (explained sum of squares) is how much total variation there are in the data (Total Sum of Squares)
+
+FIGURE TO SHOW THIS
   
   
 ---
@@ -438,7 +471,7 @@ name: residuals
 
 --
  
-| x | y | `\(\hat{y}\)` | `\(u_i\)` |
+| x | y | `\(\hat{y_i}\)` | `\(u_i\)` |
 | ---- | ---- | --- | --- |
 | 1 | 2 | 2.62 | -0.62 |
 | 2 | 5 | 3.30 | 1.70 |
@@ -556,6 +589,8 @@ We assume in the population, `\(y\)` is Normally distributed with a mean that is
   - We can then further assume a t-shaped sampling distribution for the mean of that distribution
 
 
+FIGURE SHOWING THE SAMPLING DISTRIBUTION
+  
 ---
 ## *t*-tests and p-values
 
@@ -783,6 +818,28 @@ We can compare the residual sum of squares (RSS) from two models and see if incl
 
 Models have to be "nested" and on the exact same set of observations
 
+
+---
+.left-column[
+### Correlation
+### `\(R^2\)`
+### `\(\sigma\)`
+### F-test
+]
+.right-column[
+
+ - F-test for comparing two nested models
+   - Reduced model: `\( \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 \)`
+   - Expanded model: `\( \hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1 + \hat{\beta_2}x_2 + \dots \)`
+
+ - "Reduced" model is nested within the expanded model
+
+ - The F-test comparing the two models tells us if the expanded model significantly reduces RSS
+]
+
+???
+
+This is a logical segue into multiple linear regression, which we'll cover next week
 
 ---
 template: questions
