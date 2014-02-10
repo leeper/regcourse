@@ -11,6 +11,7 @@ layout: remark
 
 
 ---
+name: outline
 ## Outline
 
  1. A little about how Stata works
@@ -19,6 +20,20 @@ layout: remark
  
  3. Work through S&#248;nderskov Ch.4-5
 
+
+---
+## How Stata works
+
+ 1. Load data into memory
+
+ 2. You request Stata to do something
+
+ 3. If a valid, Stata executes your request and:
+  
+   a. Stores some of the results temporarily
+   b. Prints some of the results to the console
+
+ 4. New requests overwrite the stored results
 
 ---
 ## summarize | sum
@@ -59,6 +74,23 @@ Scalars
   r(r)           number of rows
 ```
 
+---
+## Implications for using Stata
+
+  - Use do-files to keep track of your code
+  
+  - Work one operation at a time
+    - You can't go back without rerunning your request
+    
+  - Save output using logs
+    
+```
+log using ...
+log off
+log on
+log close
+```
+
 
 ---
 ## Graphics
@@ -66,7 +98,8 @@ Scalars
  - Code for graphics is complicated
 
  - Use the menus and `help` to learn the code
-   - See also: http://www.ssc.wisc.edu/sscc/pubs/4-24.htm
+   - Code: http://www.stata.com/support/faqs/graphics/gph/stata-graphs/
+   - Menus: http://www.ssc.wisc.edu/sscc/pubs/4-24.htm
 
  - Use resources and examples:
    - Cameron and Trivedi 2.6 (pp.58-70)
@@ -79,11 +112,25 @@ Scalars
 ---
 .left-column[
 ## histogram
-## barplot
+## density
 ## boxplot
+## barplot
+## dotchart
 ## scatterplot
 ]
 .right-column[
+
+```
+hist
+kdensity
+graph box
+
+graph bar 
+graph dot
+
+graph twoway scatter
+```
+
 ]
 
 

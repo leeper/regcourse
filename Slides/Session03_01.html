@@ -41,13 +41,110 @@ name: outline4
 ---
 template: outline1
 
+---
+# Causal Terminology #
+
+ - Unit: A physical object at a particular point in time
+
+ - Treatment: An intervention, whose effects we wish to assess relative to some other (non-)intervention
+
+ - Potential outcomes: The outcome for each unit that we would observe if that unit received each treatment
+
+ - Multiple potential outcomes for each unit, but we only observe one of them
+
+ - Causal effect: The comparisons between the unit-level potential outcomes under each intervention
+
+ - Average causal effect
+
+ 
+---
+## Causal inference
+
+Causal inference is about estimating *what would have happened* in a counterfactual reality
+
+But we can only observe any given unit in one reality!
+
+This is **the fundamental problem of causal inference**
+
+
+???
+
+Experiments as a benchmark
+
+- Green et al. (2011) from last week
+
+
+
+---
+# "Perfect Doctor" #
+
+True potential outcomes (unobservable in reality)
+
+| Unit | Y(0) | Y(1) |
+| ---- | ---- | ---- |
+| 1 | 13 | 14 |
+| 2 | 6 | 0 |
+| 3 | 4 | 1 |
+| 4 | 5 | 2 |
+| 5 | 6 | 3 |
+| 6 | 6 | 1 |
+| 7 | 8 | 10 |
+| 8 | 8 | 9 |
+| *Mean* | *7* | *5* |
+
+
+???
+
+Pretend we have life expectancy data for 8 patients
+
+We get "God's data", which shows the treatment each patient would have under treatment and control
+
+Clearly, the control is better. On average, patients live longer in the control condition.
+
+---
+# "Perfect Doctor" #
+
+How observational data can mislead
+
+| Unit | Y(0) | Y(1) |
+| ---- | ---- | ---- |
+| 1 | ? | 14 |
+| 2 | 6 | ? |
+| 3 | 4 | ? |
+| 4 | 5 | ? |
+| 5 | 6 | ? |
+| 6 | 6 | ? |
+| 7 | ? | 10 |
+| 8 | ? | 9 |
+| *Mean* | *5.4* | *11* |
+
+
+???
+
+Now we only get to see one potential outcome per patient
+
+But our data are not from an experiment
+
+A "perfect doctor" has assigned each patient to the best treatment for them
+
+Now treatment looks much better than control, even though on average it is worse
+
+(This is basic selection bias)
+
+
+Look ahead to Shadish, Cook, and Campbell (Ch.8, 246--257) for more on randomization
 
 ---
 ## Causal inference
 
-- Potential outcomes
+ - How do we draw inferences when we can't observe every potential outcome for each unit?
 
-- Green et al. (2011) from last week
+ - We focus on average causal effects
+   - Compare average outcomes among groups of units
+   - Try to make comparable those groups by controlling for confounding effects
+
+---
+
 
 
 - Causal effects
@@ -74,6 +171,9 @@ How does regression help us with causal inference?
 
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
 
+
+
+
 ---
 ## Causal models
 
@@ -89,7 +189,7 @@ It only helps with items #1 and #2. Everything else is about research design and
 - Post-treatment bias
 
   
-  
+
 
 ---
 template: outline4
@@ -103,25 +203,50 @@ template: outline4
       - Observable versus unobservable variables; Observed versus unobserved variables
     - We can tell whether observed variables should be in the model using residual plots
       - Plot residuals from a partially specified model against an excluded variable
-  - Functional form
+
+---
+## Functional form
     - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
     - We can transform variables however we want in order to force a linear relationship
+      - We want to produce a linear Conditional Expectation Function
       - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
     - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
       - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
       - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
     - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
-  - Influential observations
-    - Some observations have high "leverage," having a dramatic influence on the estimated coefficient(s) in a model
-    - Influential observations are essentially outliers (but they might be multi-dimensional outliers and thus hard to see in a boxplot)
-    - We can estimate Cook's Distance to assess how influential a particular observation is on the results of a regression model
-      - Cook's Distance is calculated by "jacknifing" the regression model
-      - Jacknifing means rerunning the model `\(n\)`-times, leaving out one observation each time
-      - This means we calculate the regression model with all the data, then we compare coefficients from that model to coefficients from the jacknifed models
-      - When the full model and jacknifed models for a particular observation differ greatly, that observation has a high Cook's distance
-      - We can then drop those observations if we're worried about how they influence the model
-      - We lose representativeness, but possibly gain a better insight into the shape of the relationships in the reduced dataset
-      - There's no perfect rule for the Cook's Distance threshold for excluding an observation but `\(n/4\)` is conventional
+
+    
+---
+## Influential observations
+
+ - Some observations have high "leverage," having a dramatic influence on the estimated coefficient(s) in a model
+ - Influential observations are essentially outliers (but they might be multi-dimensional outliers and thus hard to see in a boxplot)
+ - We can estimate Cook's Distance to assess how influential a particular observation is on the results of a regression model
+  - Cook's Distance is calculated by "jacknifing" the regression model
+  - Jacknifing means rerunning the model `\(n\)`-times, leaving out one observation each time
+  - This means we calculate the regression model with all the data, then we compare coefficients from that model to coefficients from the jacknifed models
+  - When the full model and jacknifed models for a particular observation differ greatly, that observation has a high Cook's distance
+  - We can then drop those observations if we're worried about how they influence the model
+  - We lose representativeness, but possibly gain a better insight into the shape of the relationships in the reduced dataset
+  - There's no perfect rule for the Cook's Distance threshold for excluding an observation but `\(n/4\)` is conventional
+
+---
+## Cook's Distance in Stata
+
+```
+use EnglebertPRQ2000.dta
+
+reg growth lcon lconsq
+predict newvar, cooksd
+summ newvar
+
+* biggest Cook's distance
+scalar cookmax = r(max)
+tab country if cookmax = newvar
+
+* see Cook's distance by country
+tab country, summarize(newvar) nost nofr
+```
 
 
 ---
@@ -129,8 +254,24 @@ template: outline4
 
 ---
 ## Interpretation of coefficients
+
+ - In bivariate regression, `\(\beta_1\)` is just the slope (line of best fit)
+ 
+ - In multivariate regression, interpreting coefficients is more complex
+
+ - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
+    - Holding all other variables at their means, what is the effect of x on y
+
+???
+
+Instead of thinking of a line of best fit, we have to think about a *hyperplane of best fit* that spans across all of the independent variables
+    
+---
+## Interpretation of coefficients
+
+
+
   - General interpretation
-    - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
     - The size of the effect depends on the units of `\(x\)`
       - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
     - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
@@ -139,19 +280,48 @@ template: outline4
       - Otherwise it's apples and oranges comparisons
       - Sometimes we'll "standardize" variables so that a unit change in the standardized variable `\(x\ast\)` is a standard deviation change in the original variable `\(x\)`
       - This doesn't solve the comparability problem because it's comparing standardized apples to standardized oranges
-  - Interval
-    - Change in `\(y\)` for a unit-change in `\(x\)`
-  - Indicator variables
-    - Bivariate regression is equivalent to a t-test
-    - Show this graphically
-  - Categorical
-    - Treat as interval
-      - Be cautious about linearity and the Conditional Expectation Function
-      - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
-    - Convert to indicators
-      - A series of pairwise comparisons to a baseline condition
-  - Our interpretations are sample-level interpretations
+      
+- Our interpretations are sample-level interpretations
     - We need to have a representative sample to make population-level statistical inferences
+    
+    
+---
+## Types of variables
+
+ - Interval
+ 
+ - Indicator
+ 
+ - Categorical or ordinal
+ 
+---
+## Interval
+
+ - Change in `\(y\)` for a unit-change in `\(x\)`
+
+---
+## Indicator
+
+ - Bivariate regression is equivalent to a t-test
+
+ - Show this graphically
+
+---
+## Categorical
+
+ - Is it ordinal?
+
+ - Treat as interval
+   - Be cautious about linearity and the Conditional Expectation Function
+   - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
+ 
+ - Convert to indicators
+   - A series of pairwise comparisons to a baseline condition
+ 
+---
+##
+
+  
 
 ---
 ## Reporting regression results

@@ -15,6 +15,7 @@ S&#248;nderskov Ch. 8 (153-185)
 
 
 ---
+name: outline
 ## Outline
 
  - Categorical covariates
@@ -125,6 +126,26 @@ help ereturn
 * e.g., retrieve coefficients, again
 ereturn display
 ```
+
+---
+## Storing residuals and fitted values
+
+```
+reg growth lcon
+* store fitted values as yhat
+predict yhat
+* store residuals as resid
+predict resid, r
+```
+
+---
+## Summarizing and plotting
+
+```
+graph twoway yhat growth
+graph twoway resid lcon
+```
+
 
 ---
 ## Output and export

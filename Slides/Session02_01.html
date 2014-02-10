@@ -33,6 +33,11 @@ Linear regression is the workhorse procedure of contemporary statistical analysi
 
 Linear regression doesn't guarantee anything about causality, so we need a philosophical perspective on causality to make sense of OLS in causal terms
 
+
+Next week you'll read KKV and Angrist and Pischke, which are reviews of what we cover this week but told from different perspectives
+
+This material is hard, so it's good to read and hear about it in different ways so that you can understand what's going on
+
 ---
 name: outline1
 
@@ -578,7 +583,7 @@ We never actually sample an infinite number of times
 There also may not actually be an infinite number of cases
 
 ---
-## Regression standard errors
+## Regression standard errors *
 
  - `\(var(\hat{\beta_1}) = \frac{\frac{1}{n-2}RSS}{SS_x}\)`
 
@@ -586,9 +591,14 @@ There also may not actually be an infinite number of cases
 
  - `\(s_{\hat{\beta_0}}\)` is more complicated
 
- - Multivariate regression problems have a more complicated formula
+ - Multivariate regression problems have a more complicated formula **
 
+.footnote[
+* Wooldridge 50-52
 
+** Wooldridge 81-89
+]
+ 
 ---
 ## SE Interpretation
 
@@ -625,7 +635,7 @@ template: questions
 
 - To make a statistical inference about the population slope `\(\beta_1\)` from `\(\hat{\beta_1}\)`, we need to make assumptions
 
-- Normality assumption!!!
+- Normality assumption!!! *
 
   - `\(y|x \sim N(\beta_0 + \beta_1x_1 + ..., \sigma^2)\)`
 
@@ -633,6 +643,11 @@ template: questions
 
   - What if cases are countries?
 
+
+.footnote[
+* Wooldridge 4.1 (pp.94--97)
+]
+  
 ???
 
 We assume in the population, `\(y\)` is Normally distributed with a mean that is a function of our regressor(s) and some *constant* variance `\(\sigma^2\)`
@@ -666,6 +681,8 @@ We assume in the population, `\(y\)` is Normally distributed with a mean that is
 
   - We then go back to the *t*-distribution function (which is a function that tells us how likely a given *t*-ratio is)
     - Actually we look at the cumulative distribution function (CDF)
+
+.footnote[* Wooldridge 97-114]
 
 ???
 t is actually a family of distributions, but with large *n*, t-distribution is basically the normal distribution
@@ -745,6 +762,8 @@ template: twotailedtest
   - Confidence intervals and p-values convey the same information
     - But CIs are on the scale of the statistic of interest (and thus the scale of the original data)
   
+.footnote[* Wooldridge 4.3]
+
 ???
 
 If the confidence interval overlaps zero, we would be unable to reject the null the hypothesis
