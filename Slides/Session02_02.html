@@ -112,6 +112,85 @@ log close
 ---
 .left-column[
 ## histogram
+]
+.right-column[
+
+```
+* histogram only
+hist pubadmin
+```
+]
+
+.left-column[
+## histogram
+## density
+]
+```
+* kernel density only
+kdensity pubadmin
+* histogram + kernel density
+hist pubadmin, kdensity
+```
+
+.left-column[
+## histogram
+## density
+## boxplot
+]
+.right-column[
+```
+* boxplot
+graph box growth
+* boxplot by group
+graph box growth, over(vlegit)
+
+* horizontal bars
+graph hbox growth
+graph hbox growth, over(vlegit)
+```
+]
+
+.left-column[
+## histogram
+## density
+## boxplot
+## barplot
+]
+.right-column[
+```
+* means of variables
+graph bar paris london brussels lisbon
+* median of variables
+graph bar (median) elf language
+
+* mean of one variable by group
+graph bar elf, over(vlegit)
+```
+
+.left-column[
+## histogram
+## density
+## boxplot
+## barplot
+## dotchart
+]
+.right-column[
+```
+graph dot corrupt
+
+gen colonial = paris
+replace colonial = 2 if london==1
+replace colonial = 3 if brussels==1
+replace colonial = 4 if lisbon==1
+label define colonialnames 0 "None" 1 "France" 2 "Britain" 3 "Belgium" 4 "Portugal"
+label values colonial colonialnames
+graph dot corrup, over(colonial)
+```
+]
+
+
+.left-column[
+## histogram
 ## density
 ## boxplot
 ## barplot
@@ -119,18 +198,18 @@ log close
 ## scatterplot
 ]
 .right-column[
-
 ```
-hist
-kdensity
-graph box
+* scatterplot
+graph twoway scatter growth lcon
+* shorter command
+scatter growth lcon
 
-graph bar 
-graph dot
+* labeled points
+scatter goodgov hlegit, mlabel(wbcode)
 
-graph twoway scatter
+* weird old plotting command
+plot growth lcon
 ```
-
 ]
 
 
