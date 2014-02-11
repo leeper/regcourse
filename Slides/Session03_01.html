@@ -42,7 +42,7 @@ name: outline4
 template: outline1
 
 ---
-# Causal Terminology #
+## Causal Terminology
 
  - Unit: A physical object at a particular point in time
 
@@ -56,6 +56,11 @@ template: outline1
 
  - Average causal effect
 
+ 
+---
+## Mill's method of difference
+
+> If an instance in which the phenomenon under investigation occurs, and an instance in which it does not occur, have every circumstance save one in common, that one occurring only in the former; the circumstance in which alone the two instances differ, is the effect, or cause, or an necessary part of the cause, of the phenomenon.
  
 ---
 ## Causal inference
@@ -73,6 +78,12 @@ Experiments as a benchmark
 
 - Green et al. (2011) from last week
 
+
+Try to make our data analysis as experiment-like as possible
+
+  - Sometimes we have quasi-experiments
+  
+  - But usually we just have to build a good model
 
 
 ---
@@ -132,8 +143,6 @@ Now treatment looks much better than control, even though on average it is worse
 (This is basic selection bias)
 
 
-Look ahead to Shadish, Cook, and Campbell (Ch.8, 246--257) for more on randomization
-
 ---
 ## Causal inference
 
@@ -145,8 +154,6 @@ Look ahead to Shadish, Cook, and Campbell (Ch.8, 246--257) for more on randomiza
 
 ---
 
-
-
 - Causal effects
     - SATE
     - PATE and sampling
@@ -154,7 +161,8 @@ Look ahead to Shadish, Cook, and Campbell (Ch.8, 246--257) for more on randomiza
 
 ---
 ## Causal inference
-  - When do our statistical inferences have *causal* meaning?
+
+  - When do our statistical inferences based on observational data have *causal* meaning?
 
 ---
 ## Five criteria
@@ -172,21 +180,133 @@ How does regression help us with causal inference?
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
 
 
+---
+## Causation in regression
+
+We need to focus on bias in the estimated relationship (slope coefficient) due to:
+ 
+ - Measurement Error
+ 
+ - Post-treatment bias
+
+ - Confounding
+
+ 
+---
+## Measurement error
+
+Two kinds of measurement error:
+
+ 1. Dependent variable
+ 
+ 2. Independent variable(s)
+ 
+ 
+
+
 
 
 ---
+## Posttreatment bias
+
+ - We usually want to know the **total effect** of a cause
+ 
+ - If we include a mediator, M, of the X -> Y relationship, the coefficient on X:
+  - Only reflects the **direct** effect
+  - Excludes the **indirect** effect of X through M
+
+ - So don't control for mediators!
+ 
+
+???
+
+Is there an example in Eveland and Scheufele? Or in Prior?
+
+Problem is that we can only theorize about possible mediators
+
+---
+## Confounding
+
+ - To make a causal claim about a regression coefficient, we need to know that the effect is unconfounded.
+
+ - To do this we can use:
+ 
+   1. Theory
+   
+   2. Empirical tests of model specification
+
+
+---
+## Common practices
+
+ 1. Condition on nothing
+   - Estimate a "naive" effect
+ 
+ 2. Condition on some variables
+   - Theoretically motivated?
+   - Data dredging?
+ 
+ 3. Condition on observables
+   - All observed variables in model
+   - All unobserved variables not in model
+   
+
+   
+---
 ## Causal models
 
-- Graphs
-- Backdoor criterion
+  - Graphs as expressions of causal theories
+
+
+---
+## Backdoor criterion
+
+How do we know what variables to condition on?
+
+ 1. Condition a "fork of mutual dependence" (i.e., confounds)
+ 
+ 2. Condition on a complete chain of mediation
+ 
+ 3. Do not condition on "colliders" or their descendents
+ 
+ 
+???
+
+Draw examples on board?
+
+Colliders open back door paths
+
+This is expressed in KKV about relevant versus irrelevant omitted variables
+
+
+---
+
+Simple confounding:
+![http://i.imgur.com/cOX02vk.png](http://i.imgur.com/cOX02vk.png)
+
+
+---
+
+Lagged DV:
+![http://i.imgur.com/0AvbiYc.png](http://i.imgur.com/0AvbiYc.png)
+
+
+----
+
+Full confounding example:
+![http://i.imgur.com/EvJfY5h.png](http://i.imgur.com/EvJfY5h.png)
+
+????
+
+Instruments (Week 12)
+
+
+---
 
   
 - Endogeneity
   - Omitted variables
 
-- Measurement error
-
-- Post-treatment bias
 
   
 
@@ -196,42 +316,92 @@ template: outline4
 
 
 ---
-## Model Building
-  - Identifying the right variables
-    - We can never know the true model
-    - We can only guess at the model, using theory and observable variables
-      - Observable versus unobservable variables; Observed versus unobserved variables
-    - We can tell whether observed variables should be in the model using residual plots
-      - Plot residuals from a partially specified model against an excluded variable
+## Empirical model-building
+  
+ - We can never know the true model
+ 
+ - We can never observe all variables
+ 
+ - We can tell whether and how observed variables should be in the model using residual plots:
+   
+   1. Plot residuals from a partially specified model against an excluded variable
+   
+   2. Plot residuals from a fully specified model against an included variable
 
+???
+
+ - Observable versus unobservable variables
+
+ - Observed versus unobserved variables
+ 
+ - We should observe all observable, theoretically important variables
+
+ - **IMPORTANT:** Interactions between variables (see Session 5)
+ 
 ---
 ## Functional form
-    - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
-    - We can transform variables however we want in order to force a linear relationship
-      - We want to produce a linear Conditional Expectation Function
-      - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
-    - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
-      - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
-      - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
-    - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
 
-    
+ - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
+ 
+ - We can transform variables however we want in order to force a linear relationship
+  - We want to produce a linear Conditional Expectation Function
+  - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
+ 
+ - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
+  - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
+  - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
+
+ - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
+
+
+---
+## RESET test
+
+Can we account for nonlinearities by including power terms?
+
+In Stata:
+
+```
+reg growth lcon
+ovtest
+```
+
+.footnote[Wooldridge pp.296-297]
+
+
+
 ---
 ## Influential observations
 
  - Some observations have high "leverage," having a dramatic influence on the estimated coefficient(s) in a model
- - Influential observations are essentially outliers (but they might be multi-dimensional outliers and thus hard to see in a boxplot)
- - We can estimate Cook's Distance to assess how influential a particular observation is on the results of a regression model
-  - Cook's Distance is calculated by "jacknifing" the regression model
-  - Jacknifing means rerunning the model `\(n\)`-times, leaving out one observation each time
-  - This means we calculate the regression model with all the data, then we compare coefficients from that model to coefficients from the jacknifed models
-  - When the full model and jacknifed models for a particular observation differ greatly, that observation has a high Cook's distance
-  - We can then drop those observations if we're worried about how they influence the model
-  - We lose representativeness, but possibly gain a better insight into the shape of the relationships in the reduced dataset
-  - There's no perfect rule for the Cook's Distance threshold for excluding an observation but `\(n/4\)` is conventional
+ 
+ - Influential observations are essentially outliers
+ 
+ - They might be multi-dimensional outliers and thus hard to see
+ 
+ - We can measure leverage directly, but often use Cook's Distance
+ 
+???
+
+Cook's Distance incorporates information about residuals in addition to leverage
+ 
+---
+## Cook's Distance
+ 
+ - Cook's Distance is calculated by "jacknifing" the regression model
+   - Re-running the model *n*-times, leaving out one observation each time
+ 
+ - Run the model with all the data, then compare those coefficients to the jacknifed models
+   - Cook's Distance is high when the differences between those coefficients are large
+   - `\(n/4\)` is conventional threshold for "high" Cook's Distance
+ 
+ - We can then drop those observations if we're worried about how they influence the model
+   - We lose representativeness
+   - Possibly gain a better insight into the shape of the relationships in the reduced dataset
+  
 
 ---
-## Cook's Distance in Stata
+## Influential Observations in Stata
 
 ```
 use EnglebertPRQ2000.dta
@@ -246,6 +416,9 @@ tab country if cookmax = newvar
 
 * see Cook's distance by country
 tab country, summarize(newvar) nost nofr
+
+* leverage plot
+lvr2plot, mlabel(country)
 ```
 
 
@@ -258,6 +431,7 @@ template: outline4
  - In bivariate regression, `\(\beta_1\)` is just the slope (line of best fit)
  
  - In multivariate regression, interpreting coefficients is more complex
+   - Imagine a *hyperplane*
 
  - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
     - Holding all other variables at their means, what is the effect of x on y
@@ -269,20 +443,36 @@ Instead of thinking of a line of best fit, we have to think about a *hyperplane 
 ---
 ## Interpretation of coefficients
 
+  - Our interpretations are sample-level interpretations
+    - We need to have a representative sample to make population-level inferences
+    - But we rarely have truly representative samples
+  
+  - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
+    - Better not to think about the point estimates (slopes) but instead the interval
 
+???
 
-  - General interpretation
-    - The size of the effect depends on the units of `\(x\)`
-      - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
-    - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
-      - Better not to think about the point estimates (slopes) but instead the interval
-    - It's not easy to compare substantive size of coefficients unless regressors have comparable units
-      - Otherwise it's apples and oranges comparisons
-      - Sometimes we'll "standardize" variables so that a unit change in the standardized variable `\(x\ast\)` is a standard deviation change in the original variable `\(x\)`
-      - This doesn't solve the comparability problem because it's comparing standardized apples to standardized oranges
+Sometimes we have populations
+
+Even random samples are not always representative
+ - Bad sampling procedures
+ - Nonresponse
+ 
+    
+---
+## Comparing coefficients
+ 
+ - It's not easy to compare substantive size of coefficients unless regressors have comparable units
+ 
+ - Otherwise it's apples and oranges comparisons
+ 
+ - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x\ast\)`)
+   - A standard deviation change in `\(x\)` equals a unit-change in `\(x\ast\)`
+   - The coefficient `\(\beta\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
+   - Comparing standardized apples to standardized oranges
       
-- Our interpretations are sample-level interpretations
-    - We need to have a representative sample to make population-level statistical inferences
+ - The size of the effect depends on the units of `\(x\)`
+    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
     
     
 ---
@@ -302,9 +492,9 @@ Instead of thinking of a line of best fit, we have to think about a *hyperplane 
 ---
 ## Indicator
 
- - Bivariate regression is equivalent to a t-test
-
- - Show this graphically
+ - Bivariate regression is equivalent to a *t*-test
+ 
+ - Like the example from last week
 
 ---
 ## Categorical
@@ -315,9 +505,11 @@ Instead of thinking of a line of best fit, we have to think about a *hyperplane 
    - Be cautious about linearity and the Conditional Expectation Function
    - How categorical variables are coded can affect the estimate since the scale is imposed by the researcher
  
- - Convert to indicators
+ - Convert to indicators*
    - A series of pairwise comparisons to a baseline condition
- 
+
+.footnote[Wooldridge pp.225-230]
+   
 ---
 ##
 
