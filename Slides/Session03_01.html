@@ -221,6 +221,20 @@ template: questions
 
 ???
 
+ 1. We need a demonstrated relationship between X and Y (e.g., correlation)
+ 
+ 2. X needs to precede Y
+   - This is easy in experiments due to human intervention
+   - What about in cross-sectional data?
+   
+ 3. No reason why we see a relationship other than that X causes Y
+ 
+ 4. Does it make sense that X can cause Y (directly or indirectly)
+ 
+ 5. No ecological inferences
+   - Effect has to be found at the level of the causal effect
+
+
 How does regression help us with causal inference?
 
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
@@ -281,10 +295,19 @@ Which of these is a problem for us?
 ???
 
 
+ 1. Constant measurement error not a problem
+ 
+ 2. Random measurement error is inefficient but only biasing in the DV
+ 
+ 3. Systematic measurement error is a big mess and is essentially selection bias
+
 
 ---
 ## Errors in Dependent Variables
 
+  - This produces bias
+
+  - The direction of that bias is toward zero
 
 .footnote[* Wooldridge pp.308-310, KKV pp.158,164-168]
 
@@ -293,11 +316,20 @@ Which of these is a problem for us?
 ---
 ## Errors in Independent Variables
 
+ - This produces inefficiencies
+ 
+ - It's harder to see an effect
+ 
+ - This is pretty much guaranteed to exist
 
 .footnote[* Wooldridge pp.310-313]
 
 
 ???
+
+We have to worry about measurement error both in our causal variable *and* in conditioning variables
+
+If an effect between X and Y is confounded by Z, and Z is measured with error, including Z does not fully break the confounding
 
 
 ---
@@ -554,10 +586,23 @@ ovtest
 ---
 ## Residual plots
 
+ - Residuals are the unexplained part of the variation in Y
+ 
+ - If there is a relationship between residuals and an included variable, there is endogeneity
+ 
+ - How do we use residuals to build models?
+   
+   1. Are our included variables included in the correct form?
+ 
+   2. Are there excluded variables that should be in the model?
+
 
 ???
 
-NEED A FIGURE TO SHOW THIS
+NEED A FIGURE TO SHOW FUNCTIONAL FORM
+
+NEED A FIGURE TO SHOW OMITTED VARIABLE
+
 
 
 
