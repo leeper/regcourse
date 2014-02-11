@@ -29,18 +29,15 @@ name: outline1
 name: outline2
  2. Model building
  
+
 --
 name: outline3
- 3. Multiple linear regression
- 
---
-name: outline4
- 4. Reporting and interpreting regression results
+ 3. Reporting and interpreting regression results
  
 
  
 ---
-class: middle, center
+class: center
 ## Exercise
 
 Think about the Eveland and Scheufele (2000) article.
@@ -48,7 +45,7 @@ Think about the Eveland and Scheufele (2000) article.
 What is their core argument?
 
 ---
-class: middle, center
+class: center
 ## Exercise
 
 For 90 seconds, think about:
@@ -56,13 +53,13 @@ For 90 seconds, think about:
 How good a job did they do of making a causal inference?
 
 ---
-class: middle, center
+class: center
 ## Exercise
 
 Now, share with the person sitting next to you.
 
 ---
-class: middle, center
+class: center
 ## Exercise
 
 What did you come up with? 
@@ -119,7 +116,7 @@ Try to make our data analysis as experiment-like as possible
 
 ---
 name: questions
-class: center, middle
+class: center
 
 Questions?
   
@@ -207,6 +204,9 @@ template: questions
 
   When do our statistical inferences based on observational data have *causal* meaning?
 
+
+
+  
 ---
 ## Five criteria
 
@@ -227,6 +227,18 @@ How does regression help us with causal inference?
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
 
 
+---
+## Multiple linear regression
+
+Why do we rarely see bivariate regression in published research?
+
+???
+
+The only reason, from a causal inference perspective, to use a multivariate regression model is to control for confounding
+
+Some people - especially Economists and in some, older, PS literature - focus on causal interpretations of all variables in a model
+
+That's usually bad practice
 
 ---
 ## Causation in regression
@@ -544,7 +556,7 @@ template: questions
 
 
 ---
-class: center, middle
+class: center
 ## Exercise
 
 For 90 seconds, think about how well Eveland and Scheufele did at making a causal inference.
@@ -628,7 +640,7 @@ template: questions
 
 
 ---
-template: outline4
+template: outline3
 
 ---
 ## Interpretation of coefficients
@@ -784,7 +796,7 @@ template: questions
    - Confidence intervals or standard errors
    
    - Measures of model fit
-     1. RMSE (`\(\sigma\)`)
+     1. RMSE (`\(\hat{\sigma}\)`)
      2. Adjusted-`\(R^2\)`
      
    - Model-specific sample size (*n*)
