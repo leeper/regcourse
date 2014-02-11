@@ -150,27 +150,33 @@ Now treatment looks much better than control, even though on average it is worse
 
  - We focus on average causal effects
    - Compare average outcomes among groups of units
-   - Try to make comparable those groups by controlling for confounding effects
+   - Try to make groups comparable by controlling for confounding effects
+   
+ - SATE vs. PATE
+ 
+???
 
----
+Sample Average Causal Effect (SATE)
 
-- Causal effects
-    - SATE
-    - PATE and sampling
-  
+Population Average Causal Effect (PATE)
+
 
 ---
 ## Causal inference
 
-  - When do our statistical inferences based on observational data have *causal* meaning?
+  When do our statistical inferences based on observational data have *causal* meaning?
 
 ---
 ## Five criteria
 
   1. Relationship
+  
   2. Temporal precedence
+  
   3. No confounding
+  
   4. Plausible mechanism
+  
   5. Level of analysis
 
 ???
@@ -178,6 +184,7 @@ Now treatment looks much better than control, even though on average it is worse
 How does regression help us with causal inference?
 
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
+
 
 
 ---
@@ -191,7 +198,23 @@ We need to focus on bias in the estimated relationship (slope coefficient) due t
 
  - Confounding
 
+---
+## An aside: Inefficiencies
+
+ - Measurement error in the independent variables
  
+ - Including irrelevant control variables
+ 
+.footnote[* KKV pp.182-185]
+ 
+???
+
+Inefficiencies make it harder for us to find a relationship by introducing more uncertainty
+
+But they do not bias our point estimates
+
+We still get the right slope(s), on average, but we just are less certain of the exact value of the slope(s)
+
 ---
 ## Measurement error
 
@@ -201,7 +224,28 @@ Two kinds of measurement error:
  
  2. Independent variable(s)
  
+Which of these is a problem for us?
  
+???
+
+
+
+---
+## Errors in Dependent Variables
+
+
+.footnote[* Wooldridge pp.308-310, KKV pp.158,164-168]
+
+
+
+---
+## Errors in Independent Variables
+
+
+.footnote[* Wooldridge pp.310-313]
+
+
+???
 
 
 
@@ -259,7 +303,8 @@ Problem is that we can only theorize about possible mediators
 
 
 ---
-## Backdoor criterion
+name: backdoor
+## "Backdoor criterion"
 
 How do we know what variables to condition on?
 
@@ -279,32 +324,56 @@ Colliders open back door paths
 This is expressed in KKV about relevant versus irrelevant omitted variables
 
 
+ 1. Variables that confound the relationship between X and Y
+ 
+ 2. "Smoking kills people" example:
+   Smoking -> Tar
+   Tar -> Growth of cancer cells
+   Cancer -> Morbidity
+
+ 3. Colliders are confusing. They open backdoor paths
+
 ---
 background-image: url(http://i.imgur.com/cOX02vk.png)
 
+
+---
+template: backdoor
 
 ---
 background-image: url(http://i.imgur.com/0AvbiYc.png)
 
 
 ---
+template: backdoor
+
+---
 background-image: url(http://i.imgur.com/EvJfY5h.png)
 
 
-????
+???
 
 Instruments (Week 12)
 
 
+
 ---
+## An Aside: Endogeneity
 
-  
-- Endogeneity
-  - Omitted variables
+ - We often hear the word **endogeneity**
+ 
+ - It refers to correlation between included variables and the error term
+ 
+ - Causes of endogeneity:
+   1. Measurement error in regressors
+   2. Omitted variables correlated with included regressors
+   3. Lack of temporal precedence
 
+???
 
-  
+When I say endogeneity, I am almost always referring to the third use of the term
 
+But it also encompasses the first two meanings
 
 ---
 template: outline4
@@ -339,11 +408,16 @@ template: outline4
  - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
  
  - We can transform variables however we want in order to force a linear relationship
-  - We want to produce a linear Conditional Expectation Function
-  - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
+  - We want to produce a *linear* Conditional Expectation Function
+  - To interpret transformations, reverse the transformation to make sense of the coefficient on the original variable scale
  
+---
+## Functional form
+
  - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
+  
   - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
+  
   - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
 
  - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
@@ -362,6 +436,17 @@ ovtest
 ```
 
 .footnote[Wooldridge pp.296-297]
+
+
+---
+## Residual plots
+
+
+???
+
+NEED A FIGURE TO SHOW THIS
+
+
 
 
 
@@ -383,18 +468,32 @@ Cook's Distance incorporates information about residuals in addition to leverage
 ---
 ## Cook's Distance
  
- - Cook's Distance is calculated by "jacknifing" the regression model
+ - Cook's Distance is calculated by "jacknifing"
    - Re-running the model *n*-times, leaving out one observation each time
  
  - Run the model with all the data, then compare those coefficients to the jacknifed models
    - Cook's Distance is high when the differences between those coefficients are large
-   - `\(n/4\)` is conventional threshold for "high" Cook's Distance
+   
+   - `\(\frac{n}{4}\)` is conventional threshold for "high" Cook's Distance
  
+---
+## Cook's Distance
+
  - We can then drop those observations if we're worried about how they influence the model
-   - We lose representativeness
-   - Possibly gain a better insight into the shape of the relationships in the reduced dataset
+
+ - We lose representativeness
+
+ - Possibly gain a better insight into the shape of the relationships in the reduced dataset
   
 
+???
+
+The issue of dropping observations is something we'll revisit
+
+How do we deal with outliers and missing data?
+
+Trade-off representativeness and quality/precision of inference about a reduced population
+  
 ---
 ## Influential Observations in Stata
 
@@ -434,7 +533,17 @@ template: outline4
 ???
 
 Instead of thinking of a line of best fit, we have to think about a *hyperplane of best fit* that spans across all of the independent variables
-    
+
+
+---
+
+???
+
+NEED A FIGURE SHOWING A HYPERPLANE
+
+
+
+
 ---
 ## Interpretation of coefficients
 
@@ -457,18 +566,30 @@ Even random samples are not always representative
 ---
 ## Comparing coefficients
  
+ - The size of the effect depends on the units of `\(x\)`
+    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
+    - p-value is not an indicator of effect size
+ 
  - It's not easy to compare substantive size of coefficients unless regressors have comparable units
  
  - Otherwise it's apples and oranges comparisons
  
+???
+
+Don't say an effect is "highly significant"
+ 
+---
+## Comparing standardized coefficients
+
  - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x\ast\)`)
-   - A standard deviation change in `\(x\)` equals a unit-change in `\(x\ast\)`
-   - The coefficient `\(\beta\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
-   - Comparing standardized apples to standardized oranges
-      
- - The size of the effect depends on the units of `\(x\)`
-    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
-    
+ 
+ - A standard deviation change in `\(x\)` equals a unit-change in `\(x\ast\)`
+ 
+ - The coefficient `\(\beta\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
+ 
+ - "Comparing standardized apples to standardized oranges"
+ 
+.footnote[http://gking.harvard.edu/files/mist.pdf]    
     
 ---
 ## Types of variables
@@ -480,19 +601,34 @@ Even random samples are not always representative
  - Categorical or ordinal
  
 ---
-## Interval
+.left-column[
+### Interval
+]
+.right-column[
 
  - Change in `\(y\)` for a unit-change in `\(x\)`
 
+]
+
 ---
-## Indicator
+.left-column[
+### Interval
+### Indicator
+]
+.right-column[
 
  - Bivariate regression is equivalent to a *t*-test
  
- - Like the example from last week
+ - Like the experimental example from last week
+]
 
 ---
-## Categorical
+.left-column[
+### Interval
+### Indicator
+### Categorical
+]
+.right-column[
 
  - Is it ordinal?
 
@@ -503,8 +639,9 @@ Even random samples are not always representative
  - Convert to indicators*
    - A series of pairwise comparisons to a baseline condition
 
-.footnote[Wooldridge pp.225-230]
-   
+.footnote[* Wooldridge pp.225-230]
+
+]   
 ---
 ##
 
@@ -512,3 +649,28 @@ Even random samples are not always representative
 
 ---
 ## Reporting regression results
+
+ - What is normally reported from a regression model?
+ 
+   1. Coefficients
+   
+   2. Standard errors (or *t*-statistics)
+   
+   3. Significance stars
+   
+   4. `\(R^2\)` or Adjusted-`\(R^2\)` 
+
+---
+## Reporting regression results
+
+ - What should we report from a regression model?
+ 
+   - Coefficients
+   
+   - Confidence intervals or standard errors
+   
+   - Measures of model fit
+     1. RMSE `\(\sigam\)`
+     2. Adjusted-`\(R^2\)`
+     
+   - Model-specific sample size (*n*)
