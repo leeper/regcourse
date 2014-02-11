@@ -283,7 +283,7 @@ We need to focus on bias in the estimated relationship (slope coefficient) due t
 ---
 ## An aside: Inefficiencies
 
- - Measurement error in the independent variables
+ - Random measurement error
  
  - Including irrelevant control variables
  
@@ -293,7 +293,7 @@ We need to focus on bias in the estimated relationship (slope coefficient) due t
 
 Inefficiencies make it harder for us to find a relationship by introducing more uncertainty
 
-But they do not bias our point estimates
+But they do not necessarily bias our point estimates
 
 We still get the right slope(s), on average, but we just are less certain of the exact value of the slope(s)
 
@@ -313,7 +313,7 @@ Which of these is a problem for us?
 
  1. Constant measurement error not a problem
  
- 2. Random measurement error is inefficient but only biasing in the DV
+ 2. Random measurement error is inefficient but only biasing in the independent variables
  
  3. Systematic measurement error is a big mess and is essentially selection bias
 
@@ -321,9 +321,11 @@ Which of these is a problem for us?
 ---
 ## Errors in Dependent Variables
 
-  - This produces bias
-
-  - The direction of that bias is toward zero
+  - This produces inefficiencies
+  
+  - Biasing if systematically related to regressor(s)
+  
+  - Pretty much guaranteed to exist
 
 .footnote[* Wooldridge pp.308-310, KKV pp.158,164-168]
 
@@ -332,11 +334,11 @@ Which of these is a problem for us?
 ---
 ## Errors in Independent Variables
 
- - This produces inefficiencies
+ - This produces inefficiencies and bias
  
- - It's harder to see an effect
+ - It's harder to see an effect (*attenuation*)
  
- - This is pretty much guaranteed to exist
+ - Pretty much guaranteed to exist
 
 .footnote[* Wooldridge pp.310-313]
 
@@ -346,6 +348,11 @@ Which of these is a problem for us?
 We have to worry about measurement error both in our causal variable *and* in conditioning variables
 
 If an effect between X and Y is confounded by Z, and Z is measured with error, including Z does not fully break the confounding
+
+Options:
+ - We can just live with this (i.e., ignore it)
+ - Try to get better data (e.g., multiple measures)
+ - Instrumental variables
 
 
 ---
@@ -451,7 +458,7 @@ C causes both D and Y, so C is a confound we need to control for
 background-image: url(http://i.imgur.com/0AvbiYc.png)
 
 
-.footnote[ADD CITATION TO WOOLDRIDGE]
+.footnote[* Wooldridge pp.251-252]
 
 ???
 
