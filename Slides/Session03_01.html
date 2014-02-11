@@ -38,6 +38,35 @@ name: outline4
  4. Reporting and interpreting regression results
  
 
+ 
+---
+class: middle, center
+## Exercise
+
+Think about the Eveland and Scheufele (2000) article.
+
+What is their core argument?
+
+---
+class: middle, center
+## Exercise
+
+For 90 seconds, think about:
+
+How good a job did they do of making a causal inference?
+
+---
+class: middle, center
+## Exercise
+
+Now, share with the person sitting next to you.
+
+--
+
+What did you come up with? 
+
+
+
 ---
 template: outline1
 
@@ -155,6 +184,7 @@ Now treatment looks much better than control, even though on average it is worse
  - SATE vs. PATE
  
 ???
+
 
 Sample Average Causal Effect (SATE)
 
@@ -326,6 +356,37 @@ This is expressed in KKV about relevant versus irrelevant omitted variables
 
  1. Variables that confound the relationship between X and Y
  
+
+---
+background-image: url(http://i.imgur.com/cOX02vk.png)
+
+???
+
+This is a simple example of confounding:
+
+C causes both D and Y, so C is a confound we need to control for
+
+
+---
+background-image: url(http://i.imgur.com/0AvbiYc.png)
+
+
+.footnote[ADD CITATION TO WOOLDRIDGE]
+
+???
+
+Sometimes we can't observe a known confound
+
+One strategy is to condition on a lagged version of the DV
+
+ - The logic is that this controls for unobservables
+ 
+ - But it actually opens up a backdoor path
+
+---
+template: backdoor
+
+
  2. "Smoking kills people" example:
    Smoking -> Tar
    Tar -> Growth of cancer cells
@@ -334,26 +395,35 @@ This is expressed in KKV about relevant versus irrelevant omitted variables
  3. Colliders are confusing. They open backdoor paths
 
 ---
-background-image: url(http://i.imgur.com/cOX02vk.png)
-
-
----
-template: backdoor
-
----
-background-image: url(http://i.imgur.com/0AvbiYc.png)
-
-
----
-template: backdoor
-
----
 background-image: url(http://i.imgur.com/EvJfY5h.png)
 
 
 ???
 
-Instruments (Week 12)
+A is a collider
+
+We just have to condition on F
+
+No need to condition on G, it's causally irrelevant
+
+
+---
+template: backdoor
+
+ 4. Instruments
+ 
+ 
+.footnote[We'll cover this in Week 12]
+
+
+---
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
+???
+
+C is an instrument for D
+
+We can talk about the effect of D on Y, local to C
 
 
 
@@ -445,6 +515,17 @@ ovtest
 ???
 
 NEED A FIGURE TO SHOW THIS
+
+
+
+---
+## Exercise
+
+For 90 seconds, think about how well Eveland and Scheufele did at making a causal inference.
+
+--
+
+Now share with the person sitting next to you.
 
 
 
