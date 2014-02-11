@@ -29,7 +29,6 @@ name: outline1
 name: outline2
  2. Model building
  
-
 --
 name: outline3
  3. Reporting and interpreting regression results
@@ -312,7 +311,9 @@ template: questions
  - We usually want to know the **total effect** of a cause
  
  - If we include a mediator, M, of the X -> Y relationship, the coefficient on X:
+  
   - Only reflects the **direct** effect
+  
   - Excludes the **indirect** effect of X through M
 
  - So don't control for mediators!
@@ -357,6 +358,9 @@ Problem is that we can only theorize about possible mediators
 
   - Graphs as expressions of causal theories
 
+  - We can draw out causal theories as a set of directed relationships between variables
+  
+**Note: This is not Structural Equation Modelling**
 
 ---
 name: backdoor
@@ -415,6 +419,8 @@ One strategy is to condition on a lagged version of the DV
 template: backdoor
 
 
+???
+
  2. "Smoking kills people" example:
    Smoking -> Tar
    Tar -> Growth of cancer cells
@@ -438,7 +444,9 @@ No need to condition on G, it's causally irrelevant
 ---
 template: backdoor
 
- 4. Instruments
+Another strategy:
+
+  - Instruments
  
  
 .footnote[We'll cover this in Week 12]
@@ -511,7 +519,9 @@ But it also encompasses the first two meanings
  - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
  
  - We can transform variables however we want in order to force a linear relationship
+  
   - We want to produce a *linear* Conditional Expectation Function
+  
   - To interpret transformations, reverse the transformation to make sense of the coefficient on the original variable scale
  
 ---
@@ -704,11 +714,11 @@ Don't say an effect is "highly significant"
 ---
 ## Comparing standardized coefficients
 
- - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x\ast\)`)
+ - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x^\ast\)`)
  
- - A standard deviation change in `\(x\)` equals a unit-change in `\(x\ast\)`
+ - A standard deviation change in `\(x\)` equals a unit-change in `\(x^\ast\)`
  
- - The coefficient `\(\beta\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
+ - The coefficient `\(\beta^\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
  
  - "Comparing standardized apples to standardized oranges"
  
