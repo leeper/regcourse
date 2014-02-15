@@ -27,16 +27,47 @@ name: outline1
 
 --
 name: outline2
- 2. Model-building
+ 2. Model building
  
 --
 name: outline3
- 3. Multiple linear regression
+ 3. Reporting and interpreting regression results
  
+
+ 
+---
+class: center
+## Exercise
+
+Form pairs
+
 --
-name: outline4
- 4. Reporting and interpreting regression results
- 
+
+Person A: Eveland and Scheufele (2000)
+
+Person B: Prior (2005)
+
+---
+class: center
+## Exercise
+
+For 90 seconds, think about your assigned article.
+
+How good a job did they do of making a causal inference?
+
+---
+class: center
+## Exercise
+
+Now, share with your partner.
+
+---
+class: center
+## Exercise
+
+What did you come up with? 
+
+
 
 ---
 template: outline1
@@ -86,6 +117,12 @@ Try to make our data analysis as experiment-like as possible
   - But usually we just have to build a good model
 
 
+---
+name: questions
+class: center, middle
+
+Questions?
+  
 ---
 # "Perfect Doctor" #
 
@@ -150,36 +187,89 @@ Now treatment looks much better than control, even though on average it is worse
 
  - We focus on average causal effects
    - Compare average outcomes among groups of units
-   - Try to make comparable those groups by controlling for confounding effects
+   - Try to make groups comparable by controlling for confounding effects
+   
+ - SATE vs. PATE
+ 
+???
+
+How do we make groups equal?
+
+ 1. Focus on selection bias:
+   - What causes units to have a particular value of the treatment/causal variable?
+   - Control for those
+ 
+ 2. Control for confounding:
+   - What things cause both X and Y?
+   - Control for those
+
+We can formalize the second one more easily and that's what we'll focus on
+   
+   
+Sample Average Causal Effect (SATE)
+
+Population Average Causal Effect (PATE)
 
 ---
+template: questions
 
-- Causal effects
-    - SATE
-    - PATE and sampling
-  
 
 ---
 ## Causal inference
 
-  - When do our statistical inferences based on observational data have *causal* meaning?
+  When do our statistical inferences based on observational data have *causal* meaning?
 
+
+
+  
 ---
 ## Five criteria
 
   1. Relationship
+  
   2. Temporal precedence
+  
   3. No confounding
+  
   4. Plausible mechanism
+  
   5. Level of analysis
 
 ???
+
+ 1. We need a demonstrated relationship between X and Y (e.g., correlation)
+ 
+ 2. X needs to precede Y
+   - This is easy in experiments due to human intervention
+   - What about in cross-sectional data?
+   
+ 3. No reason why we see a relationship other than that X causes Y
+ 
+ 4. Does it make sense that X can cause Y (directly or indirectly)
+ 
+ 5. No ecological inferences
+   - Effect has to be found at the level of the causal effect
+
 
 How does regression help us with causal inference?
 
 It only helps with items #1 and #2. Everything else is about research design and philosophical assumptions.
 
 
+---
+## Multiple linear regression
+
+Why do we rarely see bivariate regression in published research?
+
+???
+
+The only reason, from a causal inference perspective, to use a multivariate regression model is to control for confounding
+
+Some people - especially Economists and in some, older, PS literature - focus on causal interpretations of all variables in a model
+
+That's usually bad practice
+
+   
 ---
 ## Causation in regression
 
@@ -191,7 +281,23 @@ We need to focus on bias in the estimated relationship (slope coefficient) due t
 
  - Confounding
 
+---
+## An aside: Inefficiencies
+
+ - Random measurement error
  
+ - Including irrelevant control variables
+ 
+.footnote[* KKV pp.182-185]
+ 
+???
+
+Inefficiencies make it harder for us to find a relationship by introducing more uncertainty
+
+But they do not necessarily bias our point estimates
+
+We still get the right slope(s), on average, but we just are less certain of the exact value of the slope(s)
+
 ---
 ## Measurement error
 
@@ -201,8 +307,57 @@ Two kinds of measurement error:
  
  2. Independent variable(s)
  
+Which of these is a problem for us?
  
+???
 
+
+ 1. Constant measurement error not a problem
+ 
+ 2. Random measurement error is inefficient but only biasing in the independent variables
+ 
+ 3. Systematic measurement error is a big mess and is essentially selection bias
+
+
+---
+## Errors in Dependent Variables
+
+  - This produces inefficiencies
+  
+  - Biasing if systematically related to regressor(s)
+  
+  - Pretty much guaranteed to exist
+
+.footnote[* Wooldridge pp.308-310, KKV pp.158,164-168]
+
+
+
+---
+## Errors in Independent Variables
+
+ - This produces inefficiencies and bias
+ 
+ - It's harder to see an effect (*attenuation*)
+ 
+ - Pretty much guaranteed to exist
+
+.footnote[* Wooldridge pp.310-313]
+
+
+???
+
+We have to worry about measurement error both in our causal variable *and* in conditioning variables
+
+If an effect between X and Y is confounded by Z, and Z is measured with error, including Z does not fully break the confounding
+
+Options:
+ - We can just live with this (i.e., ignore it)
+ - Try to get better data (e.g., multiple measures)
+ - Instrumental variables
+
+
+---
+template: questions
 
 
 
@@ -212,7 +367,9 @@ Two kinds of measurement error:
  - We usually want to know the **total effect** of a cause
  
  - If we include a mediator, M, of the X -> Y relationship, the coefficient on X:
+  
   - Only reflects the **direct** effect
+  
   - Excludes the **indirect** effect of X through M
 
  - So don't control for mediators!
@@ -257,9 +414,13 @@ Problem is that we can only theorize about possible mediators
 
   - Graphs as expressions of causal theories
 
+  - We can draw out causal theories as a set of directed relationships between variables
+  
+**Note: This is not Structural Equation Modelling**
 
 ---
-## Backdoor criterion
+name: backdoor
+## "Backdoor criterion"
 
 How do we know what variables to condition on?
 
@@ -272,6 +433,8 @@ How do we know what variables to condition on?
  
 ???
 
+"Condition on" == "Control for" == "Include in model"
+
 Draw examples on board?
 
 Colliders open back door paths
@@ -279,44 +442,113 @@ Colliders open back door paths
 This is expressed in KKV about relevant versus irrelevant omitted variables
 
 
----
-
-Simple confounding:
-![http://i.imgur.com/cOX02vk.png](http://i.imgur.com/cOX02vk.png)
-
+ 1. Variables that confound the relationship between X and Y
+ 
 
 ---
+background-image: url(http://i.imgur.com/cOX02vk.png)
 
-Lagged DV:
-![http://i.imgur.com/0AvbiYc.png](http://i.imgur.com/0AvbiYc.png)
+???
 
+This is a simple example of confounding:
 
-----
-
-Full confounding example:
-![http://i.imgur.com/EvJfY5h.png](http://i.imgur.com/EvJfY5h.png)
-
-????
-
-Instruments (Week 12)
+C causes both D and Y, so C is a confound we need to control for
 
 
 ---
-
-  
-- Endogeneity
-  - Omitted variables
+background-image: url(http://i.imgur.com/0AvbiYc.png)
 
 
-  
+.footnote[* Wooldridge pp.251-252]
+
+???
+
+Sometimes we can't observe a known confound
+
+One strategy is to condition on a lagged version of the DV
+
+ - The logic is that this controls for unobservables
+ 
+ - But it actually opens up a backdoor path
+
+---
+template: backdoor
+
+
+???
+
+ 2. "Smoking kills people" example:
+   Smoking -> Tar
+   Tar -> Growth of cancer cells
+   Cancer -> Morbidity
+
+ 3. Colliders are confusing. They open backdoor paths
+
+---
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
+
+???
+
+A is a collider
+
+We just have to condition on F
+
+No need to condition on G, it's causally irrelevant
 
 
 ---
-template: outline4
+template: backdoor
+
+Another strategy:
+
+  - Instruments
+ 
+ 
+.footnote[We'll cover this in Week 12]
 
 
 ---
-## Empirical model-building
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
+???
+
+C is an instrument for D
+
+We can talk about the effect of D on Y, local to C
+
+ - **IMPORTANT:** Interactions between variables (see Session 5)
+ 
+---
+template: questions
+
+
+
+---
+## An Aside: Endogeneity
+
+ - We often hear the word **endogeneity**
+ 
+ - It refers to correlation between included variables and the error term
+ 
+ - Causes of endogeneity:
+   1. Measurement error in regressors
+   
+   2. Omitted variables correlated with included regressors
+   
+   3. Lack of temporal precedence
+
+???
+
+When I say endogeneity, I am almost always referring to the third use of the term
+
+But it also encompasses the first two meanings
+
+
+
+
+---
+## Empirical model building
   
  - We can never know the true model
  
@@ -344,12 +576,19 @@ template: outline4
  - OLS requires the regression model to be "linear in parameters" but the relationship between a given `\(x\)` and `\(y\)` need not be linear
  
  - We can transform variables however we want in order to force a linear relationship
-  - We want to produce a linear Conditional Expectation Function
-  - To interpret transformations, we need to reverse the transformation to make sense of the coefficient on the original variable scale
+  
+  - We want to produce a *linear* Conditional Expectation Function
+  
+  - To interpret transformations, reverse the transformation to make sense of the coefficient on the original variable scale
  
+---
+## Functional form
+
  - We can have multiple versions of the same variable in a model in order to account for nonlinear relationships
-  - Example 1: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 x_1^2\)`
-  - Example 2: `\(y \~ \beta_0 + \beta_1 x_1 + \beta_2 log(x_1)\)`
+  
+  - Example 1: `\(\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_1^2 + \epsilon\)`
+  
+  - Example 2: `\(\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 log(x_1) + \epsilon\)`
 
  - Identifying appropriate functional form is the same process as identifying appropriate variables to include (theory and residual plots)
 
@@ -367,6 +606,44 @@ ovtest
 ```
 
 .footnote[Wooldridge pp.296-297]
+
+
+---
+## Residual plots
+
+ - Residuals are the unexplained part of the variation in Y
+ 
+ - If there is a relationship between residuals and an included variable, there is endogeneity
+ 
+ - How do we use residuals to build models?
+   
+   1. Are our included variables included in the correct form?
+ 
+   2. Are there excluded variables that should be in the model?
+
+
+???
+
+NEED A FIGURE TO SHOW FUNCTIONAL FORM
+
+NEED A FIGURE TO SHOW OMITTED VARIABLE
+
+
+
+
+---
+template: questions
+
+
+---
+class: center
+## Exercise
+
+For 90 seconds, think about how well Prior or Eveland and Scheufele did at making a causal inference.
+
+--
+
+Now share with your partner from before.
 
 
 
@@ -388,18 +665,32 @@ Cook's Distance incorporates information about residuals in addition to leverage
 ---
 ## Cook's Distance
  
- - Cook's Distance is calculated by "jacknifing" the regression model
+ - Cook's Distance is calculated by "jacknifing"
    - Re-running the model *n*-times, leaving out one observation each time
  
  - Run the model with all the data, then compare those coefficients to the jacknifed models
    - Cook's Distance is high when the differences between those coefficients are large
-   - `\(n/4\)` is conventional threshold for "high" Cook's Distance
+   
+   - `\(\frac{n}{4}\)` is conventional threshold for "high" Cook's Distance
  
+---
+## Cook's Distance
+
  - We can then drop those observations if we're worried about how they influence the model
-   - We lose representativeness
-   - Possibly gain a better insight into the shape of the relationships in the reduced dataset
+
+ - We lose representativeness
+
+ - Possibly gain a better insight into the shape of the relationships in the reduced dataset
   
 
+???
+
+The issue of dropping observations is something we'll revisit
+
+How do we deal with outliers and missing data?
+
+Trade-off representativeness and quality/precision of inference about a reduced population
+  
 ---
 ## Influential Observations in Stata
 
@@ -423,7 +714,11 @@ lvr2plot, mlabel(country)
 
 
 ---
-template: outline4
+template: questions
+
+
+---
+template: outline3
 
 ---
 ## Interpretation of coefficients
@@ -439,7 +734,17 @@ template: outline4
 ???
 
 Instead of thinking of a line of best fit, we have to think about a *hyperplane of best fit* that spans across all of the independent variables
-    
+
+
+---
+
+???
+
+NEED A FIGURE SHOWING A HYPERPLANE
+
+
+
+
 ---
 ## Interpretation of coefficients
 
@@ -449,7 +754,6 @@ Instead of thinking of a line of best fit, we have to think about a *hyperplane 
   
   - Uncertainty means coefficients in model are unlikely to be exactly the population-level ("true") effects
     - Better not to think about the point estimates (slopes) but instead the interval
-
 ???
 
 Sometimes we have populations
@@ -458,22 +762,34 @@ Even random samples are not always representative
  - Bad sampling procedures
  - Nonresponse
  
-    
+   
 ---
 ## Comparing coefficients
+ 
+ - The size of the effect depends on the units of `\(x\)`
+    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
+    - p-value is not an indicator of effect size
  
  - It's not easy to compare substantive size of coefficients unless regressors have comparable units
  
  - Otherwise it's apples and oranges comparisons
  
- - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x\ast\)`)
-   - A standard deviation change in `\(x\)` equals a unit-change in `\(x\ast\)`
-   - The coefficient `\(\beta\ast\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
-   - Comparing standardized apples to standardized oranges
-      
- - The size of the effect depends on the units of `\(x\)`
-    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
-    
+???
+
+Don't say an effect is "highly significant"
+ 
+---
+## Comparing standardized coefficients
+
+ - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x^{\ast}\)`)
+ 
+ - A standard deviation change in `\(x\)` equals a unit-change in `\(x^{\ast}\)`
+ 
+ - The coefficient `\(\beta^{\ast}\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
+ 
+ - "Comparing standardized apples to standardized oranges"
+ 
+.footnote[[http://gking.harvard.edu/files/mist.pdf](http://gking.harvard.edu/files/mist.pdf)]
     
 ---
 ## Types of variables
@@ -485,19 +801,34 @@ Even random samples are not always representative
  - Categorical or ordinal
  
 ---
-## Interval
+.left-column[
+### Interval
+]
+.right-column[
 
  - Change in `\(y\)` for a unit-change in `\(x\)`
 
+]
+
 ---
-## Indicator
+.left-column[
+### Interval
+### Indicator
+]
+.right-column[
 
  - Bivariate regression is equivalent to a *t*-test
  
- - Like the example from last week
+ - Like the experimental example from last week
+]
 
 ---
-## Categorical
+.left-column[
+### Interval
+### Indicator
+### Categorical
+]
+.right-column[
 
  - Is it ordinal?
 
@@ -508,12 +839,53 @@ Even random samples are not always representative
  - Convert to indicators*
    - A series of pairwise comparisons to a baseline condition
 
-.footnote[Wooldridge pp.225-230]
-   
+.footnote[* Wooldridge pp.225-230]
+
+]   
+
 ---
-##
+template: questions
 
   
 
 ---
 ## Reporting regression results
+
+ - What is normally reported from a regression model?
+ 
+   1. Coefficients
+   
+   2. Standard errors (or *t*-statistics)
+   
+   3. Significance stars
+   
+   4. `\(R^2\)` or Adjusted-`\(R^2\)` 
+
+---
+## Reporting regression results
+
+ - What should we report from a regression model?
+ 
+   - Coefficients
+   
+   - Confidence intervals or standard errors
+   
+   - Measures of model fit
+     1. RMSE (`\(\hat{\sigma}\)`)
+     2. Adjusted-`\(R^2\)`
+     
+   - Model-specific sample size (*n*)
+
+   
+---
+## Looking ahead
+
+ - Tomorrow:
+   - Regression in Stata
+ 
+ - Next week:
+   - More on multivariate regression
+   - Review causal inference
+   - Standard errors (Kim)
+   
+ - **First assignment posted on Blackboard and due February 28th**

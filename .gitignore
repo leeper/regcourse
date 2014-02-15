@@ -1,1 +1,11 @@
-*.*
+Misc/
+Slides/*.pdf
+Slides/images/
+2014_1PolAnalysis/
+
+*.aux
+*.log
+*.out
+*.synctex.gz
+
+*.dta
