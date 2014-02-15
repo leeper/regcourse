@@ -64,7 +64,7 @@ Scalars
 ```
 
 ---
-## `tabulate` | tab
+## tabulate | tab
 
 ```
 tabulate and tab1 store the following in r():
@@ -98,41 +98,134 @@ log close
  - Code for graphics is complicated
 
  - Use the menus and `help` to learn the code
-   - Code: http://www.stata.com/support/faqs/graphics/gph/stata-graphs/
-   - Menus: http://www.ssc.wisc.edu/sscc/pubs/4-24.htm
+   - [Using Code](http://www.stata.com/support/faqs/graphics/gph/stata-graphs/)
+   - [Menus](http://www.ssc.wisc.edu/sscc/pubs/4-24.htm)
 
  - Use resources and examples:
    - Cameron and Trivedi 2.6 (pp.58-70)
    - Various places in S&#248;nderskov
-   - http://www.ats.ucla.edu/stat/stata/library/GraphExamples/
-   - http://www.survey-design.com.au/Stata%20Graphs.html
-   - http://www.ssc.wisc.edu/sscc/pubs/4-24.htm
+   - [UCLA IDRE](http://www.ats.ucla.edu/stat/stata/library/GraphExamples/)
+   - [A nice graph gallery](http://www.survey-design.com.au/Stata%20Graphs.html)
    
 
 ---
 .left-column[
-## histogram
-## density
-## boxplot
-## barplot
-## dotchart
-## scatterplot
+### histogram
 ]
 .right-column[
 
 ```
-hist
-kdensity
-graph box
-
-graph bar 
-graph dot
-
-graph twoway scatter
+* histogram only
+hist pubadmin
 ```
 
 ]
 
+---
+.left-column[
+### histogram
+### density
+]
+
+.right-column[
+```
+* kernel density only
+kdensity pubadmin
+* histogram + kernel density
+hist pubadmin, kdensity
+```
+]
 
 ---
+.left-column[
+### histogram
+### density
+### boxplot
+]
+.right-column[
+```
+* boxplot
+graph box growth
+* boxplot by group
+graph box growth, over(vlegit)
+
+* horizontal bars
+graph hbox growth
+graph hbox growth, over(vlegit)
+```
+]
+
+---
+.left-column[
+### histogram
+### density
+### boxplot
+### barplot
+]
+.right-column[
+```
+* means of variables
+graph bar paris london brussels lisbon
+* median of variables
+graph bar (median) elf language
+
+* mean of one variable by group
+graph bar elf, over(vlegit)
+```
+]
+
+---
+.left-column[
+### histogram
+### density
+### boxplot
+### barplot
+### dotchart
+]
+.right-column[
+```
+graph dot corrupt
+
+gen colonial = paris
+replace colonial = 2 if london==1
+replace colonial = 3 if brussels==1
+replace colonial = 4 if lisbon==1
+label define colonialnames 0 "None"
+  1 "France"
+  2 "Britain"
+  3 "Belgium"
+  4 "Portugal"
+label values colonial colonialnames
+graph dot corrup, over(colonial)
+```
+]
+
+---
+.left-column[
+### histogram
+### density
+### boxplot
+### barplot
+### dotchart
+### scatterplot
+]
+.right-column[
+
+```
+* scatterplot
+graph twoway scatter growth lcon
+* shorter command
+scatter growth lcon
+
+* labeled points
+scatter goodgov hlegit, mlabel(wbcode)
+
+* weird old plotting command
+plot growth lcon
+```
+]
+
+
+---
+class: middle, center
 ## Work through S&#248;nderskov Ch.4-5
