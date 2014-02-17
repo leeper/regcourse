@@ -28,6 +28,36 @@ Review confidence intervals briefly
 Review normality assumptions
  - Normality of residuals vs. use of the Normal distribution of hypothesis testing
 
+ 
+---
+## BLUE
+
+ - There are many estimators of the population regression equation
+ 
+ - OLS is BLUE due to the Gauss-Markov assumptions
+   1. Linearity in parameters
+   2. Random sampling
+   3. No collinearity
+   4. Expected value of errors is zero
+   5. Homoskedasticity
+   
+.footnote[Wooldridge §3.5 and p.93]
+
+
+???
+
+OLS is conventional *for a reason*
+
+Least Squares versus Least Absolute Deviations
+ - Both are unbiased estimates of the population regression line
+ - OLS is more efficient (small variance)
+ - Thus OLS is BLUE
+
+
+ 
+
+
+
 ---
 ## Regression goodness of fit
 
@@ -180,6 +210,43 @@ Models have to be "nested" and on the exact same set of observations
 ???
 
 This is a logical segue into multiple linear regression, which we'll cover next
+
+---
+## Goodness of fit in Stata
+
+```
+. reg growth lcon
+
+      Source |       SS       df       MS              Number of obs =      44
+-------------+------------------------------           F(  1,    42) =    0.09
+       Model |  .000038348     1  .000038348           Prob > F      =  0.7615
+    Residual |  .017255198    42  .000410838           R-squared     =  0.0022
+-------------+------------------------------           Adj R-squared = -0.0215
+       Total |  .017293546    43  .000402175           Root MSE      =  .02027
+
+------------------------------------------------------------------------------
+      growth |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        lcon |  -.0017819   .0058325    -0.31   0.761    -.0135524    .0099886
+       _cons |   .0158988   .0390155     0.41   0.686    -.0628376    .0946353
+------------------------------------------------------------------------------
+```
+
+---
+## Nested model comparison
+
+```
+. nestreg: reg growth lcon (lconsq)
+
++-------------------------------------------------------------+
+                Block  Residual                     Change 
+Block        F     df        df   Pr > F       R2    in R2 
+-------+-----------------------------------------------------
+1         0.09      1        42   0.7615   0.0022          
+2         7.98      1        41   0.0073   0.1649   0.1626 
++-------------------------------------------------------------+
+```
+
 
 ---
 template: questions
