@@ -603,9 +603,32 @@ In Stata:
 ```
 reg growth lcon
 ovtest
+
+Ramsey RESET test using powers of the fitted values of growth
+       Ho:  model has no omitted variables
+                  F(3, 39) =      5.50
+                  Prob > F =      0.0030
 ```
 
 .footnote[Wooldridge pp.296-297]
+
+
+---
+## Correlation with residuals
+
+```
+. cor residuals1 lcon lconsq goodgov vlegit
+(obs=40)
+
+             | residu~1     lcon   lconsq  goodgov   vlegit
+-------------+---------------------------------------------
+  residuals1 |   1.0000
+        lcon |  -0.1311   1.0000
+      lconsq |  -0.1130   0.9985   1.0000
+     goodgov |   0.5369   0.1485   0.1603   1.0000
+      vlegit |   0.5387  -0.0747  -0.0523   0.3160   1.0000
+```
+
 
 
 ---
@@ -622,14 +645,33 @@ ovtest
    2. Are there excluded variables that should be in the model?
 
 
+---
+## Functional Form
+
+
+![http://i.imgur.com/hD80npW.png](http://i.imgur.com/hD80npW.png)
+
+
 ???
 
-NEED A FIGURE TO SHOW FUNCTIONAL FORM
+```
+reg growth lcon
+predict residuals1, resid
+graph twoway (scatter residuals1 lconsq) (lfit residuals1 lconsq)
+```
 
-NEED A FIGURE TO SHOW OMITTED VARIABLE
+---
+## Omitted variable
 
+![http://i.imgur.com/6JlE8Ws.png](http://i.imgur.com/6JlE8Ws.png)
 
+???
 
+```
+reg growth lcon
+predict residuals1, resid
+graph twoway scatter residuals1 vlegit
+```
 
 ---
 template: questions
@@ -703,14 +745,81 @@ summ newvar
 
 * biggest Cook's distance
 scalar cookmax = r(max)
-tab country if cookmax = newvar
+tab country if newvar == cookmax, summarize(newvar) nost nofr
 
 * see Cook's distance by country
 tab country, summarize(newvar) nost nofr
+list country newvar, table
 
 * leverage plot
 lvr2plot, mlabel(country)
 ```
+
+---
+## Influential Observations in Stata
+
+```
+. tab country if newvar == cookmax, summarize(newvar) nost nofr
+
+                     | Summary of
+                     |  Cook's D
+     Name of country |        Mean
+---------------------+------------
+            ETHIOPIA |   .55600208
+---------------------+------------
+               Total |   .55600208
+```
+
+---
+## Influential Observations in Stata
+
+```
+. tab country, summarize(newvar) nost nofr
+
+                     | Summary of
+                     |  Cook's D
+     Name of country |        Mean
+---------------------+------------
+              ANGOLA |   .02927462
+               BENIN |   .00005987
+            BOTSWANA |   .09608144
+        BURKINA FASO |   .00326944
+             BURUNDI |   .00053345
+            CAMEROON |   .00671317
+...
+```
+
+
+---
+## Influential Observations in Stata
+
+```
+ list country newvar, table
+
+     +---------------------------------+
+     |              country     newvar |
+     |---------------------------------|
+....
+     |---------------------------------|
+ 41. |           CAPE VERDE   .0748542 |
+ 42. |             BOTSWANA   .0960814 |
+ 43. |           SEYCHELLES   .2439945 |
+ 44. |             ETHIOPIA   .5560021 |
+ 45. |    SAO TOME-PRINCIPE          . |
+     |---------------------------------|
+ 46. |              ERITREA          . |
+ 47. |              NAMIBIA          . |
+ 48. |              MAYOTTE          . |
+ 49. |              REUNION          . |
+ 50. |    EQUATORIAL GUINEA          . |
+     +---------------------------------+
+```
+
+
+---
+## Influential Observations in Stata
+
+![http://i.imgur.com/yBRHjSP.png](http://i.imgur.com/yBRHjSP.png)
 
 
 ---
