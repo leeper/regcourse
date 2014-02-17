@@ -301,14 +301,13 @@ We still get the right slope(s), on average, but we just are less certain of the
 ---
 ## Measurement error
 
-Two kinds of measurement error:
+What is it?
 
- 1. Dependent variable
- 
- 2. Independent variable(s)
- 
-Which of these is a problem for us?
- 
+--
+
+Rather than observing `\(x\)` we observe `\(x\star\)`
+
+
 ???
 
 
@@ -318,6 +317,18 @@ Which of these is a problem for us?
  
  3. Systematic measurement error is a big mess and is essentially selection bias
 
+
+---
+## Measurement error
+
+Two kinds of measurement error:
+
+ 1. Dependent variable
+ 
+ 2. Independent variable(s)
+ 
+Which of these is a problem for us?
+ 
 
 ---
 ## Errors in Dependent Variables
@@ -330,6 +341,11 @@ Which of these is a problem for us?
 
 .footnote[* Wooldridge pp.308-310, KKV pp.158,164-168]
 
+???
+
+But we typically assume that any error is not correlated with regressors
+
+E.g., measurement error in a variable is correlated with the variable itself
 
 
 ---
@@ -341,7 +357,7 @@ Which of these is a problem for us?
  
  - Pretty much guaranteed to exist
 
-.footnote[* Wooldridge pp.310-313]
+.footnote[* Wooldridge pp.310-313,esp. eq 9.33]
 
 
 ???
@@ -353,7 +369,7 @@ If an effect between X and Y is confounded by Z, and Z is measured with error, i
 Options:
  - We can just live with this (i.e., ignore it)
  - Try to get better data (e.g., multiple measures)
- - Instrumental variables
+ - Instrumental variables (Session 12)
 
 
 ---
