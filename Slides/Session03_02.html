@@ -52,6 +52,23 @@ You can also specify a baseline category explicitly using slightly difference sy
 
 And then you can use `test` to compare coefficients across categories.
 
+
+---
+## F-test for factors
+
+ - Remember the F-test for model comparison?
+ 
+ - *t*-test will tell us about the significance of each category alone
+ 
+ - We can use the F-test to understand the joint contribution of all categories
+ 
+---
+## F-test for factors
+
+```
+nestreg: reg dv cov1 cov2 (i.cov3)
+```
+
 ---
 ## `regress` | `reg`
 
@@ -144,6 +161,7 @@ predict resid, r
 ```
 graph twoway yhat growth
 graph twoway resid lcon
+graph twoway resid vlegit
 ```
 
 
