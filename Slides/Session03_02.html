@@ -82,6 +82,7 @@ These are the same because `london` is an indicator variable
 
 ```
 use EnglebertPRQ2000.dta
+
 reg growth london
 reg growth i.london
 ```
@@ -215,8 +216,10 @@ ereturn display
 
 ```
 reg growth lcon
+
 * store fitted values as yhat
 predict yhat
+
 * store residuals as resid
 predict resid, r
 ```
@@ -226,7 +229,9 @@ predict resid, r
 
 ```
 graph twoway yhat growth
+
 graph twoway resid lcon
+
 graph twoway resid vlegit
 ```
 
@@ -297,10 +302,13 @@ We can store results and then print them nicely
 ```
 quietly reg growth lcon
 estimates store small
+
 * print results
 estimates table
+
 * print results with summary stats
 estimates table, se stats(N r2_a)
+
 * format printing of coefs/SEs
 estimates table small large, b(%9.2f) se(%9.2f) stats(N r2_a)
 ```
@@ -375,8 +383,10 @@ estout
 .right-column[
 ```
 reg growth lcon
+
 * print results (but note t-statistics by default)
 esttab
+
 * better formatting
 esttab, b(%9.2f) se(%9.2f)
 ```
@@ -404,6 +414,27 @@ esttab, b(%9.2f) se(%9.2f) stats(rmse)
 ```
 ]
 
+---
+.left-column[
+## estout
+## esttab
+## eststo
+]
+.right-column[
+
+```
+* output results to Rich Text Format (for Microsoft Word)
+esttab using example.rtf
+
+* Stata won't overwrite a file
+* But you can `replace` or `append`:
+
+esttab using example.rtf, replace
+
+esttab using example.rtf, append
+```
+
+]
 
 ---
 ## Lab work
