@@ -43,7 +43,6 @@ reg dv i.covariate
 
 .footnote[* S&#248;nderskov pp.158-161]
 
-
 ???
 
 The `i.covariate` syntax automatically generates categories.
@@ -51,6 +50,37 @@ The `i.covariate` syntax automatically generates categories.
 You can also specify a baseline category explicitly using slightly difference syntax.
 
 And then you can use `test` to compare coefficients across categories.
+
+---
+## Categorical covariates
+
+These are the same because `london` is an indicator variable
+
+```
+use EnglebertPRQ2000.dta
+reg growth london
+reg growth i.london
+```
+
+---
+## Categorical covariates
+
+```
+* create a categorical variable
+egen warcivcat = cut(warciv), at(0,10,20,30,40)
+
+* continuous covariate
+reg growth warciv
+reg growth warcivcat
+
+* categorical covariate
+reg growth i.warcivcat
+
+* specify baseline
+reg growth b30.warcivcat
+```
+
+
 
 
 ---
@@ -62,11 +92,23 @@ And then you can use `test` to compare coefficients across categories.
  
  - We can use the F-test to understand the joint contribution of all categories
  
+ - Use `testparm` not `nestreg`!
+ 
+
 ---
 ## F-test for factors
 
 ```
-nestreg: reg dv cov1 cov2 (i.cov3)
+reg growth lcon lconsq warcivcat
+testparm warcivcat
+
+reg growth i.warcivcat
+testparm i.warcivcat
+
+* nestreg doesn't work for factor variables:
+* nestreg: reg growth lcon lconsq (i.warcivcat)
+* but it does work for other variables:
+nestreg: reg growth (lcon lconsq) (vlegit hlegit)
 ```
 
 ---
