@@ -18,12 +18,36 @@ S&#248;nderskov Ch. 8 (153-185)
 name: outline
 ## Outline
 
+ - Model comparison
+
  - Categorical covariates
  
  - Regression Output
  
  - Work on S&#248;nderskov Ch. 8 (153-185)
 
+
+---
+## Model comparison
+
+ - Sometimes we need to do formal model comparison
+
+ - By default, Stata compares any model to "null" model
+   - The "null" model has no independent variables
+   
+ - To compare multiple "nested" models, use `nestreg`
+ 
+ 
+---
+## Model comparison
+
+```
+nestreg: regress growth lcon (lconsq)
+```
+
+The key statistic of interest here is the F-statistic
+
+This tells us whether the model yields a statistically significant reduction in the residual sum of squares (i.e., the portion of the variance in the data unexplained by the model)
 
 ---
 ## Categorical covariates
@@ -379,29 +403,6 @@ estout, b(%9.2f) se(%9.2f) stats(rmse)
 esttab, b(%9.2f) se(%9.2f) stats(rmse)
 ```
 ]
-
-
----
-## Model comparison
-
- - Sometimes we need to do formal model comparison
-
- - By default, Stata compares any model to "null" model
-   - The "null" model has no independent variables
-   
- - To compare multiple "nested" models, use `nestreg`
- 
- 
----
-## Model comparison
-
-```
-nestreg: regress growth lcon (lconsq)
-```
-
-The key statistic of interest here is the F-statistic
-
-This tells us whether the model yields a statistically significant reduction in the residual sum of squares (i.e., the portion of the variance in the data unexplained by the model)
 
 
 ---
