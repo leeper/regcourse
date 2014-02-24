@@ -29,7 +29,6 @@ name: outline
    - Imagine a *hyperplane*
 
  - Accounting for the variation attributable to other variables in the model, what is the effect of `\(x\)` on `\(y\)`
-    - Holding all other variables at their means, what is the effect of x on y
 
 ???
 
@@ -40,6 +39,18 @@ Instead of thinking of a line of best fit, we have to think about a *hyperplane 
 background-image: url(http://www.mathworks.com/matlabcentral/fx_files/7239/1/planenormvec.jpg)
 
 
+---
+## Interpretation of coefficients
+
+Two things to keep in mind:
+
+ - Effect `\(\beta_1\)` is constant across values of X1
+ 
+ - Effect is *also* constant across values of other covariates
+ 
+ - This all changes when we have:
+   1. Interaction terms
+   2. Non-linear models
 
 ---
 ## Interpretation of coefficients
@@ -59,34 +70,12 @@ Even random samples are not always representative
  - Nonresponse
  
    
----
-## Comparing coefficients
- 
- - The size of the effect depends on the units of `\(x\)`
-    - Think about money: kr versus 1000s of kr; coefficient is larger for 1000s
-    - p-value is not an indicator of effect size
- 
- - It's not easy to compare substantive size of coefficients unless regressors have comparable units
- 
- - Otherwise it's apples and oranges comparisons
- 
-???
 
-Don't say an effect is "highly significant"
- 
 ---
-## Comparing standardized coefficients
+## Exercise
 
- - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x^{\ast}\)`)
- 
- - A standard deviation change in `\(x\)` equals a unit-change in `\(x^{\ast}\)`
- 
- - The coefficient `\(\beta^{\ast}\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
- 
- - "Comparing standardized apples to standardized oranges"
- 
-.footnote[[http://gking.harvard.edu/files/mist.pdf](http://gking.harvard.edu/files/mist.pdf)]
-    
+Work through the worksheet in groups 
+
 ---
 ## Types of variables
 
@@ -138,6 +127,35 @@ Don't say an effect is "highly significant"
 .footnote[* Wooldridge pp.225-230]
 
 ]   
+
+---
+## Comparing coefficients
+ 
+ - The size of `\(\beta\)` depends on the units of `\(x\)`
+    - Think about money: kr versus 1000s of kr; coefficient is smaller for 1000s
+    - p-value is not an indicator of effect size
+ 
+ - It's not easy to compare substantive size of coefficients unless regressors have comparable units
+ 
+ - Otherwise it's apples and oranges comparisons
+ 
+???
+
+Don't say an effect is "highly significant"
+ 
+---
+## Comparing standardized coefficients
+
+ - Sometimes people "standardize" variables (so `\(x\)` becomes `\(x^{\ast}\)`)
+ 
+ - A standard deviation change in `\(x\)` equals a unit-change in `\(x^{\ast}\)`
+ 
+ - The coefficient `\(\beta^{\ast}\)` is interpreted as standard deviation changes in `\(y\)` per standard deviation change in `\(x\)`
+ 
+ - "Comparing standardized apples to standardized oranges"
+ 
+.footnote[[http://gking.harvard.edu/files/mist.pdf](http://gking.harvard.edu/files/mist.pdf)]
+
 
 ---
 name: questions
@@ -288,3 +306,16 @@ template: questions
 What criteria do we need to satisfy causal inference?
 
 
+???
+
+ 1. Effect
+ 2. Temporal precedence
+ 3. Nonconfounding
+ 4. Mechanism
+ 5. Level of analysis
+ 
+Temporal precedence is at the level of causation, not measurement
+
+What do I mean by that?
+
+I'm interested in the effect of smoking on cancer. So, I look at a sample of patients (some who already have cancer and some who do not) and ask them how much they smoked in the past. Does this satisfy temporal order?
