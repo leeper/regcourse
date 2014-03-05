@@ -15,47 +15,636 @@ Wooldridge 559-598 (459-497)
 Hobolt (2007)
 Price and Zaller (1993)
 
+---
+
+???
+
+General feedback on first assignment
+
 
 ---
-## Binary outcome
-  - Discrete choice problems
-    - We want to know why some unit ends up in a given category, e.g.:
-      - Whether someone makes a purchase
-      - Whether someone votes
-      - Whether a state has a particular property
-    - We think about latent utilities
-      - Unobservable, but determine whether `\(y_i = 1\)` or `\(y_i = 0\)`
-      - We try to explain the latent variable then translate that explanation into a fitted probability (\)`Pr(y_i=1)\)`) and a predicted value of `\({0,1}\)`
-      - 
-  - Linear probability model
-    - Simplicity
-    - Problems
-      - Nonsensical results
-      - Problematic standard errors
-  - Generalized linear model
-    - Link functions
-      - Convert a linear-in-parameters model into a probability
-      - `\(Pr(yi=1|x) = F(\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ...)\)`
-      - Different kinds of link functions
-    - Logit and probit
-      - Two common link functions for connection our model to the restricted probability range `\([0,1]\)`
-      - Indeed both are very similar and yield similar inferences, except at extremely high or low latent values
-      - Coefficients are not at all comparable, though
+name: outline1
+
+ - Binary outcomes
+ 
+--
+name: outline2
+
+ - Interpretation
+ 
+--
+name: outline3
+
+ - Maximum Likelihood Estimation
+ 
+
 ---
-## Goodness of fit
-  - Percent correctly classified
-  - Deviance (Likelihood ratio)
-  - Pseudo-R-squared (not really R-squared)
+template: outline1
+
+---
+## Outcome determines modeling strategy
+
+ - OLS is for continuous, quantitative outcomes
+ 
+ - Lots of scenarios when we are interested in something else?
+ 
+ - Examples?
+
+
+???
+
+Examples: 
+
+ 1. Voting or not
+ 2. Vote choice among parties
+ 3. Whether someone makes a purchase
+ 4. Whether two countries fight a war
+ 5. How many times a discrete event occurs (e.g., how many times you go to the library)
+ 
+---
+## Discrete choice problems
+
+> Scenarios where we want to understand why units do one thing instead of something else
+ 
+ 1. Choice set
+   - Includes all possible alternatives
+   - Mutually exclusive alternatives
+ 
+ 2. Units make one choice
+ 
+ 3. We model units' propensities to be in a given alternative
+
+---
+## Outcome determines modeling strategy
+
+ 1. How many alternatives in the choice set?
+ 
+ 2. Are those alternatives ordered?
+ 
+ 3. Are those alternatives counts?
+
+---
+## Outcome determines modeling strategy
+
+A lot of problems involve only two alternatives
+ - Presence vs. absence
+ - Action vs. no action
+ - What's behind door number 1 vs. door number 2
+ 
+We will address other outcomes next week
+
+
+???
+
+Other types of outcomes are generalizations of the two-category model
+
+
+---
+## Linear probability model
+
+ - Outcome is coded 1 (presence) and 0 (absence)
+   - e.g., yes vote (1) vs. no vote (0)
+ 
+ - We can model using our old friend OLS:
+ 
+ `\( y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + u \)`
+
+
+???
+
+---
+background-image: url(http://i.imgur.com/OWnaBwU.png)
+
+```
+set.seed(1)
+x <- runif(50,1e-5,1)
+y <- rbinom(50,1,x)
+g <- lm(y~x)
+par(mar=c(4,4,1,1))
+plot(x,y, pch=19, bg='black', yaxt='n', xlim=c(-.15,1.15), ylim=c(-.5,1.5), bty='l')
+axis(1, seq(0,1,by=.1), sprintf('%0.1f', seq(0,1,by=.1)))
+axis(2, 0:1, 0:1, las=2)
+abline(g, col='blue', lwd=2)
+```
+
+---
+## Linear probability model
+
+This is simple to estimate, but involves:
+
+ 1. Heteroskedasticity 
+ 2. Lack of normality
+ 3. Nonsensical predictions
+ 4. Constant effect
+
+---
+## Latent variable interpretation
+
+ - `\( y \)` is our two-category variable
+   
+ - Imagine that `\( y \)` is the manifest (or observed) form of a latent variable `\( y\star \)`
+ 
+ - Range of `\(y\star\)` is `\(\left[ -\infty, \infty \right]\)`
+ 
+ 
+---
+## Latent variable interpretation
+
+ - As `\(y\star\)` increases, `\(Pr(y=1)\)` increases
+
+ - There is some value of `\(y\star\)`, we'll call `\(\tau\)` where:
+
+`\( \[ y_i = \left\{ 
+  \begin{array}{l l}
+    1 & \text{if $y_i\star > \tau$}\\
+    0 & \text{if $y_i\star \leq \tau$}
+  \end{array} \right.\]
+\)`
+ 
+???
+
+`\( \tau \)` is the *threshold* or *cutpoint*
+
+---
+## Latent variable interpretation
+
+We therefore end up having to estimate:
+
+`\( y\star = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + u \)`
+
+We call this a *Generalized Linear Model* (GLM)
+
+???
+
+Are there any problems here?
+
+`\( y\star \)` is unobserved and unobservable
+
+We therefore have to come up with a way to link our linear equation to the observed, binary outcome
+
+
+---
+## Latent variable interpretation
+
+`\( Pr(y_i=1) = f(y\star) \)`
+
+`\( Pr(y_i=1) = f(\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i) \)`
+
+What is `\( f(\dot) \)`?
+
+---
+## Logit and probit
+
+  - Two common **link functions** for connecting our linear-in-parameters model to the range `\(\left[0,1\right]\)`
+  
+  - Slightly different assumptions
+  
+  - Very similar and yield similar substantive inferences
+    - Except at extremely high or low latent values!
+  
+  - But coefficients are not at all comparable
+  
+---
+## Logit
+
+`\( Pr(y_i=1|\boldsymbol{x_i}) = \frac{e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}}{1 + e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}} \)`
+
+???
+
+NEED EXAMPLES OF LOGISTIC CURVES (Long p.63)
+
+```
+# intercept
+par(mar=c(4,4,1,1))
+curve(1/(1+exp(-(-2+x))), -5, 5, ylab='Probability', ylim=c(0,1), xaxt='n', yaxt='n')
+axis(1, seq(-5,5,by=1), seq(-5,5,by=1))
+axis(2, seq(0,1,by=.1), seq(0,1,by=.1), las=2)
+curve(1/(1+exp(-(-1+x))), -5, 5, add=TRUE, lwd=2)
+curve(1/(1+exp(-(x))), -5, 5, add=TRUE, lwd=3)
+curve(1/(1+exp(-(1+x))), -5, 5, add=TRUE, lwd=2)
+curve(1/(1+exp(-(2+x))), -5, 5, add=TRUE)
+abline(h=.5, lty=2)
+#s <- sapply(-2:2, function(z) segments(z,0,z,.5, lty=2))
+```
+
+---
+background-image: url(http://i.imgur.com/IONZwwM.png)
+
+???
+
+This shows variations in intercepts
+
+---
+background-image: url(http://i.imgur.com/qqYNoo6.png)
+
+???
+
+Variation in *positive* slopes
+
+---
+background-image: url(http://i.imgur.com/ughzOym.png)
+
+???
+
+Variation in *negative* slopes
+
+```
+par(mar=c(4,4,1,1))
+# negative coef
+curve(1/(1+exp(-(0-0.5*x))), -5, 5, las=1, ylab='Probability', ylim=c(0,1), lwd=3)
+curve(1/(1+exp(-(0-1*x))), -5, 5, add=TRUE, lwd=2)
+curve(1/(1+exp(-(0-2*x))), -5, 5, add=TRUE)
+# positive coef
+curve(1/(1+exp(-(0+0.5*x))), -5, 5, las=1, ylab='Probability', ylim=c(0,1), lwd=3)
+curve(1/(1+exp(-(0+1*x))), -5, 5, add=TRUE, lwd=2)
+curve(1/(1+exp(-(0+2*x))), -5, 5, add=TRUE)
+```
+
+
+---
+## Probit
+
+`\( \phi\left( \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... \right)\)`
+
+
+???
+
+---
+background-image: url(http://i.imgur.com/XfpIvUo.png)
+
+???
+
+Solid line is logistic curve
+
+Dashed line is probit curve
+
+```
+par(mar=c(4,4,1,1))
+curve(1/(1+exp(-(x))), -5, 5, lwd=2, ylab="Probability") # logit
+curve(pnorm(x), -5,5, add=TRUE, lty=4, lwd=2) # probit
+```
+
+
+We'll focus on the logit model for simplicity sake
+
+---
+name: simplelogit
+
+## A simple example
+
+NEED AN EXAMPLE STATA OUTPUT HERE
+
+
+
+---
+template: outline2
+
 ---
 ## Interpretation and reporting
-  - Coefficients and standard errors
-    - Coefficients in GLMs are not at all like coefficients in OLS
-    - Coefficients across different link functions are not comparable
-    - Hypothesis testing
-      - Test statistic: Wald statistic
-      - p-values
-    - Interpretation
-      - Don't look at the coefficients!
-      - We need predicted probabilities and marginal effects
-  - Predicted probabilities
-  - Marginal effects
+
+ - Coefficients in GLMs are not at all like coefficients in OLS
+   - Effect of *x* is not constant across range of *x*
+
+ - Coefficients across different link functions are not comparable
+
+ - In short: **Don't look at the coefficients!**
+
+???
+
+---
+background-image: url(http://i.imgur.com/wPmWr9a.png)
+
+
+???
+
+```
+par(mar=c(4,4,1,1))
+curve(1/(1+exp(-(x))), -5, 5, lwd=1.5, ylab="Probability") # logistic curve
+plo <- sapply(c(-2,0,2), function(x) (1/(1+exp(-(x-.05)))))
+phi <- sapply(c(-2,0,2), function(x) (1/(1+exp(-(x+.05)))))
+slope <- (phi-plo)/.1
+segments(c(-2,0,2)-.75, plo-.75*slope, c(-2,0,2)+.75, phi+.75*slope, col='red', lwd=3)
+text(c(-2,0,2)+1, plo+(.5*(phi-plo)), sprintf('%0.2f', slope), font=2)
+segments(c(-2,0,2), 0, c(-2,0,2), plo+(.5*(phi-plo)))
+```
+
+
+---
+## SEs and p-values
+
+ - SEs have the same interpretation as in OLS
+ 
+ - Hypothesis testing with a Wald statistic
+   - Analogous to a *t*-statistic
+   - p-values have same interpretation
+
+ - Substantive effect sizes using:
+   - Predicted probabilities
+   - Marginal effects
+
+---
+template: simplelogit
+
+
+---
+background-image: url(http://i.imgur.com/N2yLxZC.png)
+
+???
+
+
+
+
+---
+## Aside: Robust standard errors?
+ 
+ - What are robust standard errors for?
+ 
+ - When do those conditions arise in binary outcome data?
+
+.footnote[Cameron and Trivedi p.462]
+
+???
+
+No advantage to using robust SEs, even though it's an option
+
+
+---
+## Predicted probabilities
+
+ - What is the probability that `\(y_i=1|\boldsymbol{x}_i\)` ?
+
+ - Think of these as the fitted values for logit models
+   - But note: There are also fitted values on the logit scale
+ 
+ - Often we look at *representative cases*
+ 
+ 
+???
+
+NEED TO PLOT CIs FOR PREDICTED PROBABILITIES
+
+
+
+
+---
+background-image: url(http://i.imgur.com/JhIGK0l.png)
+
+???
+
+Price and Zaller Figure 3
+
+
+---
+## Predicted probabilities
+
+ - How do we come up with them?
+
+---
+background-image: url(http://i.imgur.com/ABmegfe.png)
+
+---
+background-image: url(http://i.imgur.com/RNLS5jh.png)
+
+???
+
+```
+set.seed(1)
+x <- runif(50,1e-5,1)
+y <- rbinom(50,1,x)
+g <- glm(y~x, family=binomial(link='logit'))
+f <- predict(g)
+
+# example point 1
+ex1 <- sort(x)[40]
+ex1_f <- predict(g, newdata=data.frame(x=ex1))
+ex1_p <- predict(g, newdata=data.frame(x=ex1), type='response')
+# example point 2
+ex2 <- sort(x)[20]
+ex2_f <- predict(g, newdata=data.frame(x=ex2))
+ex2_p <- predict(g, newdata=data.frame(x=ex2), type='response')
+
+s <- seq(-5, 5, by=.1)
+sp <- predict(g, newdata=data.frame(x=s), type='response')
+tau <- max(which(sp <= .5))
+
+# plot without example points
+layout(matrix(1:2, nrow=1))
+par(mar=c(5,5,1,1))
+plot(NA, las=1, xlab='Observed Y', ylab='Y Star', las=2, pch=19, col='black', bg='black', xaxt='n', yaxt='n', ylim=c(-4,4), xlim=c(0,1))
+points(y[(f < s[tau] & y==0) | (f > s[tau] & y==1)], f[(f < s[tau] & y==0) | (f > s[tau] & y==1)], col='blue', bg='blue', pch=19) # correctly predicted
+points(y[(f < s[tau] & y==1) | (f > s[tau] & y==0)], f[(f < s[tau] & y==1) | (f > s[tau] & y==0)], pch=19, bg='black') # incorrectly predicted
+axis(1, 0:1, 0:1)
+abline(v=.5, lty=3)
+abline(h=(s[tau]+s[tau+1])/2)
+mtext(expression(tau), 2, line=1, at=s[tau], las=2, font=2)
+points(sp, s, type='l', col='blue', lwd=1.5)
+
+par(mar=c(5,1,1,1))
+plot(x, f, las=1, xlab='X', ylab='', las=2, pch=19, col='black', bg='black', yaxt='n', ylim=c(-4,4))
+abline(g, lwd=1.5)
+abline(h=(s[tau]+s[tau+1])/2)
+
+
+# plot with example points
+layout(matrix(1:2, nrow=1))
+par(mar=c(5,5,1,1))
+plot(NA, las=1, xlab='Observed Y', ylab='Y Star', las=2, pch=19, col='black', bg='black', xaxt='n', yaxt='n', ylim=c(-4,4), xlim=c(0,1))
+points(y[(f < s[tau] & y==0) | (f > s[tau] & y==1)], f[(f < s[tau] & y==0) | (f > s[tau] & y==1)], col='blue', bg='blue', pch=19) # correctly predicted
+points(y[(f < s[tau] & y==1) | (f > s[tau] & y==0)], f[(f < s[tau] & y==1) | (f > s[tau] & y==0)], pch=19, bg='black') # incorrectly predicted
+axis(1, 0:1, 0:1)
+abline(v=.5, lty=3)
+abline(h=(s[tau]+s[tau+1])/2)
+mtext(expression(tau), 2, line=1, at=s[tau], las=2, font=2)
+points(sp, s, type='l', col='blue', lwd=1.5)
+points(c(y[40],y[20]), c(ex1_f,ex2_f), col='red', bg='red', cex=1.5, pch=23) # point 1 and 2
+segments(0, c(ex1_f, ex2_f), 2, c(ex1_f, ex2_f), col='red')
+
+par(mar=c(5,1,1,1))
+plot(x, f, las=1, xlab='X', ylab='', las=2, pch=19, col='black', bg='black', yaxt='n', ylim=c(-4,4))
+abline(g, lwd=1.5)
+abline(h=(s[tau]+s[tau+1])/2)
+# example points 1 and 2
+segments(c(ex1,ex2), -10, c(ex1,ex2), c(ex1_f,ex2_f), col='red')
+points(c(ex1,ex2), c(ex1_f,ex2_f), col='red', bg='red', cex=1.5, pch=23)
+segments(-1, c(ex1_f, ex2_f), c(ex1,ex2), c(ex1_f, ex2_f), col='red')
+```
+
+
+---
+## Predicted probabilities
+
+ - We also care about *changes* in predicted probabilities attributable to a change in an independent variable
+ 
+ - We call these changes *marginal effects*
+
+???
+
+Go back to Price and Zaller figure
+
+The vertical distance between each line is the change in predicted probability, given a particular value of knowledge 
+
+---
+
+background-image: url(http://i.imgur.com/deShRgt.png)
+
+???
+
+Hobolt looks at change in predicted probability attributable to a 1-SD change in a covariate, *with all other variables at their means*
+
+This is not a representative case, so we may not care about the change in predicted probability at this level
+
+We also may not care about a 1-SD change in the IV. For example, what does that mean for the "party endorsement" variable?
+
+
+---
+## Marginal effects
+
+ - Given observed *X* variables, what is the effect of changing one independent variable?
+ 
+ - Representative cases (MER)
+   - Change in predicted probability
+ 
+ - Marginal effect at mean (MEM)
+   - Possibly non-sensical
+   - Wooldridge calls this "partial effect at the average" (PEA)
+ 
+ - Average marginal effect (AME)
+
+???
+
+NEED A FIGURE TO SHOW MARGINAL EFFECTS AS SLOPES OF REG CURVE
+
+NEED TO PLOT CIs FOR MARGINAL EFFECTS
+
+
+
+---
+## Marginal effects
+
+If we are interested in the marginal effect of an *x* variable on an outcome (e.g., whether someone voted), what is a reasonable change in that *x* variable over which we could estimate a marginal effect?
+
+--
+
+ 1. For a dummy/indicator variable? (e.g., male/female)
+ 
+--
+
+ 2. For a nominal-categorical variable? (e.g., municipality)
+ 
+--
+
+ 3. For an ordinal variable? (e.g., opinion on a 7-point scale)
+ 
+--
+
+ 4. For a continuous variable? (e.g., annual income)
+
+
+---
+template: outline3
+
+---
+## Maximum likelihood estimation
+
+ - Unlike OLS, we can't just calculate `\(\boldsymbol{\hat{\beta}}\)` in GLMs
+ 
+ - So we use *Maximum Likelihood Estimation* (MLE)
+ 
+ - Try to guess which value of `\(\boldsymbol{\beta}\)` makes our observed data *most likely*
+ 
+---
+## Likelihood function
+
+The *Likelihood Function* is a function that:
+ 
+ - Takes possible population parameters as inputs
+   - i.e., guess at `\(\boldsymbol{\beta}\)`
+   
+ - Give a *likelihood* of seeing our sample data given that input
+   - i.e., the probability of observing the data given the parameter guesses
+ 
+ - We pick best guess
+   - i.e., the guesses at `\(\boldsymbol{\beta}\)` that yield the *maximum* likelihood
+
+???
+
+Here `\( \beta \)` is the population parameter
+
+The likelihood function comes from a parametric function (e.g., a normal distribution)
+
+---
+## Maximizing the likelihood
+
+How do we find the maximum likelihood (and thus our estimated `\(\beta\)`'s)?
+
+We guess! Repeatedly!
+  
+  - Start with some kind of guess and calculate the likelihood
+  
+  - Make better and better guesses, until the likelihood doesn't get marginally higher
+
+---
+## A simple example
+
+ - We have a sample (n=100) of binary (0,1) data, with `\( \hat{\beta}\ )` proportion 1's
+ 
+ - We want to know what is the proportion of 1's in the population `\(\beta\)`
+
+ - The MLE estimate:
+   - We guess at some possible values of `\(\beta\)`
+   - For each guess, we calculate the likelihood of seeing our sample proportion if the true proportion were the guessed value of `\(\beta\)`
+   - We compare all the likelihoods and settle on the guess with the highest likelihood
+
+???
+
+If `\( \beta \)` were some particular value, what is the probability of seeing each values
+
+If we maximize the likelihood, we take the product of those probabilities
+
+If we maximize the log-likelihood, we take the sum of the logged probabilities
+
+MLE becomes a general mechanism of estimating population parameters from sample data
+
+
+---
+background-image: url(http://i.imgur.com/owXoqx2.png)
+
+```
+set.seed(1)
+x <- rbinom(100,1,.7)
+l <- function(x,p) {(p^x) * ((1-p)^(1-x))}
+testvals <- seq(0,1,by=.01)
+lik <- sapply(testvals, function(z) prod(l(x, z)))
+loglik <- sapply(testvals, function(z) sum(log(l(x, z)))) # loglik
+
+layout(matrix(1:2, nrow=2))
+par(mar=c(0,5,1,1))
+# likelihood
+plot(testvals, lik, xlab='Population Proportion (Guess)', ylab='Likelihood', cex=.75, xaxt='n', las=2)
+#axis(1, seq(0,1,by=.1), seq(0,1,by=.1))
+points(testvals[which.max(lik)], max(lik), bg='red', col='red', pch=19, cex=.75)
+abline(h=max(lik), col='red')
+abline(v=testvals[which.max(lik)], col='red')
+
+# log-likelihood
+par(mar=c(3,5,1,1))
+plot(testvals, loglik, xlab='Population Proportion (Guess)', ylab='Log-Likelihood', cex=.75, xaxt='n', las=2)
+axis(1, seq(0,1,by=.1), seq(0,1,by=.1))
+points(testvals[which.max(loglik)], max(loglik), bg='red', col='red', pch=19, cex=.75)
+abline(h=max(loglik), col='red')
+abline(v=testvals[which.max(loglik)], col='red')
+```    
+
+  
+---
+## Stata Output
+
+
+
+???
+
+For estimating GLM parameters, the process is the same
+
+The only difference is now there are multiple parameters to estimate instead of just one
+
+

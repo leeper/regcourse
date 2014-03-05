@@ -9,10 +9,68 @@ layout: remark
 # {{ page.title }} #
 # {{ page.day }} #
 
+???
+
 ## Logit and Probit
 ## Hypothesis tests
 ## Plotting
 
-???
+`logit`
+
+`probit`
+
 
 C&T 459-466
+
+
+---
+## Predicted probabilities
+
+```
+quietly logit ins hhincome
+predict plogit, pr
+quietly probit ins hhincome
+predict pprobit, pr
+quietly regress ins hhincome
+predict pols, xb
+summarize ins plogit probit pols
+```
+
+.footnote[Cameron and Trivedi p.474]
+
+---
+## The `prvalue` Program
+
+Installation:
+```
+findit spostado
+* install spost9_ado
+```
+
+`prvalue` (Predicted Probabilities)
+
+`prchange` (MEs)
+
+
+---
+## Marginal effects (`margins`)
+
+ - Given observed *X* variables
+ 
+ - Representative cases
+   - `margins, dydx(*) at ...`
+ 
+ - Marginal effect at mean
+   - `margins, dydx(*) atmean`
+ 
+ - Average marginal effects
+   - `margins, dydx(*)`
+
+
+---
+## AME: continuous x
+
+`margins, at(age=(30 35 40 45 50))`
+
+---
+## AME: interactions
