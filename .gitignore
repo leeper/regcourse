@@ -2,6 +2,7 @@ Misc/
 Slides/*.pdf
 Slides/images/
 2014_1PolAnalysis/
+Assignments/Assignment*
 
 *.aux
 *.log
