@@ -25,6 +25,8 @@ General feedback on first assignment
 ---
 name: outline1
 
+## Outline
+
  - Binary outcomes
  
 --
@@ -87,8 +89,11 @@ Examples:
 ## Outcome determines modeling strategy
 
 A lot of problems involve only two alternatives
+
  - Presence vs. absence
+
  - Action vs. no action
+
  - What's behind door number 1 vs. door number 2
  
 We will address other outcomes next week
@@ -115,6 +120,8 @@ Other types of outcomes are generalizations of the two-category model
 ---
 background-image: url(http://i.imgur.com/OWnaBwU.png)
 
+???
+
 ```
 set.seed(1)
 x <- runif(50,1e-5,1)
@@ -133,8 +140,11 @@ abline(g, col='blue', lwd=2)
 This is simple to estimate, but involves:
 
  1. Heteroskedasticity 
+
  2. Lack of normality
+
  3. Nonsensical predictions
+
  4. Constant effect
 
 ---
@@ -152,13 +162,13 @@ This is simple to estimate, but involves:
 
  - As `\(y\star\)` increases, `\(Pr(y=1)\)` increases
 
- - There is some value of `\(y\star\)`, we'll call `\(\tau\)` where:
+ - There is some value of `\(y\star\)`, we'll call `\(\tau\)` such that:
 
-`\( \[ y_i = \left\{ 
+`\( y_i = \left\{ 
   \begin{array}{l l}
     1 & \text{if $y_i\star > \tau$}\\
     0 & \text{if $y_i\star \leq \tau$}
-  \end{array} \right.\]
+  \end{array}
 \)`
  
 ???
@@ -190,7 +200,7 @@ We therefore have to come up with a way to link our linear equation to the obser
 
 `\( Pr(y_i=1) = f(\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i) \)`
 
-What is `\( f(\dot) \)`?
+What is `\( f(\cdotp) \)`?
 
 ---
 ## Logit and probit
@@ -207,11 +217,9 @@ What is `\( f(\dot) \)`?
 ---
 ## Logit
 
-`\( Pr(y_i=1|\boldsymbol{x_i}) = \frac{e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}}{1 + e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}} \)`
+`\( Pr(y_i=1|\boldsymbol{x_i}) = \frac{1}{1 + e^{-(\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}} \)`
 
 ???
-
-NEED EXAMPLES OF LOGISTIC CURVES (Long p.63)
 
 ```
 # intercept
@@ -264,7 +272,9 @@ curve(1/(1+exp(-(0+2*x))), -5, 5, add=TRUE)
 ---
 ## Probit
 
-`\( \phi\left( \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... \right)\)`
+Everything is basically the same as logit, but with a different link function:
+
+`\( Pr(y_i=1|\boldsymbol{x_i}) = \phi\left( \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... \right)\)`
 
 
 ???
@@ -292,9 +302,38 @@ name: simplelogit
 
 ## A simple example
 
-NEED AN EXAMPLE STATA OUTPUT HERE
+```
+. logit tmp pubemp degree income
 
+Iteration 0:   log likelihood = -519.56284  
+Iteration 1:   log likelihood = -512.35537  
+Iteration 2:   log likelihood = -512.20257  
+Iteration 3:   log likelihood = -512.20252  
 
+Logistic regression                               Number of obs   =       1173
+                                                  LR chi2(3)      =      14.72
+                                                  Prob > chi2     =     0.0021
+Log likelihood = -512.20252                       Pseudo R2       =     0.0142
+
+------------------------------------------------------------------------------
+         tmp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      pubemp |   .4323037   .1937251     2.23   0.026     .0526094     .811998
+      degree |   .1754709   .0687281     2.55   0.011     .0407663    .3101754
+      income |   .0027834   .0397509     0.07   0.944    -.0751269    .0806938
+       _cons |  -2.048087   .4246507    -4.82   0.000    -2.880387   -1.215787
+------------------------------------------------------------------------------
+```
+
+???
+
+```
+use "H:\PolAnalysis\GSS2002.dta", clear
+recode givblood 6=0 1=1 3=1 4=1 5=1, gen(tmp)
+* tab givblood tmp
+recode wrkgovt 2=0, gen(pubemp)
+logit tmp pubemp degree income
+```
 
 ---
 template: outline2
@@ -376,7 +415,7 @@ No advantage to using robust SEs, even though it's an option
  - Think of these as the fitted values for logit models
    - But note: There are also fitted values on the logit scale
  
- - Often we look at *representative cases*
+ - Often we look at predicted probabilities for *representative cases*
  
  
 ???
@@ -586,7 +625,7 @@ We guess! Repeatedly!
 ---
 ## A simple example
 
- - We have a sample (n=100) of binary (0,1) data, with `\( \hat{\beta}\ )` proportion 1's
+ - We have a sample (n=100) of binary (0,1) data, with `\( \hat{\beta} \)` proportion 1's
  
  - We want to know what is the proportion of 1's in the population `\(\beta\)`
 
@@ -608,6 +647,8 @@ MLE becomes a general mechanism of estimating population parameters from sample 
 
 ---
 background-image: url(http://i.imgur.com/owXoqx2.png)
+
+???
 
 ```
 set.seed(1)
@@ -637,8 +678,7 @@ abline(v=testvals[which.max(loglik)], col='red')
 
   
 ---
-## Stata Output
-
+template: simplelogit
 
 
 ???
@@ -646,5 +686,3 @@ abline(v=testvals[which.max(loglik)], col='red')
 For estimating GLM parameters, the process is the same
 
 The only difference is now there are multiple parameters to estimate instead of just one
-
-
