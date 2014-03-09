@@ -18,10 +18,29 @@ Price and Zaller (1993)
 ---
 ## 1st Assignment
 
+Do democratic states produce better health outcomes?
+
+???
+
+Take a poll of students
+
+What does this mean for interpreting results?
+
+ - Temporal ordering?
+ - Model specification
+ - Choice of variables
+
+General feedback on first assignment:
+
+ - Quality was good overall
+ - Use `esttab`, don't copy/paste
+ - If you're confused, don't hesitate to ask Kim or I questions
 
 
 ---
 name: outline1
+
+## Outline
 
  - Binary outcomes
  
@@ -86,8 +105,11 @@ Examples:
 ## Outcome determines modeling strategy
 
 A lot of problems involve only two alternatives
+
  - Presence vs. absence
+
  - Action vs. no action
+
  - What's behind door number 1 vs. door number 2
  
 We will address other outcomes next week
@@ -114,6 +136,8 @@ Other types of outcomes are generalizations of the two-category model
 ---
 background-image: url(http://i.imgur.com/OWnaBwU.png)
 
+???
+
 ```
 set.seed(1)
 x <- runif(50,1e-5,1)
@@ -132,8 +156,11 @@ abline(g, col='blue', lwd=2)
 This is simple to estimate, but involves:
 
  1. Heteroskedasticity 
+
  2. Lack of normality
+
  3. Nonsensical predictions
+
  4. Constant effect
 
 ---
@@ -151,13 +178,13 @@ This is simple to estimate, but involves:
 
  - As `\(y\star\)` increases, `\(Pr(y=1)\)` increases
 
- - There is some value of `\(y\star\)`, we'll call `\(\tau\)` where:
+ - There is some value of `\(y\star\)`, we'll call `\(\tau\)` such that:
 
-`\( \[ y_i = \left\{ 
+`\( y_i = \left\{ 
   \begin{array}{l l}
     1 & \text{if $y_i\star > \tau$}\\
     0 & \text{if $y_i\star \leq \tau$}
-  \end{array} \right.\]
+  \end{array}\right.
 \)`
  
 ???
@@ -189,7 +216,7 @@ We therefore have to come up with a way to link our linear equation to the obser
 
 `\( Pr(y_i=1) = f(\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i) \)`
 
-What is `\( f(\dot) \)`?
+What is `\( f(\cdotp) \)`?
 
 ---
 ## Logit and probit
@@ -206,7 +233,7 @@ What is `\( f(\dot) \)`?
 ---
 ## Logit
 
-`\( Pr(y_i=1|\boldsymbol{x_i}) = \frac{e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}}{1 + e^{\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}} \)`
+`\( Pr(y_i=1|\boldsymbol{x_i}) = \frac{1}{1 + e^{-(\beta_{i0} + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + u_i)}} \)`
 
 ???
 
@@ -261,7 +288,9 @@ curve(1/(1+exp(-(0+2*x))), -5, 5, add=TRUE)
 ---
 ## Probit
 
-`\( \phi\left( \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... \right)\)`
+Everything is basically the same as logit, but with a different link function:
+
+`\( Pr(y_i=1|\boldsymbol{x_i}) = \phi\left( \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... \right)\)`
 
 
 ???
@@ -286,10 +315,17 @@ We'll focus on the logit model for simplicity sake
 
 ---
 name: simplelogit
+background-image: url(http://i.imgur.com/NBEYDDw.png)
 
-## A simple example
+???
 
-
+```
+use "H:\PolAnalysis\GSS2002.dta", clear
+recode givblood 6=0 1=1 3=1 4=1 5=1, gen(tmp)
+* tab givblood tmp
+recode wrkgovt 2=0, gen(pubemp)
+logit tmp pubemp degree income
+```
 
 ---
 template: outline2
@@ -371,7 +407,7 @@ No advantage to using robust SEs, even though it's an option
  - Think of these as the fitted values for logit models
    - But note: There are also fitted values on the logit scale
  
- - Often we look at *representative cases*
+ - Often we look at predicted probabilities for *representative cases*
  
  
 ???
@@ -581,7 +617,7 @@ We guess! Repeatedly!
 ---
 ## A simple example
 
- - We have a sample (n=100) of binary (0,1) data, with `\( \hat{\beta}\ )` proportion 1's
+ - We have a sample (n=100) of binary (0,1) data, with `\( \hat{\beta} \)` proportion 1's
  
  - We want to know what is the proportion of 1's in the population `\(\beta\)`
 
@@ -603,6 +639,8 @@ MLE becomes a general mechanism of estimating population parameters from sample 
 
 ---
 background-image: url(http://i.imgur.com/owXoqx2.png)
+
+???
 
 ```
 set.seed(1)
@@ -632,8 +670,7 @@ abline(v=testvals[which.max(loglik)], col='red')
 
   
 ---
-## Stata Output
-
+template: simplelogit
 
 
 ???
@@ -643,3 +680,18 @@ For estimating GLM parameters, the process is the same
 The only difference is now there are multiple parameters to estimate instead of just one
 
 
+---
+## Preview
+
+ - Tomorrow:
+ 
+   - Work with logistic regression in Stata
+ 
+   - Houston, David J. 2005. "'Walking the Walk' of Public Service Motivation: Public Employees and Charitable Gifts of Time, Blood, and Money." *Journal of Public Administration Research and Theory* 16: 67-86.
+ 
+ - Next week:
+   
+   - More on binary outcome models
+   
+   - Other categorical outcomes
+   
