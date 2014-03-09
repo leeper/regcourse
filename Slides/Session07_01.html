@@ -11,11 +11,12 @@ layout: remark
 
 ???
 Citrin et al. (1997)
+Long and Freese (2005), Ch. 5
 
 ---
 name: outline1
 
- 
+ - Other categorical outcomes 
 
  
 ---
@@ -30,7 +31,7 @@ name: outline1
 
 ???
 
- 1. Number of alternatives
+ 1. Number of alternatives?
    - If 2, logit or probit
    - If more: continue
    
@@ -39,28 +40,75 @@ name: outline1
    - No: continue
  
  3. Counts?
-   - Yes: Poisson or beta-binomial
-   - No: Multinomial logit
+   - Yes: Poisson, negative-binomial, etc.
+   - No: Multinomial logit or probit
+   
+---
+## Other scenarios
+
+ - Conditional logit/probit
  
+ - Nested logit/probit
+ 
+ - Mixed logit
+ 
+ - Tobit models for censored data
+   - e.g., survival data
+
+???
+
+We are not going to talk about these
+   
 ---
 ## Latent variable
-    - Latent variable which is predicted by our model then translated via a link function
-    - The logic is the same as the binary model, but we now have more categories
-    - Thus we're not trying to figure out `\(Pr(y_i=1)\)`, but `\(Pr(y_i=t)\)` for all categories, `\(t\)`, of the outcome
-      - All probabilities have to sum to 1
-    - This can get very complicated
 
+ - Latent variable which is predicted by our model then translated via a link function
+
+ - The logic is the same as the binary model, but we now have more categories
+
+ - Thus we're not trying to figure out `\(Pr(y_i=1)\)`, but `\(Pr(y_i=t)\)` for all categories, `\(t\)`, of the outcome
+   - All probabilities have to sum to 1
+
+ - This can get very complicated
+
+ 
+---
+## An example: Danish Grading Scale
+
+
+???
+
+Performance as a latent variable
+
+Manifest categories
+
+You are probabilistically in any category, but we figure out which of those grades is best (has the highest probability)
+
+
+---
 ## Ordered models
-      - Logit
-        - Assumptions
-      - Probit
-        - Assumptions
+
+ - Logit
+   - Assumptions
+
+ - Probit
+   - Assumptions
+
+   
+   
+---
 ## Count models
-      - Poisson
-      - Quasi-poisson
-      - Negative binomial
-      - Some others (beta-binomial, various zero-inflated models)        
+
+ - Poisson
+ - Quasi-poisson
+ - Negative binomial
+ - Some others (beta-binomial, various zero-inflated models)        
+
+---
 ## Multinomial models
-      - Logit
-      - Probit
-      - Conditional models
+
+  - Logit
+
+  - Probit
+
+  - Conditional models
