@@ -79,7 +79,9 @@ template: outline1
 
 ???
 
-We'll talk about this a bit in lab, but goodness-of-fit is not something we think you should worry too much about in these kinds of models
+Goodness-of-fit is not something we think you should worry too much about in these kinds of models
+
+It's an issue, but our focus is on causal inference not on building descriptive or predictive models
 
 
 ---
@@ -92,19 +94,21 @@ findit spostado
 
 This includes several commands:
 
- - `fitstats` (Goodness of fit)
+ - `fitstat` (Goodness of fit)
  - `prvalue` (Predicted Probabilities)
  - `prchange` (MEs)
 
 ---
-## The `fitstats` command
+background-image: url(http://i.imgur.com/XGvfqi4.png)
 
 
 ???
 
-INCLUDE EXAMPLE STATA OUTPUT
 
+---
+background-image: url(http://i.imgur.com/VJZg7i6.png)
 
+???
 
 
 
@@ -115,14 +119,14 @@ template: outline2
 ---
 ## Interactions in OLS
 
-
+ 
 
 
 ???
 
 Review interactions in OLS
 
-Interaction is a difference-in-differences
+Interaction is a difference-in-differencesg
 
 
 ---
@@ -134,6 +138,78 @@ Interaction is a difference-in-differences
 Interaction is still a difference-in-differences
 
 But how do we measure the difference? In logits (log odds)? Odds? In predicted probabilities?
+
+
+```
+# non-interactive model
+set.seed(1)
+n <- 200
+x <- runif(n,1e-5,1)
+y <- rbinom(n,1,x)
+g <- glm(y~x, family=binomial(link='logit'))
+nx <- seq(0,1,by=.01)
+new <- data.frame(x=nx)
+f <- predict(g, newdata=new)
+p <- predict(g, newdata=new, type='response')
+layout(matrix(1:2))
+par(mar=c(1,4,1,1), las=1)
+plot(nx, f, type='l', lwd=2, bty='l', xlab='', ylab='Logit scale')
+par(mar=c(4,4,1,1))
+plot(nx, p, type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale')
+
+# interactive model
+set.seed(1)
+x <- runif(n,1e-5,1)
+z <- rbinom(n,1,x)
+x2 <- (x + 5) - min((x+5)/5)
+y <- numeric(n)
+y[z==0] <- rbinom(length(y[z==0]),1,x[z==0])
+y[z==1] <- rbinom(length(y[z==1]),1,(x2/max(x2))[z==1])
+g <- glm(y~x*z, family=binomial(link='logit'))
+nx <- seq(0,1,by=.01)
+nz <- 0:1
+new <- expand.grid(x=nx,z=nz)
+f <- predict(g, newdata=new, se.fit=TRUE)
+p <- predict(g, newdata=new, type='response', se.fit=TRUE)
+# logit scale
+layout(matrix(1:2))
+par(mar=c(1,4,1,1), las=1)
+plot(new$x[new$z==0], f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='', ylab='Logit scale', ylim=c(-4,6))
+lines(new$x[new$z==1], f$fit[new$z==1], lwd=2)
+text(.1, 2, "z=1")
+text(.1, -1, "z=0")
+# predicted probabilities
+par(mar=c(4,4,1,1))
+plot(new$x[new$z==0], p$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(0,1))
+lines(new$x[new$z==1], p$fit[new$z==1], lwd=2)
+text(.1, .8, "z=1")
+text(.1, .2, "z=0")
+
+# marginal effects of z|x
+layout(matrix(1:2))
+# marginal effects of z (logit scale)
+plot(nx, f$fit[new$z==1]-f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Logit scale', ylim=c(-1,3))
+abline(h=0)
+b <- cbind.data.frame(x=x,z=z,y=y)
+invisible(replicate(100, {
+    tmpg <- glm(y~x*z, data=b[sample(1:nrow(b),nrow(b),TRUE),], family=binomial(link='logit'))
+    tmpp <- predict(tmpg, newdata=new)
+    lines(nx, tmpp[new$z==1]-tmpp[new$z==0], col=gray(.5,.4))
+}))
+# marginal effects of z (prob scale)
+plot(nx, p$fit[new$z==1]-p$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(-.2,.5))
+abline(h=0)
+b <- cbind.data.frame(x=x,z=z,y=y)
+invisible(replicate(100, {
+    tmpg <- glm(y~x*z, data=b[sample(1:nrow(b),nrow(b),TRUE),], family=binomial(link='logit'))
+    tmpp <- predict(tmpg, newdata=new, type='response')
+    lines(nx, tmpp[new$z==1]-tmpp[new$z==0], col=gray(.5,.4))
+}))
+
+```
+
+
+
 
 
 ---
