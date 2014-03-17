@@ -1,0 +1,53 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{hyperref}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+\textbf{Generalized Linear Model Lab}
+\end{center}
+
+For today we'll be using the Danish country data from the European Social Survey Round 6 (2012--2013), which consists of a nationally representative survey of Danish adults asked questions on a variety of topics as part of a multi-country survey of European residents. The data, in Stata (.dta) format, are available to you on Blackboard in the \texttt{Content > ESS} folder, along with a complete codebook describing the questions and response options in the data, and a do-file to get you started with some simple variable recoding.%\footnote{You can find the original data file here: \url{http://www.europeansocialsurvey.org/download.html?file=ESS6DK&c=DK&y=2012/} and the codebook here: \url{http://www.europeansocialsurvey.org/docs/round6/fieldwork/source/ESS6_source_main_questionnaire.pdf}.} 
+{\em Note: Variables in the codebook are identified by an alphanumeric code, but these codes are not used as variable names in the Stata dataset. As a result, it is helpful to use \texttt{lookfor} along with particular keywords to find and identify relevant variables.}\\
+
+\noindent The goal today is to look at and interpret a variety of Generalized Linear Models for ordered, multinomial, and count outcomes.
+
+\begin{enumerate}\itemsep0.5em
+
+\subsection*{Ordered Outcomes}
+
+\item Open the .do file from Blackboard to contain the following analyses.
+\item Load the ESS data file.
+\item Take a look at Questions B29--B31. These questions address attitudes toward levels of immigration by different types of groups. Look at the current coding of these variables and settle on a reasonable coding that orders the alternatives. One possibility is included in the do file.
+\item Generate a few covariates that will allow you to build a simple regression model. Some possibilities are given in the do file. Feel free to add others, change the recodings, or exclude some of the covariates.
+\item Estimate an ordered logistic regression model for one of the outcomes using the \texttt{ologit} command.
+\item Use \texttt{margins} to estimate predicted probabilities from the model at various levels of the covariates. For example, what do the predicted probabilities look like at varying levels of left-right political ideology?
+\item Trying estimating the probabilities for interesting, representative cases from the data using the \texttt{at()} option to \texttt{margins}.
+\item Use \texttt{margins} with the \texttt{dydx} option to estimate marginal effects at various levels of the covariates.
+\item Use \texttt{marginsplot} to plot predicted probabilities and marginal effects.
+\item Compare these substantive interpretations to those from an ordered probit regression (\texttt{oprobit}) and an OLS regression.
+
+\subsection*{Multinomial Outcomes}
+
+\item One prominent example of an unordered categorical variable in the ESS is party choice in the last election. Use \texttt{tab prtvtcdk} to examine the variable.
+\item Use \texttt{clonevar partychoice = prtvtcdk} to create a new ``party choice'' variable and then use \texttt{recode partychoice 10/99=.} to code all non-substantive answers as missing values.
+\item Use \texttt{mlogit} to estimate a multinomial logistic regression model predicting party choice as a function of your chosen covariates.
+\item By default, \texttt{mlogit} used the lowest category as the baseline in the model, so all coefficients represent the effect of a given variable on the shift to a particular party relative to the baseline outcome category (i.e., party). Reestimate the model by specifying a different party using option \texttt{baseoutcome}. For example, set Venstre as the baseline using: \texttt{baseoutcome(7)}.
+\item Define a new variable \texttt{sdchoice1} that represents voting for the Social Democrats as 1, Venstre as 0, and all other choices as missing.
+\item Estimate a binary logistic model using \texttt{sdchoice1} as the outcome. How do the results compare to those from the \texttt{mlogit} estimates?
+\item Define another new variable \texttt{sdchoice2} that represents voting for the Social Democrats as 1, and all other choices as 0.
+\item Estimate a binary logistic model using \texttt{sdchoice2} as the outcome. How do the results compare to those from the \texttt{mlogit} and previous \texttt{logit} estimates?
+\item Try expressing these results as predicted probabilities using \texttt{margins} and plotting the results.
+\item To see that ordered logit and binary logit are identical, re-estimate your models of \texttt{sdchoice1} and \texttt{sdchoice2} using the \texttt{ologit} command instead of \texttt{logit}. Compare the results.
+
+\subsection*{Count Outcomes}
+
+\item The ESS does not include a lot of count variables, but one --- \texttt{njbspv} --- that is available indicates how many employees the respondent supervises in their job. Eliminate the missing values from the variable and code the ``not applicable'' category as 0 (i.e., that the individual supervises zero employees).
+\item Use \texttt{poisson} to estimate a poisson model that regresses number of employees on any covariates.
+\item Interpret the results using \texttt{margins}.
+
+\end{enumerate}
+
+
+\end{document}
