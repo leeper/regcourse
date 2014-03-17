@@ -131,15 +131,17 @@ logit charbin i.racebin i.married educ
 margins racebin
 marginsplot, ylabel(0 (.1) 1)
 
-margins, dydx(racebin) at(educ=(0 (5) 20))
+margins, dydx(racebin)
 marginsplot
 
 margins racebin, at(married=(0 1))
 marginsplot, ylabel(0 (.1) 1)
 
-margins racebin, at(educ=(0 (5) 20))
-marginsplot, ylabel(0 (.1) 1)
-
+margins, dydx(race) predict(xb) at(age=(20 (20) 100))
+marginsplot, name(panela, replace)
+margins, dydx(race) at(age=(20 (20) 100))
+marginsplot, ylabel(-.1 (.1) .2) name(panelb, replace)
+graph combine panela panelb, cols(1)
 
 
 * factor by factor
@@ -183,17 +185,47 @@ graph combine panela panelb, cols(1)
 margins, dydx(racebin) predict(xb) at(age=(20 (20) 100))
 marginsplot, ylabel(0 (.5) 2) name(panela, replace)
 margins, dydx(racebin) at(age=(20 (20) 100))
-marginsplot, ylabel(0 (.1) 1) name(panelb, replace)
+marginsplot, ylabel(-.3 (.1) .4) name(panelb, replace)
 graph combine panela panelb, cols(1)
-
 
 * --- Ordered outcome --- *
 
 * Those in need should take care of self
 recode careself 5=1 4=2 3=3 2=4 1=5, gen(attcare)
-ologit attcare pubemp gender racebin educ married age
+ologit attcare i.pubemp gender racebin educ age
 
-* use `prvalue` to look at predicted probabilities
-prvalue
+margins pubemp
 
-* `margins` doesn't 
+margins, dydx(pubemp)
+
+forvalues i = 1/5 {
+  margins, dydx(pubemp) predict(outcome(`i'))
+}
+
+* at representative cases
+
+prgen age, from(20) to(80) generate(ptmp)
+graph twoway (scatter ptmpp1 ptmpp2 ptmpp3 ptmpp4 ptmpp5 ptmpx, c(l l l l l) ytitle("Predicted Probability") xlabel(20 (20) 80))
+
+
+
+* --- Multinomial outcome --- *
+mlogit attcare i.pubemp gender racebin educ age, baseoutcome(3)
+
+margins pubemp
+
+margins, dydx(pubemp)
+
+
+
+* --- Count outcome --- *
+
+poisson hhchildren racebin age educ
+margins racebin
+margins, dydx(racebin)
+
+margins, at(age=(20 (20) 80))
+marginsplot
+
+margins, dydx(age) at(age=(20 (20) 80))
+marginsplot

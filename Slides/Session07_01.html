@@ -17,6 +17,8 @@ Long and Freese (2005), Ch. 5
 ---
 name: outline1
 
+## Outline
+
  - Other categorical outcomes 
 
  
@@ -43,7 +45,20 @@ name: outline1
  3. Counts?
    - Yes: Poisson, negative-binomial, etc.
    - No: Multinomial logit or probit
-   
+
+---
+## Outcome determines modeling strategy
+
+ 1. How many alternatives in the choice set?
+   - 2: Logit or probit
+ 
+ 2. Are those alternatives ordered?
+   - Yes: ordered logit or ordered probit
+ 
+ 3. Are those alternatives counts?
+   - Yes: Poisson, negative binomial, etc.
+   - No: Multinomial logit and multinomial probit
+
 ---
 ## Other scenarios
 
@@ -59,7 +74,18 @@ name: outline1
 ???
 
 We are not going to talk about these
-   
+
+Cameron and Trivedi discuss (some of them) in detail
+
+---
+template: outline1
+
+ - Ordered outcomes
+ 
+ - Count outcomes
+ 
+ - Multinomial outcomes
+
 ---
 ## An ordered example: Danish Grading Scale
 
@@ -69,14 +95,54 @@ We are not going to talk about these
  
  - We have to classify by creating cutpoints between grades on the latent quality dimension
 
+---
+background-image: url(http://i.imgur.com/DWlXULu.png)
+
 ???
 
-Performance as a latent variable
+```
+set.seed(1)
+x <- runif(75, 0, 100)
+y <- x
+plot(x,y, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
 
-Manifest categories
+# pass/fail
+ypass <- as.numeric(cut(y, c(0,30,100)))
+abline(h=30)
+points(x, (ypass-1)*100, pch=21, col='gray', bg='gray', yaxt='n',
+bty='n', ylab='')
+axis(2, c(0,100), c("Fail","Pass"), las=2)
 
-You are probabilistically in any category, but we figure out which of those grades is best (has the highest probability)
 
+# evenly spaced
+y2 <- as.numeric(cut(y, 7))
+plot(x, y2, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
+axis(2, 1:7, c('-3', '00', '02', '4', '7', '10', '12'), las=2)
+
+
+# unevenly spaced
+y3 <- as.numeric(cut(y, c(0,2,10,20,40,80,95,100)))
+plot(x, y3, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
+axis(2, 1:7, c('-3', '00', '02', '4', '7', '10', '12'), las=2)
+```
+
+---
+background-image: url(http://i.imgur.com/7YO4kjC.png)
+
+---
+background-image: url(http://i.imgur.com/fYKvWKD.png)
+
+---
+background-image: url(http://i.imgur.com/lkYs8PZ.png)
+
+
+???
+
+If we could observe quality directly and without error, this task would be easy
+
+But we generally can't observe the latent scale that determines the observed discrete categories
+
+So, we build the regression model - just like in the binary case - to try to figure out why cases are in particular categories (i.e., why they score higher or lower on the latent scale)
 
 ---
 background-image: url(http://i.imgur.com/DWlXULu.png)
@@ -166,7 +232,7 @@ Both logit and probit produce:
    
  - Estimate cutpoints for where (on latent scale) cases move from one category to the next
 
- - Like in binary models, the coefficients can't be directly interpreted
+ - Like in binary models, effect sizes can't be directly interpreted from coefficients
  
 ???
 
@@ -178,6 +244,15 @@ Interpretation:
  - Negative coefficients mean lower probabilities of being in higher categories
 
 But we typically interpret these models in terms of predicted probabilities
+
+
+---
+name: questions
+class: center, middle
+
+Questions?
+
+
 
 ---
 ## Example: Citrin et al. (1997)
@@ -218,7 +293,260 @@ Higher outcome scores favor reduced immigration
 An increase in the probability of one category means a decrease in probability of other categories
 
 
+---
+## Example in Stata
+
+ - Agree or disagree with the following statement:
  
+ >Those in need have to take care of themselves
+
+```
+                           |      Freq.     Percent        Cum.
+---------------------------+-----------------------------------
+            strongly agree |        175       12.94       12.94
+                     agree |        552       40.83       53.77
+neither agree nor disagree |        319       23.59       77.37
+                  disagree |        254       18.79       96.15
+         strongly disagree |         52        3.85      100.00
+```
+
+.footnote[`careself` from GSS 2002 data]
+ 
+---
+## Example in Stata
+
+```
+. ologit attcare pubemp gender racebin educ age
+
+Ordered logistic regression     Number of obs   =   1282
+                                LR chi2(5)      =  47.25
+                                Prob > chi2     = 0.0000
+Log likelihood = -1778.3104     Pseudo R2       = 0.0131
+
+--------------------------------------------------------
+     attcare |      Coef.   Std. Err.      z    P>|z|   
+-------------+------------------------------------------
+      pubemp |  -.3899225   .1363544    -2.86   0.004   
+      gender |  -.5630772   .1032641    -5.45   0.000   
+     racebin |  -.1621066    .133823    -1.21   0.226   
+        educ |  -.0224488   .0171905    -1.31   0.192   
+         age |  -.0037081   .0030212    -1.23   0.220   
+-------------+------------------------------------------
+       /cut1 |  -4.243643   .3246511                    
+       /cut2 |  -2.233768   .2956083                    
+       /cut3 |   -1.13546   .2910222                    
+       /cut4 |   1.002274   .2926004                    
+--------------------------------------------------------
+```
+
+???
+
+We can do the same with `oprobit`
+
+
+
+---
+## Example in Stata
+
+```
+. margins pubemp
+
+Predictive margins                                
+Expression   : Pr(attcare==1), predict()
+
+------------------------------------------------------
+             |     Margin   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+      pubemp |
+          0  |   .0353033   .0050628     6.97   0.000 
+          1  |   .0512061   .0087281     5.87   0.000 
+------------------------------------------------------
+
+. margins, dydx(pubemp)
+
+Average marginal effects                          
+Expression   : Pr(attcare==1), predict()
+
+------------------------------------------------------
+             |      dy/dx   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+    1.pubemp |   .0159029   .0065099     2.44   0.015 
+------------------------------------------------------
+```
+
+???
+
+By default, Stata is going to give you:
+
+ - The probability of being in the lowest category
+ - The marginal effect for that category
+ 
+---
+## Example in Stata
+
+ - To get the marginal effect for each level of the outcome:
+
+```
+forvalues i = 1/5 {
+  margins, dydx(pubemp) predict(outcome(`i'))
+}
+```
+
+ - This is a little tedious, though.
+
+---
+## Example in Stata
+
+Predicted probability at means
+
+```
+. prvalue, x(pubemp=0)
+
+ologit: Predictions for attcare
+
+Confidence intervals by delta method
+
+                                95% Conf. Interval
+     Pr(y=1|x):       0.0339   [ 0.0243,    0.0435]
+     Pr(y=2|x):       0.1735   [ 0.1521,    0.1949]
+     Pr(y=3|x):       0.2323   [ 0.2089,    0.2557]
+     Pr(y=4|x):       0.4297   [ 0.4012,    0.4581]
+     Pr(y=5|x):       0.1306   [ 0.1113,    0.1500]
+
+       pubemp     gender    racebin       educ        age
+x=          0  .51560062  .80343214  13.341654  46.663027
+```
+
+???
+
+This is from `spostado` (mentioned in Cameron and Trivedi)
+
+Could repeat using `prvalue, x(pubemp=1)`
+
+Note this is predicted probabilities at the means...so it's different from what `margins` gives us.
+
+This is helpful, though, for looking at representative cases
+
+---
+## Example in Stata
+
+```
+. prchange pubemp
+
+ologit: Changes in Probabilities for attcare
+
+pubemp
+        Avg|Chg|           1           2           3           4           5
+0->1   .03884759   .01535955   .05597512   .02578433  -.05883405  -.03828493
+
+                 1          2          3          4          5
+Pr(y|x)  .03612645  .18243667   .2376117  .42057252  .12325267
+
+        pubemp   gender  racebin     educ      age
+   x=  .170827  .515601  .803432  13.3417   46.663
+sd_x=  .376504  .499952  .397558  3.07318  17.3001
+
+```
+
+???
+
+Again, this is marginal effects at mean of all other variables, so not ideal, but it's helpful for getting a quick glance at the data.
+
+
+---
+## A complication
+
+Significant effects may not be substantively important
+
+---
+## A simple example
+
+```
+. ologit attcare age
+
+Ordered logistic regression     Number of obs   =       1346
+                                LR chi2(1)      =       4.75
+                                Prob > chi2     =     0.0292
+Log likelihood = -1894.1466     Pseudo R2       =     0.0013
+
+-------------------------------------------------------------
+     attcare |      Coef.   Std. Err.      z    P>|z|     
+-------------+-----------------------------------------------
+         age |  -.0061698   .0028318    -2.18   0.029    
+-------------+-----------------------------------------------
+       /cut1 |  -3.526489   .1965201                     
+       /cut2 |  -1.515816   .1480014                     
+       /cut3 |  -.4402123   .1421443                     
+       /cut4 |   1.625165   .1522441                     
+-------------------------------------------------------------
+```
+
+---
+## A simple example
+
+```
+. margins, dydx(age) at(age=(20 (10) 80))
+Conditional marginal effects
+Expression   : Pr(attcare==1), predict()
+------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+age          |
+         _at |
+          1  |   .0001923   .0000785     2.45   0.014 
+          2  |   .0002037   .0000882     2.31   0.021 
+          3  |   .0002157   .0000989     2.18   0.029 
+          4  |   .0002284   .0001104     2.07   0.039 
+          5  |   .0002417   .0001228     1.97   0.049 
+          6  |   .0002558   .0001363     1.88   0.061 
+          7  |   .0002705   .0001508     1.79   0.073 
+------------------------------------------------------
+```
+
+???
+
+This is just showing marginal effects for the outcome category = 1 (strongly disagree)
+
+But the pattern is consistent for all levels of the outcome
+
+---
+background-image: url(http://i.imgur.com/S67nYzb.png)
+
+
+???
+
+Even though there is a significant coefficient and marginal effect, individuals at all ages are most likely to be in category 4 ('agree')
+
+
+Only when these lines cross is there really a substantively important effect because the "predicted/fitted value" is the most probably category
+
+---
+background-image: url(http://i.imgur.com/ix0dHCZ.png)
+
+???
+
+This is just a trivial example
+
+
+---
+template: questions
+
+
+---
+## Count models
+
+ - Outcome is a count of discrete events
+
+ - Generally with no upper limit
+ 
+ - Goal is to predict how many of the outcome a given unit has
+ 
+???
+
+Like in ordered models, each combination of covariates has a non-zero probability of having each possible number of outcomes
+ 
+
 ---
 ## Count models
 
@@ -239,6 +567,124 @@ Model choice depends on the variance in the data
 Poisson requires mean = variance
 
 Interpretation can focus on predicted probabilities of particular counts given combinations of covariates
+
+
+---
+## Example in Stata
+
+```
+. poisson hhchildren i.racebin age educ
+
+Poisson regression              Number of obs   =       2741
+                                LR chi2(3)      =     444.37
+                                Prob > chi2     =     0.0000
+Log likelihood = -2710.2026     Pseudo R2       =     0.0758
+
+-------------------------------------------------------------
+  hhchildren |      Coef.   Std. Err.      z    P>|z|     
+-------------+-----------------------------------------------
+     racebin |   -.240699   .0597422    -4.03   0.000    
+         age |   -.035065   .0018909   -18.54   0.000    
+        educ |  -.0082201   .0098283    -0.84   0.403    
+       _cons |   1.084579   .1524212     7.12   0.000    
+-------------------------------------------------------------
+```
+
+---
+## Example in Stata
+
+```
+. margins racebin
+
+Predictive margins                                
+Model VCE    : OIM
+
+Expression   : Predicted number of events, predict()
+
+------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+     racebin |
+          0  |   .6170084   .0311507    19.81   0.000 
+          1  |   .4850169     .01526    31.78   0.000 
+------------------------------------------------------
+```
+
+---
+## Example in Stata
+
+```
+. margins, dydx(racebin)
+
+Average marginal effects                          
+Model VCE    : OIM
+
+Expression   : Predicted number of events, predict()
+dy/dx w.r.t. : 1.racebin
+
+------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+   1.racebin |  -.1319916   .0348182    -3.79   0.000 
+------------------------------------------------------
+```
+
+---
+## Example in Stata
+
+```
+. margins, at(age=(20 (20) 80))
+
+Predictive margins                                
+
+Expression   : Predicted number of events, predict()
+------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+         _at |
+          1  |   1.092181     .04623    23.62   0.000 
+          2  |   .5416563   .0146989    36.85   0.000 
+          3  |   .2686291   .0135422    19.84   0.000 
+          4  |    .133224   .0113096    11.78   0.000 
+------------------------------------------------------
+```
+
+---
+background-image: url(http://i.imgur.com/B9ar8kE.png)
+
+
+---
+## Example in Stata
+
+```
+. margins, dydx(age) at(age=(20 (20) 80))
+
+Average marginal effects                          
+
+Expression   : Predicted number of events, predict()
+-----------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|
+-------------+---------------------------------------
+age          |
+         _at |
+          1  |  -.0382973   .0034771   -11.01   0.000
+          2  |  -.0189932   .0010591   -17.93   0.000
+          3  |  -.0094195   .0002724   -34.58   0.000
+          4  |  -.0046715   .0001762   -26.51   0.000
+-----------------------------------------------------
+```
+
+---
+background-image: url(http://i.imgur.com/SM6hXuJ.png)
+
+
+---
+template: questions
+
 
 ---
 ## Multinomial models
@@ -272,6 +718,56 @@ None of these models are particularly widely used because interpretation can be 
 
 
 ---
+## Multinomial models
+ 
+ - Probability of being in a given outcome category, relative to a baseline outcome
+ 
+ - Set of coefficients for every outcome category
+
+ - In Stata:
+
+```
+. mlogit attcare i.pubemp gender racebin educ age, baseoutcome(3)
+```
+
+
+???
+
+Use the same outcome from ordered logit analysis
+
+
+---
+background-image: url(http://i.imgur.com/iU608el.png)
+
+
+---
+## Multinomial models
+
+ - Interpretation is relative to a baseline:
+ 
+```
+. margins pubemp
+Predictive margins                               
+Expression   : Pr(attcare==1), predict()
+------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z| 
+-------------+----------------------------------------
+      pubemp |
+          0  |    .035845   .0057065     6.28   0.000 
+          1  |   .0499048   .0149134     3.35   0.001 
+------------------------------------------------------
+```
+ 
+ - Interpretation is tedious
+
+
+ 
+---
+template: questions
+
+
+---
 ## Preview
 
 Tomorrow:
@@ -285,5 +781,4 @@ Next week:
  - More about interpretation
  
  - Kim on panel analysis
- 
  
