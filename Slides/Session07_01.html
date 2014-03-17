@@ -414,6 +414,82 @@ Again, this is marginal effects at mean of all other variables, so not ideal, bu
 
 
 ---
+## A complication
+
+Significant effects may not be substantively important
+
+---
+## A simple example
+
+```
+. ologit attcare age
+
+Ordered logistic regression     Number of obs   =       1346
+                                LR chi2(1)      =       4.75
+                                Prob > chi2     =     0.0292
+Log likelihood = -1894.1466     Pseudo R2       =     0.0013
+
+-------------------------------------------------------------
+     attcare |      Coef.   Std. Err.      z    P>|z|     
+-------------+-----------------------------------------------
+         age |  -.0061698   .0028318    -2.18   0.029    
+-------------+-----------------------------------------------
+       /cut1 |  -3.526489   .1965201                     
+       /cut2 |  -1.515816   .1480014                     
+       /cut3 |  -.4402123   .1421443                     
+       /cut4 |   1.625165   .1522441                     
+-------------------------------------------------------------
+```
+
+---
+## A simple example
+
+```
+. margins, dydx(age) at(age=(20 (10) 80))
+Conditional marginal effects
+Expression   : Pr(attcare==1), predict()
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+age          |
+         _at |
+          1  |   .0001923   .0000785     2.45   0.014     .0000385    .0003461
+          2  |   .0002037   .0000882     2.31   0.021     .0000307    .0003766
+          3  |   .0002157   .0000989     2.18   0.029     .0000219    .0004094
+          4  |   .0002284   .0001104     2.07   0.039      .000012    .0004447
+          5  |   .0002417   .0001228     1.97   0.049     9.46e-07    .0004825
+          6  |   .0002558   .0001363     1.88   0.061    -.0000114    .0005229
+          7  |   .0002705   .0001508     1.79   0.073     -.000025    .0005661
+------------------------------------------------------------------------------
+```
+
+???
+
+This is just showing marginal effects for the outcome category = 1 (strongly disagree)
+
+But the pattern is consistent for all levels of the outcome
+
+---
+background-image: url(http://i.imgur.com/S67nYzb.png)
+
+
+???
+
+Even though there is a significant coefficient and marginal effect, individuals at all ages are most likely to be in category 4 ('agree')
+
+
+Only when these lines cross is there really a substantively important effect because the "predicted/fitted value" is the most probably category
+
+---
+background-image: url(http://i.imgur.com/ix0dHCZ.png)
+
+???
+
+This is just a trivial example
+
+
+---
 template: questions
 
 
