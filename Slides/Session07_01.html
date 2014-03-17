@@ -10,6 +10,7 @@ layout: remark
 # {{ page.day }} #
 
 ???
+
 Citrin et al. (1997)
 Long and Freese (2005), Ch. 5
 
@@ -60,21 +61,13 @@ name: outline1
 We are not going to talk about these
    
 ---
-## Latent variable
+## An ordered example: Danish Grading Scale
 
- - Latent variable which is predicted by our model then translated via a link function
-
- - The logic is the same as the binary model, but we now have more categories
-
- - Thus we're not trying to figure out `\(Pr(y_i=1)\)`, but `\(Pr(y_i=t)\)` for all categories, `\(t\)`, of the outcome
-   - All probabilities have to sum to 1
-
- - This can get very complicated
-
+ - Students exams vary on some dimension of quality
  
----
-## An example: Danish Grading Scale
-
+ - We can only assign one discrete grade
+ 
+ - We have to classify by creating cutpoints between grades on the latent quality dimension
 
 ???
 
@@ -86,23 +79,166 @@ You are probabilistically in any category, but we figure out which of those grad
 
 
 ---
+background-image: url(http://i.imgur.com/DWlXULu.png)
+
+???
+
+```
+set.seed(1)
+x <- runif(75, 0, 100)
+y <- x
+plot(x,y, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
+
+# pass/fail
+ypass <- as.numeric(cut(y, c(0,30,100)))
+abline(h=30)
+points(x, (ypass-1)*100, pch=21, col='gray', bg='gray', yaxt='n',
+bty='n', ylab='')
+axis(2, c(0,100), c("Fail","Pass"), las=2)
+
+
+# evenly spaced
+y2 <- as.numeric(cut(y, 7))
+plot(x, y2, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
+axis(2, 1:7, c('-3', '00', '02', '4', '7', '10', '12'), las=2)
+
+
+# unevenly spaced
+y3 <- as.numeric(cut(y, c(0,2,10,20,40,80,95,100)))
+plot(x, y3, pch=21, col='black', bg='black', yaxt='n', bty='n', ylab='')
+axis(2, 1:7, c('-3', '00', '02', '4', '7', '10', '12'), las=2)
+```
+
+---
+background-image: url(http://i.imgur.com/7YO4kjC.png)
+
+---
+background-image: url(http://i.imgur.com/fYKvWKD.png)
+
+---
+background-image: url(http://i.imgur.com/lkYs8PZ.png)
+
+
+???
+
+If we could observe quality directly and without error, this task would be easy
+
+But we generally can't observe the latent scale that determines the observed discrete categories
+
+So, we build the regression model - just like in the binary case - to try to figure out why cases are in particular categories (i.e., why they score higher or lower on the latent scale)
+
+---
 ## Ordered models
 
  - Logit
-   - Assumptions
 
  - Probit
-   - Assumptions
 
+???
+
+Just like for binary outcomes:
+
+  - Similar shape
+  
+  - Differ computationally
+  
+  - Slightly different assumptions that aren't too important for us
+  
+  - Ordered probit seems somewhat more common in polisci literature
    
+---
+## Latent variable
+
+ - Latent variable which is predicted by our model then translated via a logit or probit link function
+
+ - The logic is the same as the binary model, but we now have more outcome categories
+
+ - Thus we're not trying to figure out `\(Pr(y_i=1)\)`, but `\(Pr(y_i=t)\)` for all categories, `\(t\)`, of the outcome
+
+ - This can get very complicated!
+
+---
+## Ordered models
+
+Both logit and probit produce:
+ 
+ - Coefficients indicating effects on latent scale
    
+ - Estimate cutpoints for where (on latent scale) cases move from one category to the next
+
+ - Like in binary models, the coefficients can't be directly interpreted
+ 
+???
+
+We can still look at direction and significance of effects
+
+Interpretation: 
+
+ - Positive coefficients mean higher probabilities of being in higher categories
+ - Negative coefficients mean lower probabilities of being in higher categories
+
+But we typically interpret these models in terms of predicted probabilities
+
+---
+## Example: Citrin et al. (1997)
+
+What is this article's research question?
+
+--
+
+What is/are the researchers' prediction(s)?
+
+--
+
+What do they find? (Discuss with the person sitting next to you)
+
+--
+
+How big are the effects?
+
+???
+
+Individual self-interest versus macroeconomic concerns as causes of support for immigration
+
+Higher outcome scores favor reduced immigration
+
+ 
+---
+## Predicted probabilities
+
+ - For each combination of levels of covariates, we have `\(t\)` predicted probabilities
+
+ - One for each category of the outcome
+   - e.g., on the grading scale we get 7 predicted probabilities
+   
+ - All probabilities have to sum to 1
+
+???
+
+An increase in the probability of one category means a decrease in probability of other categories
+
+
+ 
 ---
 ## Count models
 
  - Poisson
- - Quasi-poisson
+ 
  - Negative binomial
- - Some others (beta-binomial, various zero-inflated models)        
+ 
+ - Some others (beta-binomial, various zero-inflated models) 
+
+???
+
+Outcome is a count of discrete events
+
+Generally with no upper limit
+
+Model choice depends on the variance in the data
+
+Poisson requires mean = variance
+
+Interpretation can focus on predicted probabilities of particular counts given combinations of covariates
 
 ---
 ## Multinomial models
@@ -112,3 +248,42 @@ You are probabilistically in any category, but we figure out which of those grad
   - Probit
 
   - Conditional models
+
+???
+
+The outcome is unordered discrete categories
+
+Examples: 
+
+ - Party choice is the best example in political science
+ - Choice of degree program
+ - Type of welfare state in a country
+ - Type of policy implemented in some domain
+ - Combination of binary outcomes (e.g., voting laws/restrictions)
+
+Models estimate probability of being in a particular category relative to a baseline category 
+
+ - E.g., voting for a party rather than voting for the Social Democrats
+ - E.g., choosing each possible university education relative to choosing to be a doctor
+
+Advanced models (conditional logit, nested logit, etc.) that compare outcome categories in different ways
+
+None of these models are particularly widely used because interpretation can be somewhat difficult
+
+
+---
+## Preview
+
+Tomorrow:
+
+ - Ordered, multinomial, and count models in lab
+ 
+ - Materials on Blackboard
+ 
+Next week:
+
+ - More about interpretation
+ 
+ - Kim on panel analysis
+ 
+ 

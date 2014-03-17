@@ -56,9 +56,11 @@ logit charbin pubemp gender racebin educ income60 prestg80 married age hhchildre
 
 
 * ------- predicted probabilities ------- *
-logit charbin pubemp gender racebin educ income60 prestg80 married age hhchildren poplog church
+quietly logit charbin pubemp gender racebin educ income60 prestg80 married age hhchildren poplog church
 * predicted probabilities (fitted values)
 predict charprobs
+recode charprobs .5/1=1 .=. else=0, gen(charpredy)
+tab charpredy charbin, cell
 hist charprobs
 
 * linear predictions
@@ -78,6 +80,7 @@ margins pubemp, atmeans
 * marginal effect at levels of education
 margins pubemp, at(educ=(0 (5) 20))
 
+
 * ------- predicted probability plots ------- *
 twoway scatter charprobs educ
 
@@ -89,6 +92,7 @@ marginsplot, recast(line) recastci(rarea) ylabel(0 (.1) 1)
 
 quietly margins pubemp, at(educ=(0 (5) 20))
 marginsplot, recast(line) recastci(rarea) ylabel(0 (.1) 1)
+
 
 
 * ------- marginal effects ------- *
@@ -113,3 +117,83 @@ marginsplot, recast(line) recastci(rarea)
 * marginal effects plot
 margins, dydx(pubemp) at(age=(20 (5) 80))
 marginsplot, recast(line) recastci(rarea)
+
+
+* ---- Interactions ---- *
+
+* effect of race (1=white/caucasion; 0=else)
+logit charbin i.racebin
+margins racebin
+marginsplot, ylabel(0 (.1) 1)
+margins racebin
+
+logit charbin i.racebin i.married educ
+margins racebin
+marginsplot, ylabel(0 (.1) 1)
+
+margins, dydx(racebin) at(educ=(0 (5) 20))
+marginsplot
+
+margins racebin, at(married=(0 1))
+marginsplot, ylabel(0 (.1) 1)
+
+margins racebin, at(educ=(0 (5) 20))
+marginsplot, ylabel(0 (.1) 1)
+
+
+
+* factor by factor
+logit charbin i.racebin##i.married educ
+
+* predicted probabilities
+margins racebin, predict(xb)
+marginsplot, ylabel(0 (.5) 2) name(panela, replace)
+margins racebin
+marginsplot, ylabel(0 (.1) 1) name(panelb, replace)
+graph combine panela panelb, cols(1)
+
+* marginal effects
+margins, dydx(racebin) predict(xb) at(educ=(0 (5) 20))
+marginsplot, ylabel(0 (.5) 2) name(panela, replace)
+margins, dydx(racebin) at(educ=(0 (5) 20))
+marginsplot, ylabel(0 (.1) .5) name(panelb, replace)
+graph combine panela panelb, cols(1)
+
+
+
+margins racebin, at(married=(0 1) educ=(0 20))
+marginsplot, ylabel(0 (.1) 1)
+
+margins, dydx(racebin) at(educ=(0 (5) 20))
+marginsplot
+
+
+
+
+* factor by continous
+logit charbin i.racebin##c.age
+margins racebin
+
+margins racebin, predict(xb) at(age=(20 (20) 100))
+marginsplot, ylabel(0 (.5) 2) name(panela, replace)
+margins racebin, at(age=(20 (20) 100))
+marginsplot, ylabel(0 (.1) 1) name(panelb, replace)
+graph combine panela panelb, cols(1)
+
+margins, dydx(racebin) predict(xb) at(age=(20 (20) 100))
+marginsplot, ylabel(0 (.5) 2) name(panela, replace)
+margins, dydx(racebin) at(age=(20 (20) 100))
+marginsplot, ylabel(0 (.1) 1) name(panelb, replace)
+graph combine panela panelb, cols(1)
+
+
+* --- Ordered outcome --- *
+
+* Those in need should take care of self
+recode careself 5=1 4=2 3=3 2=4 1=5, gen(attcare)
+ologit attcare pubemp gender racebin educ married age
+
+* use `prvalue` to look at predicted probabilities
+prvalue
+
+* `margins` doesn't 
