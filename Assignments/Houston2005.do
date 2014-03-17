@@ -206,6 +206,12 @@ forvalues i = 1/5 {
   margins, dydx(pubemp) predict(outcome(`i'))
 }
 
+* at representative cases
+
+prgen age, from(20) to(80) generate(ptmp)
+graph twoway (scatter ptmpp1 ptmpp2 ptmpp3 ptmpp4 ptmpp5 ptmpx, c(l l l l l) ytitle("Predicted Probability") xlabel(20 (20) 80))
+
+
 
 * --- Multinomial outcome --- *
 mlogit attcare i.pubemp gender racebin educ age, baseoutcome(3)
