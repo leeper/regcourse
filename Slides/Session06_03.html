@@ -19,7 +19,7 @@ name: outline1
 name: outline2
 
  - Further interpretation
-   - Categorical independent variables
+   - Effects of independent variables
    - Interactions
    
 --
@@ -37,8 +37,6 @@ template: outline1
 
  - Percent Correctly Classified
 
- - Likelihood Ratio
-
  - Pseudo-`\(R^2\)`
 
 ---
@@ -48,22 +46,95 @@ template: outline1
 ]
 .right-column[
 ## Percent correctly classified
-]
 
+ - Predicted values from a GLM are predicted probabilities of being in a particular outcome category
+   - In binary models, `\(Pr(Y=1|X)\)`
+ 
+ - Sort outcomes based on *most probable* outcome category
+ 
+ - Percent of observations whose most probable outcome category matches their observed outcome
+
+]
 ---
 .left-column[
 ### Classification
 
-### LR
 ]
 .right-column[
-## Deviance (Likelihood ratio)
+## Percent correctly classified
+
+```
+quietly logit charbin pubemp gender racebin educ income60 prestg80 married age hhchildren poplog church
+predict charprobs
+recode charprobs .5/1=1 .=. else=0, gen(charpredy)
+tab charpredy charbin, cell
+
+ RECODE of | RECODE of givchrty (r
+ charprobs | has given money to a
+(Pr(charbi |       charity)
+       n)) |         0          1 |     Total
+-----------+----------------------+----------
+         0 |       164        393 |       557 
+           |     12.08      28.94 |     41.02 
+-----------+----------------------+----------
+         1 |       134        667 |       801 
+           |      9.87      49.12 |     58.98 
+-----------+----------------------+----------
+     Total |       298      1,060 |     1,358 
+           |     21.94      78.06 |    100.00 
+
+* equivalently: `estat classification`           
+```
+
+.footnote[Cameron and Trivedi pp.473-74]
 ]
+
+???
+
+The problem here is that we are coercing probabilities into discrete categories
+
+Each observation has a non-zero probability of being in both categories, so the off-diagonal cases aren't necessary "incorrect" classifications
+
+This gets a lot murkier with multiple outcome categories
+
+---
+background-image: url(http://i.imgur.com/ZpFxs7M.png)
+
+???
+
+```
+curve((1/(1+exp(-.4*x))),-15,15, yaxt='n', bty='n', ylab='y', lwd=2)
+axis(2, 0:1, 0:1, las=2)
+abline(h=.5, lty=2)
+
+invlogit <- function(x) (1/(1+exp(-.4*x)))
+
+a <- -1.5
+segments(a,0,a,invlogit(a), col='red')
+text(a+1, invlogit(a)/2, sprintf('%0.2f',invlogit(a)), col='red')
+segments(a,1,a,invlogit(a), col='blue')
+text(a+1, (1-invlogit(a)), sprintf('%0.2f',(1-invlogit(a))), col='blue')
+
+a <- 3
+segments(a,0,a,invlogit(a), col='red')
+text(a+1, invlogit(a)/2, sprintf('%0.2f',invlogit(a)), col='red')
+segments(a,1,a,invlogit(a), col='blue')
+text(a+1, .95, sprintf('%0.2f',(1-invlogit(a))), col='blue')
+
+a <- -10
+segments(a,0,a,invlogit(a), col='red')
+text(a+1, 0, sprintf('%0.2f',invlogit(a)), col='red')
+segments(a,1,a,invlogit(a), col='blue')
+text(a+1, .6, sprintf('%0.2f',(1-invlogit(a))), col='blue')
+```
+
+
+---
+background-image: url(http://i.imgur.com/ScDu50m.png)
+
 ---
 .left-column[
 ### Classification
-
-### LR
 
 ### Pseudo-`\(R^2\)`
 ]
@@ -117,105 +188,248 @@ template: outline2
 
 
 ---
+## Predicted probabilities
+
+We can calculate predicted probabilities at different levels of the covariates.
+
+At what levels do we typically want to calculate predicted probabilities?
+
+
+???
+
+Representative cases
+
+Average predicted probabilities
+
+Predicted probabilities at mean - not very helpful
+
+
+---
+## Changes in Predicted Probabilities
+
+If we are interested in the effect of an *x* variable on an outcome (e.g., whether someone voted), what is a reasonable change in that *x* variable over which we could estimate a change in predicted probability?
+
+--
+
+ 1. For a dummy/indicator variable? (e.g., male/female)
+ 
+--
+
+ 2. For a nominal-categorical variable? (e.g., municipality)
+ 
+--
+
+ 3. For an ordinal variable? (e.g., opinion on a 7-point scale)
+ 
+--
+
+ 4. For a continuous variable? (e.g., annual income)
+
+
+???
+
+For continuous covariates, we have lots of choices
+
+Hobolt used a 1 SD change
+
+We could look at full scale changes, or changes at different points
+
+But we are often instead interested in the "marginal effect"
+
+
+---
+## Interactions
+
+---
 ## Interactions in OLS
 
- 
+ - The effect of *X* on the outcome *Y* depends on *Z*
 
+ - An interaction is a *difference-in-differences*
+   - e.g., the difference in *Y* between levels of *X* when *Z* is small is 2, while the difference in *Y* between levels of *X* when *Z* is large is 0
+   
+ - i.e., the effects of *X* differ
 
 ???
 
 Review interactions in OLS
 
-Interaction is a difference-in-differencesg
-
-
 ---
-## Interactions in logistic regression
+background-image: url(http://i.imgur.com/KaNNAcl.png)
 
 
 ???
 
-Interaction is still a difference-in-differences
+From Kim's slide 18 in Session 5-1
+
+---
+## Interactions in logistic regression
+
+ - Interaction is still a difference-in-differences
+
+ - Estimate it in the same way in Stata
+
+ - But we can look at it in two ways:
+
+  - Logit (logged odds ratio) scale
+  - Probability scale
+
+
+???
 
 But how do we measure the difference? In logits (log odds)? Odds? In predicted probabilities?
 
+Here's we're just focusing on logit. We could make an analogous discussion of probit; but it's not log-odds...it's something crazier.
+
+Two points of common confusion:
+
+ - We can look at effects at two different scales
+ - At the probability scale in GLM, all effects are dependent on other variables, even without product terms
+
+
+---
+background-image: url(http://i.imgur.com/KnHp498.png)
+
+???
+
+Logit and probit models are only linear on the latent scale
+- in logit, this is on the scale of logits (logged odds ratio)
+
+Predicted probabilities depend on values of all variables (thus there is already an implicit interaction)
+
+But we still need to incorporate product terms in the model to fully represent interactions
+
+---
+background-image: url(http://i.imgur.com/JhIGK0l.png)
+
+???
+
+We saw this last week with Price and Zaller's figures (no product term)
+
+
+We can formalize this a little bit by comparing the logit scale to the probability scale
+
+---
+background-image: url(http://i.imgur.com/iwl1WtW.png)
+
+???
+
+Whether we look at logit scale or predicted probabilities affects appearance of linearities
+
+Even without product term, probabilities depend on level of other variables
 
 ```
-# non-interactive model
+# data
 set.seed(1)
-n <- 200
+n=1000
 x <- runif(n,1e-5,1)
-y <- rbinom(n,1,x)
-g <- glm(y~x, family=binomial(link='logit'))
+z <- rbinom(n,1,x)
+x2 <- abs(1-(.2*x))
+y <- numeric(n)
+y[z==0] <- rbinom(length(y[z==0]),1,x[z==0])
+y[z==1] <- rbinom(length(y[z==1]),1,(x2/max(x2))[z==1])
 nx <- seq(0,1,by=.01)
-new <- data.frame(x=nx)
+nz <- 0:1
+new <- expand.grid(x=nx,z=nz)
+
+# non-interactive model
+g <- glm(y~x+z, family=binomial(link='logit'))
 f <- predict(g, newdata=new)
 p <- predict(g, newdata=new, type='response')
 layout(matrix(1:2))
 par(mar=c(1,4,1,1), las=1)
-plot(nx, f, type='l', lwd=2, bty='l', xlab='', ylab='Logit scale')
+plot(new$x[new$z==0], f[new$z==0], type='l', lwd=2, bty='l', xlab='', ylab='Logit scale', xaxt='n', ylim=c(-4,6))
+lines(new$x[new$z==1], f[new$z==1], type='l', lwd=2)
+text(.1, 2, "z=1")
+text(.1, -2, "z=0")
 par(mar=c(4,4,1,1))
-plot(nx, p, type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale')
+plot(new$x[new$z==0], p[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(0,1))
+lines(new$x[new$z==1], p[new$z==1], type='l', lwd=2)
+text(.1, .6, "z=1")
+text(.1, .1, "z=0")
 
+# marginal effects of z|x
+layout(matrix(1:2))
+# marginal effects of z (logit scale)
+par(mar=c(1,4,1,1), las=1)
+plot(nx, f[new$z==1]-f[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Logit scale', ylim=c(-1,3), xaxt='n')
+abline(h=0)
+# marginal effects of z (prob scale)
+par(mar=c(4,4,1,1))
+plot(nx, p[new$z==1]-p[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(-.5,1))
+abline(h=0)
+```
+
+---
+background-image: url(http://i.imgur.com/ymkZtCN.png)
+
+???
+
+So marginal effects on the logit scale without a product term are constant, whereas they are nonlinear on the probability scale
+
+
+
+
+---
+background-image: url(http://i.imgur.com/FIMga29.png)
+
+???
+
+Interactions thus introduce linear dependencies like in OLS at the logit scale that also show up in the probability scale
+
+```
 # interactive model
-set.seed(1)
-x <- runif(n,1e-5,1)
-z <- rbinom(n,1,x)
-x2 <- (x + 5) - min((x+5)/5)
-y <- numeric(n)
-y[z==0] <- rbinom(length(y[z==0]),1,x[z==0])
-y[z==1] <- rbinom(length(y[z==1]),1,(x2/max(x2))[z==1])
-g <- glm(y~x*z, family=binomial(link='logit'))
-nx <- seq(0,1,by=.01)
-nz <- 0:1
-new <- expand.grid(x=nx,z=nz)
-f <- predict(g, newdata=new, se.fit=TRUE)
-p <- predict(g, newdata=new, type='response', se.fit=TRUE)
+g2 <- glm(y~x*z, family=binomial(link='logit'))
+f <- predict(g2, newdata=new, se.fit=TRUE)
+p <- predict(g2, newdata=new, type='response', se.fit=TRUE)
 # logit scale
 layout(matrix(1:2))
 par(mar=c(1,4,1,1), las=1)
-plot(new$x[new$z==0], f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='', ylab='Logit scale', ylim=c(-4,6))
+plot(new$x[new$z==0], f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='', ylab='Logit scale', ylim=c(-4,6), xaxt='n')
 lines(new$x[new$z==1], f$fit[new$z==1], lwd=2)
-text(.1, 2, "z=1")
-text(.1, -1, "z=0")
+text(.1, 1, "z=1")
+text(.1, -3, "z=0")
 # predicted probabilities
 par(mar=c(4,4,1,1))
 plot(new$x[new$z==0], p$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(0,1))
 lines(new$x[new$z==1], p$fit[new$z==1], lwd=2)
 text(.1, .8, "z=1")
-text(.1, .2, "z=0")
+text(.1, .05, "z=0")
 
 # marginal effects of z|x
 layout(matrix(1:2))
 # marginal effects of z (logit scale)
-plot(nx, f$fit[new$z==1]-f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Logit scale', ylim=c(-1,3))
+par(mar=c(1,4,1,1), las=1)
+plot(nx, f$fit[new$z==1]-f$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Logit scale', ylim=c(-1,3), xaxt='n')
 abline(h=0)
-b <- cbind.data.frame(x=x,z=z,y=y)
-invisible(replicate(100, {
-    tmpg <- glm(y~x*z, data=b[sample(1:nrow(b),nrow(b),TRUE),], family=binomial(link='logit'))
-    tmpp <- predict(tmpg, newdata=new)
-    lines(nx, tmpp[new$z==1]-tmpp[new$z==0], col=gray(.5,.4))
-}))
 # marginal effects of z (prob scale)
-plot(nx, p$fit[new$z==1]-p$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(-.2,.5))
+par(mar=c(4,4,1,1))
+plot(nx, p$fit[new$z==1]-p$fit[new$z==0], type='l', lwd=2, bty='l', xlab='x', ylab='Probability scale', ylim=c(-.5,1))
 abline(h=0)
-b <- cbind.data.frame(x=x,z=z,y=y)
-invisible(replicate(100, {
-    tmpg <- glm(y~x*z, data=b[sample(1:nrow(b),nrow(b),TRUE),], family=binomial(link='logit'))
-    tmpp <- predict(tmpg, newdata=new, type='response')
-    lines(nx, tmpp[new$z==1]-tmpp[new$z==0], col=gray(.5,.4))
-}))
 
 ```
 
 
+---
+background-image: url(http://i.imgur.com/7EhKCeH.png)
+
+???
+
+With a product term, the marginal effect on the logit scale is non-constant
+
+This is where our statistical significance tests come from
 
 
 
 ---
-## Predicted probabilities with interactions
+## Interpreting interactions
 
-
----
-## Marginal effects with interactions
+ - For significance of interaction, look at coefficient, SE, and p-value
+ 
+ - This is the same as using `margins` with the `predict(xb)` option
+ 
+ - For substantive size of effects:
+ 
+   - Look at predicted probabilities
+   - Or marginal effects on probability scale
 
