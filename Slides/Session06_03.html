@@ -13,6 +13,8 @@ layout: remark
 ---
 name: outline1
 
+## Outline
+
  - Goodness of fit
 
 --
@@ -45,7 +47,8 @@ template: outline1
 
 ]
 .right-column[
-## Percent correctly classified
+ 
+ - Percent correctly classified
 
  - Predicted values from a GLM are predicted probabilities of being in a particular outcome category
    - In binary models, `\(Pr(Y=1|X)\)`
@@ -61,7 +64,6 @@ template: outline1
 
 ]
 .right-column[
-## Percent correctly classified
 
 ```
 quietly logit charbin pubemp gender racebin educ income60 prestg80 married age hhchildren poplog church
@@ -288,6 +290,17 @@ Two points of common confusion:
 
 
 ---
+background-image: url(http://i.imgur.com/JhIGK0l.png)
+
+???
+
+We saw this last week with Price and Zaller's figures (no product term)
+
+
+We can formalize this a little bit by comparing the logit scale to the probability scale
+
+
+---
 background-image: url(http://i.imgur.com/KnHp498.png)
 
 ???
@@ -299,15 +312,6 @@ Predicted probabilities depend on values of all variables (thus there is already
 
 But we still need to incorporate product terms in the model to fully represent interactions
 
----
-background-image: url(http://i.imgur.com/JhIGK0l.png)
-
-???
-
-We saw this last week with Price and Zaller's figures (no product term)
-
-
-We can formalize this a little bit by comparing the logit scale to the probability scale
 
 ---
 background-image: url(http://i.imgur.com/iwl1WtW.png)
@@ -426,10 +430,144 @@ This is where our statistical significance tests come from
 
  - For significance of interaction, look at coefficient, SE, and p-value
  
- - This is the same as using `margins` with the `predict(xb)` option
+   - Same as using `margins` with the `predict(xb)` option
  
  - For substantive size of effects:
  
    - Look at predicted probabilities
    - Or marginal effects on probability scale
+
+
+---
+## Example: No product term
+
+```
+. logit charbin i.racebin age
+
+Logistic regression                               Number of obs   =       1352
+                                                  LR chi2(3)      =      55.95
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -681.30445                       Pseudo R2       =     0.0394
+
+------------------------------------------------------------------------------
+     charbin |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+   1.racebin |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+         age |   .0179163   .0040474     4.43   0.000     .0099836     .025849
+       _cons |  -.0410455   .2085535    -0.20   0.844    -.4498029    .3677119
+------------------------------------------------------------------------------
+```
+
+---
+## Average Marginal Effect (logit scale)
+
+```
+. margins, dydx(race) predict(xb) at(age=(20 (20) 100))
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1.racebin    |
+         _at |
+          1  |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+          2  |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+          3  |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+          4  |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+          5  |   .3647901   .1578669     2.31   0.021     .0553768    .6742035
+------------------------------------------------------------------------------
+```
+
+---
+## Average Marginal Effect (Pr scale)
+
+```
+. margins, dydx(race) at(age=(20 (20) 100))
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1.racebin    |
+         _at |
+          1  |   .0780694   .0346902     2.25   0.024     .0100779    .1460608
+          2  |   .0673584   .0304971     2.21   0.027     .0075852    .1271315
+          3  |   .0554545   .0258285     2.15   0.032     .0048316    .1060774
+          4  |   .0438903   .0213942     2.05   0.040     .0019585    .0858221
+          5  |   .0336508   .0175115     1.92   0.055     -.000671    .0679726
+------------------------------------------------------------------------------
+```
+
+---
+background-image: url(http://i.imgur.com/pQk4wyP.png)
+
+---
+## Example: With product term
+
+```
+. logit charbin i.racebin##c.age
+
+Logistic regression                               Number of obs   =       1352
+                                                  LR chi2(3)      =      41.00
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -688.77809                       Pseudo R2       =     0.0289
+
+-------------------------------------------------------------------------------
+      charbin |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+    1.racebin |  -.1927052   .4257223    -0.45   0.651    -1.027105    .6416951
+          age |   .0076139   .0083742     0.91   0.363    -.0087992    .0240269
+              |
+racebin#c.age |
+           1  |   .0159047   .0096025     1.66   0.098     -.002916    .0347253
+              |
+        _cons |   .5226164   .3650456     1.43   0.152    -.1928598    1.238093
+-------------------------------------------------------------------------------
+```
+
+---
+## Average marginal effects (logit scale)
+
+```
+. margins, dydx(racebin) predict(xb) at(age=(20 (20) 100))
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1.racebin    |
+         _at |
+          1  |   .1253883   .2562407     0.49   0.625    -.3768342    .6276108
+          2  |   .4434818   .1544224     2.87   0.004     .1408195    .7461442
+          3  |   .7615753   .2362211     3.22   0.001     .2985904     1.22456
+          4  |   1.079669   .4018977     2.69   0.007     .2919639    1.867374
+          5  |   1.397762   .5839608     2.39   0.017     .2532203    2.542304
+------------------------------------------------------------------------------
+```
+
+---
+## Average marginal effects (Pr scale)
+
+```
+. margins, dydx(racebin) at(age=(20 (20) 100))
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1.racebin    |
+         _at |
+          1  |   .0274367   .0566057     0.48   0.628    -.0835084    .1383819
+          2  |   .0850981   .0311612     2.73   0.006     .0240233    .1461728
+          3  |   .1238184    .043822     2.83   0.005     .0379288    .2097079
+          4  |    .145111   .0676185     2.15   0.032     .0125811    .2776408
+          5  |   .1528118   .0889482     1.72   0.086    -.0215235     .327147
+------------------------------------------------------------------------------
+```
+
+---
+background-image: url(http://i.imgur.com/qNN9Zn8.png)
+
+???
+
+On the logit scale race has a significant marginal effect across the entire age scale, but this goes away in the probability scale.
+
 
