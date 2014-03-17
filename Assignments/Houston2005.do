@@ -219,3 +219,12 @@ margins, dydx(pubemp)
 * --- Count outcome --- *
 
 poisson hhchildren racebin age educ
+margins racebin
+margins, dydx(racebin)
+
+margins, at(age=(20 (20) 80))
+marginsplot
+
+margins, dydx(age) at(age=(20 (20) 80))
+marginsplot
+
