@@ -21,6 +21,13 @@ name: outline
  - Kim: Panel Analysis I
  
 
+---
+## 3rd Assignment
+
+ - Some of you have started on this 
+ 
+ - Any questions so far?
+ 
 
 <!-- Model Choice -->
 ---
@@ -29,6 +36,10 @@ name: outline
 
 Review when we use different types of models
 
+I'm going to put questions on the board
+
+Spend 10 seconds individually and think of an answer
+
 
 ---
 class: center, middle
@@ -36,6 +47,8 @@ class: center, middle
 When do we use **binary logit** versus **binary probit**?
 
 ???
+
+ - Outcome that is a binary/dummy/indicator (0/1)
 
  - Only important difference is untestable assumption about error term
 
@@ -48,6 +61,10 @@ When do we use **ordered logit** versus **ordered probit**?
 
 ???
 
+ - The outcome is a set of categories that can be ordered from highest to lowest
+ 
+ - Categories do not need to be equidistant
+ 
  - Same as in binary logit/probit
 
 ---
@@ -62,6 +79,8 @@ When do we use **OLS** versus **ordered probit**?
  - Ex: Spending opinion variable: increased/decreased/same
  
  - Can they give the same substantive results? How would we know?
+ 
+ - Worth doing robustness checks
 
 
 ---
@@ -75,6 +94,8 @@ When do we use **OLS** versus **poisson**?
  
  - Distribution of count variable (Normal, Poisson, zero-inflated, negative-binomial)
  
+ - Versus Normal distribution
+ 
  - If the count is a proportion of a number of finite trials, you actually want logit/probit
 
 ---
@@ -86,13 +107,18 @@ When do we use **ordered logit** versus **multinomial logit**?
 
  - Categories can be ordered or not
  
+ - Multinomial logit will still work with an ordered outcome
+ 
  - Choice of logit/probit is same as in binary logit/probit
 
 
 ---
 class: center, middle
 
-When do we use **multinomial logit** versus several **binary logit**s?
+When do we use **multinomial logit** versus several **binary logits**?
+
+
+???
 
  - We want to constrain probabilities to sum to one
 
@@ -106,6 +132,9 @@ Questions?
  
  
 <!-- Model Interpretation -->
+---
+
+???
 
 ---
 class: center, middle
@@ -122,6 +151,10 @@ In a GLM, how do we determine the statistical significance of a covariate?
 class: center, middle
 
 In OLS with a product term, how do we determine the substantive size of a covariate's effect?
+
+???
+
+Key is that there are multiple effect sizes for included covariates
 
 ---
 class: center, middle
@@ -143,10 +176,20 @@ class: center, middle
 In OLS, what is the difference between the coefficient/slope and the marginal effect of a variable?
 
 
+???
+
+They are the same
+
 ---
 class: center, middle
 
 In a GLM, what is the difference between the coefficient/slope and the marginal effect of a variable?
+
+???
+
+They are the same on the latent scale (e.g., in logit, on the logit scale)
+
+On the probability scale, the marginal effect depends on all other variables
 
 
 ---
@@ -170,6 +213,18 @@ In a GLM, why do we calculate marginal effects?
  - Average marginal effects versus marginal effects at the mean
  
  - Comparing effect sizes in probability terms 
+
+
+---
+class: center, middle
+
+For which covariates should we estimate marginal effects and/or predicted probabilities?
+
+???
+
+The ones we care about theoretically
+
+Everything we said in OLS about causal inference and hypothesis testing applies with GLMs
 
 ---
 name: questions
