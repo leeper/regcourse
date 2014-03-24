@@ -8,3 +8,171 @@ layout: remark
 
 # {{ page.title }} #
 # {{ page.day }} #
+
+---
+name: outline
+
+ - 3rd Assignment Due Friday
+
+ - Review GLMs
+ 
+ - Discuss any uncertainties
+ 
+ - Kim: Panel Analysis I
+ 
+
+
+<!-- Model Choice -->
+---
+
+???
+
+Review when we use different types of models
+
+
+---
+class: center, middle
+
+When do we use **binary logit** versus **binary probit**?
+
+???
+
+ - Only important difference is untestable assumption about error term
+
+
+---
+class: center, middle
+
+When do we use **ordered logit** versus **ordered probit**?
+
+
+???
+
+ - Same as in binary logit/probit
+
+---
+class: center, middle
+
+When do we use **OLS** versus **ordered probit**?
+
+???
+
+ - Ordered, but not interval outcome
+ 
+ - Ex: Spending opinion variable: increased/decreased/same
+ 
+ - Can they give the same substantive results? How would we know?
+
+
+---
+class: center, middle
+
+When do we use **OLS** versus **poisson**?
+
+???
+
+ - Upper bound to variable
+ 
+ - Distribution of count variable (Normal, Poisson, zero-inflated, negative-binomial)
+ 
+ - If the count is a proportion of a number of finite trials, you actually want logit/probit
+
+---
+class: center, middle
+
+When do we use **ordered logit** versus **multinomial logit**?
+
+???
+
+ - Categories can be ordered or not
+ 
+ - Choice of logit/probit is same as in binary logit/probit
+
+
+---
+class: center, middle
+
+When do we use **multinomial logit** versus several **binary logit**s?
+
+ - We want to constrain probabilities to sum to one
+
+
+
+---
+name: questions
+class: center, middle
+
+Questions?
+ 
+ 
+<!-- Model Interpretation -->
+
+---
+class: center, middle
+
+In OLS, how do we determine the statistical significance of a covariate?
+
+---
+class: center, middle
+
+In a GLM, how do we determine the statistical significance of a covariate?
+
+
+---
+class: center, middle
+
+In OLS with a product term, how do we determine the substantive size of a covariate's effect?
+
+---
+class: center, middle
+
+In a GLM with a product term, how do we determine the substantive size of a covariate's effect?
+
+
+???
+
+ - Latent scale
+ 
+ - Probability scale
+ 
+ - Are they always the same?
+
+---
+class: center, middle
+
+In OLS, what is the difference between the coefficient/slope and the marginal effect of a variable?
+
+
+---
+class: center, middle
+
+In a GLM, what is the difference between the coefficient/slope and the marginal effect of a variable?
+
+
+---
+class: center, middle
+
+In a GLM, why do we calculate predicted probabilities?
+
+???
+
+ - Average Predicted Probabilities
+ 
+ - Predicted probabilities at representative cases
+
+---
+class: center, middle
+
+In a GLM, why do we calculate marginal effects?
+
+???
+
+ - Average marginal effects versus marginal effects at the mean
+ 
+ - Comparing effect sizes in probability terms 
+
+---
+name: questions
+class: center, middle
+
+Questions?
