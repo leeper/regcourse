@@ -18,43 +18,278 @@ Kam and Palmer (2008)
 Henderson and Chatfield (2011)
 
 
+
+
 ---
-## Mimic experiment by matching across covariates
-  - Define treatment and control groups
-  - Independence assumption
-    - Achieved by randomization
-  - Conditional ignorability
-    - Not independence (which is not testable)
-  - Trivial example with one covariate
-  - Consequences
-    - Covariate balance across treatment groups
-    - Eliminate covariate non-overlap
-    - Potentially discard a lot of observations
-      - Is this a good thing or a bad thing?
-      - Loss of representativeness
-      - 1-to-1 or 1-to-k or k-to-k matching
+## Experiments
+
+ - If we can run an experiment, we should
+ 
+ - If we cannot run an experiment, we can try to emulate one
+
+
+???
+
+Use Rubin's smoking and cancer as running example
+ 
 ---
-## Problem of dimensionality
-  - As number and levels of covariates increase, too many levels to match at
-  - Solutions
-    - CEM
-    - Propensity score
-    - Mahalanobis distance (we won't discuss this)
+## Experiments
+
+ - Experiments work because of the **ignorability** of treatment assignment
+ 
+ - Randomization of treatment assignment means no factor (no variable) causes a unit to receive the treatment rather than the control
+ 
+ - In observational data, lots of factors affect treatment assignment
+ 
+ - Matching is about **conditionality ignorability**
+
+???
+
+What factors predict smoking?
+
+---
+## Matching
+
+ - Treatment assignment is **conditionally ignorable** if, in our sample data, no factor predicts treatment assignment
+ 
+ - We achieve this by:
+  
+   - Selecting units that share pretreatment characteristics
+   
+   - Selectively discarding observations that do not **match**
+
+ - Conditional ignorability lets us make a **causal** claim about the effect of treatment
+
+
+---
+## Five criteria
+
+  1. Relationship
+  
+  2. Temporal precedence
+  
+  3. No confounding
+  
+  4. Plausible mechanism
+  
+  5. Level of analysis
+
+
+
+---
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
+???
+
+We always use the same causal logic
+
+We want to block "backdoor paths"
+
+In matching, we do that by focusing on variables that cause selection into categories of the treatment variable
+
+We only need to condition to close backdoor paths, but we can additionally condition on anything that causes selection
+
+
+---
+## Considerations
+
+ - Matched sample is a nonrandom subsample of our original data
+ 
+ - We sacrifice representativeness for the ability to make a clearer causal inference
+ 
+ - Matching may not be possible (no common covariate support)
+ 
+ - Matching is highly covariate-dependent
+
+
+???
+
+Without covariate support, we shouldn't do regression either
+
+
+Choice of covariates can have a big impact on results. More on this in a minute.
+
+ 
+---
+## How do we match?
+
+ - Define treatment and control groups
+ 
+ - Observe variables that affect treatment selection
+   - *We can never know all of these!*
+
+ - Construct a matched sample (matching and pruning)
+ 
+ - Analyze matched sample as we see fit
+   
+???
+
+We can do this with more than two groups (more than just T and C), but the math gets complicated
+
+Easier to do it with Exact matching
+
+
+---
+## An Example
+
+MATCHING ON ONE COVARIATE
+
+
+---
+## Three big choices
+
+ 1. Which covariates do we match on?
+ 
+ 2. How do we do the matching?
+
+ 3. How do we know when units are sufficiently matched?
+ 
+---
+## Which covariates do we match on?
+
+ - Common practice is called **matching on observables**
+ 
+ - Go back to graphs
+
+---
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
+---
+name: methods
+
+## How do we do the matching?
+
+ 1. Exact matching
+ 
+ 2. Coarsened exact matching
+ 
+ 3. Nearest-neighbor matching
+ 
+ 4. Propensity score matching
+ 
+ 5. Propensity score subclassification
+ 
+ 
+---
+## An Example
+
+NEED TO HAVE AN EXAMPLE HERE: ONE COVARIATE, THEN MANY, THEN EXACT AND PSCORE
+
+
+---
+## Exact Matching
+
+ - Benefits:
+ 
+   - Groups are automatically balanced
+ 
+ - Challenges:
+ 
+   - Choice of covariates
+   - Sparsity can be problematic
+   - Problem of dimensionality
+   
+   
+---
+## Problem of Dimensionality
+
+ - Problem: As number and levels of covariates increase, too many levels to match at
+ 
+ - Solutions:
+   
+   1. Coarsened exact matching (CEM)
+   2. Nearest-neighbor matching (We won't discuss this)
+   3. Propensity score matching/subclassification
+
+
 ---
 ## Propensity score matching
-  - Estimate a logistic regression model
-    - Outcome: treatment variable
-    - Predictors: covariates
-  - Match on the fitted values, as a single covariate
-    - Use either the logit scale or predicted probability
-  - Benefits
-    - Solves the dimensionality problem
-    - Balancing covariates
-  - Consequences
-    - Model dependence!
-    - No guarantee of covariate balance
+
+ 1. Gather all covariates to match on
+ 
+ 2. Estimate a binary outcome GLM predicting treatment assignment
+ 
+ 3. Match cases based on propensity score (a single covariate)
+ 
+   - Predicted probability of being in treatment group, or
+   - Logit (log-odds)
+
 ---
-## How do we use matched data?
-  - Difference-in-means based on matched data
-    - Weighted difference (ATT/ATC)
-  - Regression on preprocessed data
+## Propensity score matching
+
+ - Benefits:
+ 
+   - Solves problem of dimensionality
+   - Assess balance on only one dimension
+   
+ - Challenges:
+ 
+   - Choice of covariates
+   - Model dependence (logit/probit)
+   - Decision about 1-to-1 or 1-to-k or k-to-k matching
+   - Assessing balance
+   
+
+---
+## How do we know when units are sufficiently matched?
+
+ - Common covariate support
+ 
+ - Covariate (mean) balance
+ 
+ - Identical covariate distributions
+
+???
+
+Because there are unobserved covariates, we can never really know
+
+This is also a problem for regression; there are always omitted variables
+
+ 1. We get common covariate support in any matching exercise
+ 
+ 2. Mean balance is something we have to test (exact matching ignores it)
+ 
+   - We can do t-test, but do we need exactly identical means?
+   - Do we look at the propensity score or individual covariates?
+ 
+ 3. Identical distributions
+
+   - Is it necessary?
+   - How do we test?
+
+
+---
+## Analysis
+
+ - Matching is preprocessing
+ 
+ - We still need to estimate a causal effect
+ 
+ - We can use any method:
+ 
+   - Difference-in-means
+   - Weighted difference
+   - Regression
+
+  
+  
+---
+## Activity (10 min)
+
+Divide into groups and come up with summary of article section
+
+ 1. Argument (K&P pp.614-617)
+ 2. Methods (K&P pp.617-622)
+ 3. Results (K&P pp.622-626)
+
+ 4. Method (H&C pp.649-652)
+ 5. Results (H&C pp.653-655)
+
+ 
+???
+
+Divide class into groups of ~3
+
+Have each pair take a part of the two articles
+
+
