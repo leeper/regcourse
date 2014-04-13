@@ -18,8 +18,28 @@ Kam and Palmer (2008)
 Henderson and Chatfield (2011)
 
 
+---
+name: outline
+
+## Outline
 
 
+---
+## Why do I like matching?
+
+ - Forces the researcher to look at the data
+
+ - Matching and regression are equivalent
+
+???
+
+Everything we talk about today applies to all research
+
+Matching focuses our attention on whether we've eliminated confounding due to *observed* factors; this is something we need to do anytime we're trying to make a causal claim
+
+Regression and matching seem really different, but they're ultimately both about eliminating confounding
+ 
+ 
 ---
 ## Experiments
 
@@ -30,39 +50,26 @@ Henderson and Chatfield (2011)
 
 ???
 
-Use Rubin's smoking and cancer as running example
- 
+
 ---
-## Experiments
+## Does smoking cause cancer?
 
- - Experiments work because of the **ignorability** of treatment assignment
- 
- - Randomization of treatment assignment means no factor (no variable) causes a unit to receive the treatment rather than the control
- 
- - In observational data, lots of factors affect treatment assignment
- 
- - Matching is about **conditionality ignorability**
+Experiment
 
+ - Randomly assign individuals to:
+   - Treatment: Smoking
+   - Control: No smoking
+   
+ - Observe cancer rates in both groups
+ 
+ - Causal effect is difference in cancer rates
+ 
 ???
 
-What factors predict smoking?
+How does this study satisfy the five criteria for causal inference?
 
 ---
-## Matching
-
- - Treatment assignment is **conditionally ignorable** if, in our sample data, no factor predicts treatment assignment
- 
- - We achieve this by:
-  
-   - Selecting units that share pretreatment characteristics
-   
-   - Selectively discarding observations that do not **match**
-
- - Conditional ignorability lets us make a **causal** claim about the effect of treatment
-
-
----
-## Five criteria
+## Five causal criteria
 
   1. Relationship
   
@@ -74,6 +81,63 @@ What factors predict smoking?
   
   5. Level of analysis
 
+???
+
+But what's wrong with the experimental study?
+
+  
+
+---
+## Does smoking cause cancer?
+
+Observational study
+
+ - Observe treatment status
+ 
+ - Observe cancer rates in both groups
+ 
+ - **Naive causal effect** is difference in cancer rates
+ 
+???
+
+How does this study satisfy the five criteria for causal inference?
+
+
+What's wrong with it?
+
+What factors predict smoking?
+
+
+Naive because it shows naivete. It ignores confounding: all of the factors that affect selection into smoking.
+
+
+ 
+---
+## Experiments
+
+ - Experiments work because of the **ignorability** of treatment assignment
+ 
+ - Randomization of treatment assignment means no factor (no variable) causes a unit to receive the treatment rather than the control
+
+ - Matching is about **conditionality ignorability** of confounding factors
+ 
+???
+
+
+
+---
+## Matching
+
+ - Treatment assignment is **conditionally ignorable** if, in our sample data, no factor predicts treatment assignment
+ 
+ - We achieve this by:
+  
+   - Selecting units that share pretreatment characteristics
+   - Selectively discarding observations that do not **match**
+
+ - Conditional ignorability lets us make a **causal** claim about the effect of treatment
+
+???
 
 
 ---
@@ -132,7 +196,26 @@ Easier to do it with Exact matching
 ---
 ## An Example
 
+
+```
+        T T T T T T T T T T T T T T T
+
+  C C C C C C C C C C C C C C
+
+<--------------- W ------------------->
+```
+
+???
+
 MATCHING ON ONE COVARIATE
+
+Age affects whether someone smokes
+
+If age also affects whether someone gets cancer (older people more likely to get cancer) then the effect of age will confound the effect of smoking
+
+If we look only at area of common covariate support, then smokers and non-smokers do not differ on age
+
+Age becomes ignorable in our assessment of the causal effect of smoking on cancer
 
 
 ---
@@ -169,12 +252,6 @@ name: methods
  
  5. Propensity score subclassification
  
- 
----
-## An Example
-
-NEED TO HAVE AN EXAMPLE HERE: ONE COVARIATE, THEN MANY, THEN EXACT AND PSCORE
-
 
 ---
 ## Exact Matching
@@ -189,7 +266,39 @@ NEED TO HAVE AN EXAMPLE HERE: ONE COVARIATE, THEN MANY, THEN EXACT AND PSCORE
    - Sparsity can be problematic
    - Problem of dimensionality
    
-   
+---
+## An Example: Exact matching
+
+```
+        T   T T       T T     T T T
+
+  C C   C C     C C C C C C       C
+
+<--------------- W ------------------->
+```
+
+???
+
+Exact matching we discard anyone who isn't a perfect match
+
+---
+## An Example: Coarsened exact matching
+
+```
+        T   T T       T T     T T T
+
+  C C   C C     C C C C C C       C
+
+<   Low  |    Medium     |     High   >
+  
+<--------------- W ------------------->
+```
+
+???
+
+We coarsen our covariate and create matches within each band
+
+
 ---
 ## Problem of Dimensionality
 
@@ -203,6 +312,26 @@ NEED TO HAVE AN EXAMPLE HERE: ONE COVARIATE, THEN MANY, THEN EXACT AND PSCORE
 
 
 ---
+## Nearest neighbor matching
+
+```
+        T   T T       T T     T T T
+
+  C C   C C     C C C C C C       C
+
+<--------------- W ------------------->
+```
+
+???
+
+We pick a treated observation and we find the closest matching control unit
+
+When everyone is matched we discard the remaining data
+
+This is sensitive to order of choosing observations
+
+
+---
 ## Propensity score matching
 
  1. Gather all covariates to match on
@@ -213,6 +342,10 @@ NEED TO HAVE AN EXAMPLE HERE: ONE COVARIATE, THEN MANY, THEN EXACT AND PSCORE
  
    - Predicted probability of being in treatment group, or
    - Logit (log-odds)
+
+???
+
+We can either match exactly, use nearest-neighbor on the propensity score, or subclassify (like in CEM)
 
 ---
 ## Propensity score matching
@@ -274,16 +407,22 @@ This is also a problem for regression; there are always omitted variables
   
   
 ---
-## Activity (10 min)
+## Activity
 
-Divide into groups and come up with summary of article section
+ - Divide into groups
+ - Summarize one article section
+ - Share with class
 
- 1. Argument (K&P pp.614-617)
- 2. Methods (K&P pp.617-622)
- 3. Results (K&P pp.622-626)
+From Kam and Palmer:
 
- 4. Method (H&C pp.649-652)
- 5. Results (H&C pp.653-655)
+   1) Argument (K&P pp.614-617)
+   2) Methods (K&P pp.617-622)
+   3) Results (K&P pp.622-626)
+
+From Henderson and Chatfield:
+
+   4) Method (H&C pp.649-652)
+   5) Results (H&C pp.653-655)
 
  
 ???
@@ -293,3 +432,24 @@ Divide class into groups of ~3
 Have each pair take a part of the two articles
 
 
+---
+## Preview
+
+Tomorrow:
+
+ - Matching in Stata
+ 
+Next week:
+
+ - Instrumental Variables (IV regression)
+ 
+Week after next:
+
+ - Missing data
+ - Multiple imputation
+
+???
+
+IV focuses on estimating a Local Average Treatment Effect (LATE) by finding some real-world randomization to "instrument" for the causal variable
+
+So-called "natural experiments", "regression discontinuity designs", and "interrupted time series" are all basically instrumental variables designs
