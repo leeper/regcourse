@@ -41,9 +41,17 @@ After today's lab you will be able to analyze the extent to which covariates are
 \item % one covariate
 \item % exact matching
 
-\item % pscore estimation (log-odds and probability scale)
-\item % balance in pscores and in original variables
+\item Estimate a propensity score model using \texttt{logit} to predict \texttt{college} as a function of pretreatment covariates.
+\item Estimate propensity scores from the model using \texttt{predict} on both the linear (log-odds) and probability scales. For example: \texttt{predict pscore, pr} and \texttt{predict pscorexb, xb}.
+Plot the two versions of the propensity score to understand how the predicted probability is a simple non-linear transformation of the linear (log-odds) prediction: \texttt{twoway scatter pscore pscorexb}
+
+\item Assess balance in the propensity scores using a comparative density plot:\\ \texttt{twoway (kdensity pscore if college == 1) (kdensity pscore if college == 0), legend(label(1 university) label(2 no university))} .
+
 \item % \texttt{teffects overlap} to assess pscore overlap
+
+
+
+\item Use the techniques we used earlier to assess pre-matching balance in the covariates to assess post-matching balance in the covariates.
 
 \item % pscore matching
 % options for number of matches: \texttt{nneighborh(4)}
@@ -54,7 +62,10 @@ After today's lab you will be able to analyze the extent to which covariates are
 % psmatch2 t x1 x2, out(y) logit
 % reg y x1 x2 t [fweight=_weight] 
 
-\item % pscore subclassification
+% pscore subclassification
+\item Generate propensity score subclasses using the \texttt{egen} command: \texttt{egen pclass = cut(pscore), group(5)}. Note: the \texttt{group(5)} option indicates you are requesting five subclasses.
+
+
 
 \item % effect estimation (ATE, regression, ATT)
 \item % compare matching to regression
