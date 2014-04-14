@@ -17,15 +17,26 @@ After today's lab you will be able to analyze the extent to which covariates are
 
 \subsection*{Balance Testing}
 
+\item The first step in preparing for matching is assessing covariate overlap (common covariate support). This can be done using tables or graphs, and both unidimensionally and multidimensionally. 
+	\begin{itemize}
+	\item Assess common covariate support on several covariates among those attending university and those not attending university (variable \texttt{college}) using \texttt{centile} and/or \texttt{summarize} with the \textt{by} syntax. For example: \texttt{by college, sort: centile yNewspaper, c(0 100)} or \texttt{by college, sort: summ yNewspaper, d}.
+	\item Repeat this analysis using the \texttt{box} (or \texttt{hbox}) command to produce visual summaries of covariate distributions.
+	\item Use a scatterplot to compare common covariate support on two dimensions. Use the \texttt{jitter} option to clarify categorical variables. For example:\\ \texttt{twoway (scatter y1973ThermNixon y1973ThermDems if college == 1, jitter(10)) (scatter y1973ThermNixon y1973ThermDems if college == 0, jitter(10)), legend(label(1 university) label(2 no university))}
+	\end{itemize}
+\item If the treatment and control groups have common covariate, we typically then focus on balance across groups in terms of the covariate's mean in each group. Use \texttt{summarize}, again with the \texttt{by college, sort:} prefix to compare the means of covariates in each group.
+\item We can also compare balance across groups by looking at density plots to see not only whether the distributions are mean-balanced but whether they are similar. This is not critical for matching, but the more similar the distributions, the less likely there is to be bias in the causal effect estimate attributable to this variable. Use the \texttt{kdensity} plotting command to produce comparative density plots of (continuous) covariates for the treatment and control groups. For example:\\ \texttt{twoway (kdensity y1973ThermNixon if college == 1) (kdensity y1973ThermNixon if college == 0), legend(label(1 university) label(2 no university))}
 
-\item % covariate overlap using boxplots and summaries
-\item % means comparisons using summarize and tables
-\item % distribution comparisons density plots and QQplots
+\subsection*{Matching}
 
+\item Stata 13 includes several matching commands as part of its built-in \texttt{teffects} package. We will also use two add-on packages called \texttt{psmatch2} and \texttt{CEM}:
+	\begin{itemize}
+	\item Install psmatch2: \texttt{ssc install psmatch2, replace}
+	\item Install CEM: \texttt{ssc install CEM, replace}
+	\end{itemize}
+
+\item Matching is a fundamentally an iterative process. Once the subset of observations within the range of common covariate support are identified, the actual matching of treatment to control units needs to take place by identifying one treatment unit, matching it it to one or more control units and then continuing with the next treatment unit. (Depending on whether matching is done {\em with replacement}, the matched control units might remain available for further matching.)
 
 \subsection*{Propensity Score Matching}
-
-% install psmatch2: \texttt{ssc install psmatch2, replace}
 
 \item % one covariate
 \item % exact matching
@@ -39,6 +50,10 @@ After today's lab you will be able to analyze the extent to which covariates are
 % options for caliper: \texttt{caliper(.1)}
 % estimating ATET (only matches treatment units): \texttt{, atet vce(iid)}
 
+
+% psmatch2 t x1 x2, out(y) logit
+% reg y x1 x2 t [fweight=_weight] 
+
 \item % pscore subclassification
 
 \item % effect estimation (ATE, regression, ATT)
@@ -50,6 +65,10 @@ After today's lab you will be able to analyze the extent to which covariates are
 \item % CEM installation
 \item % CEM recoding
 \item % CEM analysis
+
+% cem y1973ThermNixon, tr(college)
+% reg y1982demonstrate college
+% reg y1982demonstrate college [iweight=cem_weights]
 
 
 \subsection*{Analyze Houston (2005) GSS data with Matching}
@@ -75,6 +94,13 @@ But you are also welcome to use other measures.
 
 \item % effect of `pubemp` on outcomes
 \item % teffects psmatch
+
+% psmatch2 pubemp educ, out(y) logit
+% reg voted pubemp [fweight=_weight] 
+
+% cem educ, tr(pubemp)
+% reg voted pubemp
+% reg voted pubemp [iweight=cem_weights]
 
 \end{enumerate}
 
