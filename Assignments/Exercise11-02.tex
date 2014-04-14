@@ -8,39 +8,73 @@
 \textbf{Matching Lab}
 \end{center}
 
-
-
+After today's lab you will be able to analyze the extent to which covariates are balanced between treatment and control groups and use Stata to produce matched data and estimate causal effects. To achieve these objectives, we will (1) use data from the Political Socialization Panel Study to replicate analyses by Kim and Palmer and Henderson and Chatfield on the causal effects of university education, and (2) use General Social Survey data (from earlier in the course) to estimate causal effects of public versus private employment status.
 
 \begin{enumerate}\itemsep0.5em
 
+\item Download the \texttt{WhoMatches.dta} data file from Blackboard.
+\item Open the file and start a new \texttt{.do} file to contain the following analyses.
+
 \subsection*{Balance Testing}
+
 
 \item % covariate overlap using boxplots and summaries
 \item % means comparisons using summarize and tables
 \item % distribution comparisons density plots and QQplots
 
 
-\subsection*{Matching}
+\subsection*{Propensity Score Matching}
+
+% install psmatch2: \texttt{ssc install psmatch2, replace}
 
 \item % one covariate
 \item % exact matching
 
 \item % pscore estimation (log-odds and probability scale)
 \item % balance in pscores and in original variables
+\item % \texttt{teffects overlap} to assess pscore overlap
 
 \item % pscore matching
+% options for number of matches: \texttt{nneighborh(4)}
+% options for caliper: \texttt{caliper(.1)}
+% estimating ATET (only matches treatment units): \texttt{, atet vce(iid)}
+
 \item % pscore subclassification
 
 \item % effect estimation (ATE, regression, ATT)
 \item % compare matching to regression
 
 
-\subsection*{Balance Testing}
+\subsection*{Coarsened Exact Matching}
 
 \item % CEM installation
 \item % CEM recoding
 \item % CEM analysis
 
+
+\subsection*{Analyze Houston (2005) GSS data with Matching}
+
+\item Download the \texttt{GSS2002.dta} data file from Blackboard.
+\item Open the file and start a new \texttt{.do} file to contain the following analyses.
+
+\item Create a new variable, \texttt{pubemp}, to represent public employment, using \texttt{recode wrkgovt 2=0, gen(pubemp)}
+\item Use the balance testing techniques above to assess pre-matching balance of covariates. You may want to use the covariates we identified previously in GSS:
+	\begin{itemize}
+	\item Female: \texttt{sex}
+	\item White: \texttt{race}
+	\item Education: \texttt{educ}
+	\item Income: \texttt{rincom98}
+	\item Occupational prestige: \texttt{prestg80}
+	\item Married: \texttt{marital}
+	\item Age: \texttt{age}
+	\item Children in household: a sum of \texttt{babies}, \texttt{preteen}, and \texttt{teens}
+	\item Community size (logged): \texttt{size}
+	\item Church attendance: \texttt{attend}
+	\end{itemize}
+But you are also welcome to use other measures.
+
+\item % effect of `pubemp` on outcomes
+\item % teffects psmatch
 
 \end{enumerate}
 
