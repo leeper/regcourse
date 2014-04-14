@@ -11,6 +11,11 @@ layout: remark
 
 ???
 
+Entering a phase of the course on techniques that you will see a lot in recent literature
+
+The last three weeks with Kim had a very coherent theme about hierarhical data structures. The next few weeks are not as coherent as a whole.
+
+
 Rubin (2001)
 Ho, Imai, King, and Stuart (2007)
 Angrist and Pischke (69-91)
@@ -337,17 +342,15 @@ template: questions
 
  - Problem: As number and levels of covariates increase, too many levels to match at
  
- - E.g.:
- 
-   - If we need to match on gender:
-     - There are 2 levels (male and female)
-     - We need 4 observations (2 smokers and 2 non-smokers)
+ - If we need to match on gender:
+   - There are 2 levels (male and female)
+   - We need 4 observations (2 smokers and 2 non-smokers)
    
-   - If we also match on 'having a university degree':
-     - We have 4 levels:
-       - Male with degree and Female with degree
-       - Male w/o degree and Female w/o degree
-     - We need 8 observations (4 smokers and 4 non-smokers)
+ - If we also match on 'having a university degree':
+   - We have 4 levels:
+     - Male with degree and Female with degree
+     - Male w/o degree and Female w/o degree
+   - We need 8 observations (4 smokers and 4 non-smokers)
 
 ---
 ## Activity: How many levels do we need if we match on...
@@ -375,8 +378,10 @@ template: questions
  - Solutions:
    
    1. Coarsened exact matching (CEM)
+   
    2. Nearest-neighbor matching
      - We won't discuss this in detail
+   
    3. Propensity score matching/subclassification
 
 
@@ -385,6 +390,22 @@ template: questions
 template: questions
 
 
+
+---
+## Propensity score matching
+
+ 1. Gather all covariates to match on
+ 
+ 2. Estimate a binary outcome GLM predicting treatment assignment
+ 
+ 3. Match cases based on propensity score (a single covariate)
+ 
+   - Predicted probability of being in treatment group, or
+   - Logit (log-odds)
+
+???
+
+We can either match exactly, use nearest-neighbor on the propensity score, or subclassify (like in one-variable CEM)
 
 ---
 ## Nearest neighbor matching
@@ -405,22 +426,6 @@ When everyone is matched we discard the remaining data
 
 This is sensitive to order of choosing observations
 
-
----
-## Propensity score matching
-
- 1. Gather all covariates to match on
- 
- 2. Estimate a binary outcome GLM predicting treatment assignment
- 
- 3. Match cases based on propensity score (a single covariate)
- 
-   - Predicted probability of being in treatment group, or
-   - Logit (log-odds)
-
-???
-
-We can either match exactly, use nearest-neighbor on the propensity score, or subclassify (like in one-variable CEM)
 
 ---
 ## Propensity score matching
@@ -516,7 +521,7 @@ template: questions
  - Divide into groups
  - Summarize one section to share with class
 
-From Kam and Palmer:
+**From Kam and Palmer**:
 
    1) Argument (K&P pp.614-617)
    
@@ -524,7 +529,7 @@ From Kam and Palmer:
    
    3) Results (K&P pp.622-626)
 
-From Henderson and Chatfield:
+**From Henderson and Chatfield**:
 
    4) Method (H&C pp.649-652)
    
@@ -677,20 +682,20 @@ This way you aren't picking a model based on the causal effect estimate that com
 ## Effect estimation in Stata
 
 ```
-. teffects psmatch (outcome) (smoker age gender income married educ)
+teffects psmatch (outcome) (smoker age gender income married educ)
 
-Treatment-effects estimation                    Number of obs      =      1013
-Estimator      : propensity-score matching      Matches: requested =         1
-Outcome model  : matching                                      min =         1
-Treatment model: logit                                         max =         2
-------------------------------------------------------------------------------
+Treatment-effects estimation                    
+Estimator      : propensity-score matching      
+Outcome model  : matching                       
+Treatment model: logit                          
+-----------------------------------------------------
              |              AI Robust
-     outcome |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
+     outcome |      Coef.   Std. Err.      z    P>|z|
+-------------+---------------------------------------
 ATE          |
       smoker |
- (Yes vs 0)  |   .0853899   .0277538     3.08   0.002     .0309936    .1397863
-------------------------------------------------------------------------------
+ (Yes vs 0)  |   .0853899   .0277538     3.08   0.002
+-----------------------------------------------------
 ```
 
 
@@ -714,7 +719,7 @@ Next week:
 
  - Instrumental Variables (IV regression)
  
-Week after next:
+Following week:
 
  - Missing data
  - Multiple imputation
