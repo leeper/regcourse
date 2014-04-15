@@ -1,6 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{hyperref}
-\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[top=.5in, bottom=.5in, left=.5in, right=.5in]{geometry}
 
 \begin{document}
 
@@ -8,110 +8,108 @@
 \textbf{Matching Lab}
 \end{center}
 
-After today's lab you will be able to analyze the extent to which covariates are balanced between treatment and control groups and use Stata to produce matched data and estimate causal effects. To achieve these objectives, we will (1) use data from the Political Socialization Panel Study to replicate analyses by Kim and Palmer and Henderson and Chatfield on the causal effects of university education, and (2) use General Social Survey data (from earlier in the course) to estimate causal effects of public versus private employment status.
+After today's lab you will be able to analyze the extent to which covariates are balanced between treatment and control groups and use Stata to produce matched data and estimate causal effects. To achieve these objectives, we will (1) use General Social Survey data (from earlier in the course) to estimate causal effects of public versus private employment status, and (2) use data from the Political Socialization Panel Study to replicate analyses by Kam and Palmer and Henderson and Chatfield on the causal effects of university education.
 
 \begin{enumerate}\itemsep0.5em
 
-\item Download the \texttt{WhoMatches.dta} data file from Blackboard.
-\item Open the file and start a new \texttt{.do} file to contain the following analyses.
+\subsection*{GSS Data}
+
+\item Download the \texttt{GSS2002.dta} data file from Blackboard.
+\item Download the \texttt{Matching.do} file (if you don't already have it) and add the following analyses. We can save ourselves some time by using the some of covariates we already know how to recode from working with Houston's data in Session 6.
+\item Create a new variable, \texttt{pubemp}, to represent public employment, using \texttt{recode wrkgovt 2=0, gen(pubemp)} (this is already in the do-file)
 
 \subsection*{Balance Testing}
 
 \item The first step in preparing for matching is assessing covariate overlap (common covariate support). This can be done using tables or graphs, and both unidimensionally and multidimensionally. 
 	\begin{itemize}
-	\item Assess common covariate support on several covariates among those attending university and those not attending university (variable \texttt{college}) using \texttt{centile} and/or \texttt{summarize} with the \textt{by} syntax. For example: \texttt{by college, sort: centile yNewspaper, c(0 100)} or \texttt{by college, sort: summ yNewspaper, d}.
-	\item Repeat this analysis using the \texttt{box} (or \texttt{hbox}) command to produce visual summaries of covariate distributions.
-	\item Use a scatterplot to compare common covariate support on two dimensions. Use the \texttt{jitter} option to clarify categorical variables. For example:\\ \texttt{twoway (scatter y1973ThermNixon y1973ThermDems if college == 1, jitter(10)) (scatter y1973ThermNixon y1973ThermDems if college == 0, jitter(10)), legend(label(1 university) label(2 no university))}
+	\item Assess common covariate support on several covariates among those attending university and those not attending university (variable \texttt{college}) using \texttt{centile} and/or \texttt{summarize} with the \texttt{by} syntax. For example: \texttt{by pubemp, sort: centile age, c(0 100)} or \texttt{by pubemp, sort: summ age, d}.
+	\item Repeat this analysis using the \texttt{graph box} (or \texttt{graph hbox}) command to produce visual summaries of covariate distributions.
+	\item Use a scatterplot to compare common covariate support on two dimensions. Use the \texttt{jitter} option to clarify categorical variables. For example:\\ \texttt{twoway (scatter age educ if pubemp == 1, jitter(3))\\ (scatter age educ if pubemp == 0, jitter(3)),\\ legend(label(1 Public) label(2 Private))}
 	\end{itemize}
-\item If the treatment and control groups have common covariate, we typically then focus on balance across groups in terms of the covariate's mean in each group. Use \texttt{summarize}, again with the \texttt{by college, sort:} prefix to compare the means of covariates in each group.
-\item We can also compare balance across groups by looking at density plots to see not only whether the distributions are mean-balanced but whether they are similar. This is not critical for matching, but the more similar the distributions, the less likely there is to be bias in the causal effect estimate attributable to this variable. Use the \texttt{kdensity} plotting command to produce comparative density plots of (continuous) covariates for the treatment and control groups. For example:\\ \texttt{twoway (kdensity y1973ThermNixon if college == 1) (kdensity y1973ThermNixon if college == 0), legend(label(1 university) label(2 no university))}
+\item If the treatment and control groups have common covariate, we typically then focus on balance across groups in terms of the covariate's mean in each group. Use \texttt{summarize}, again with the \texttt{by pubemp, sort:} prefix to compare the means of covariates in each group.
+\item We can also compare balance across groups by looking at density plots to see not only whether the distributions are mean-balanced but whether they are similar. This is not critical for matching, but the more similar the distributions, the less likely there is to be bias in the causal effect estimate attributable to this variable. Use the \texttt{kdensity} plotting command to produce comparative density plots of (continuous) covariates for the treatment and control groups. For example:\\ \texttt{twoway (kdensity educ if pubemp == 1) (kdensity educ if pubemp == 0),\\ legend(label(1 Public) label(2 Private))}
+\item After you've assessed balance on a number of covariates, you should have a sense of which are already balanced (and thus unrelated to treatment assignment) and those that are not. We need to match on everything that imbalanced. We can also try to match on other variables, at the cost of making matching more difficult with potentially little gain in bias reduction. At this point you should have a list of variables you want to match on.
 
 \subsection*{Matching}
 
-\item Stata 13 includes several matching commands as part of its built-in \texttt{teffects} package. We will also use two add-on packages called \texttt{psmatch2} and \texttt{CEM}:
-	\begin{itemize}
-	\item Install psmatch2: \texttt{ssc install psmatch2, replace}
-	\item Install CEM: \texttt{ssc install CEM, replace}
-	\end{itemize}
+Stata 13 includes several matching commands as part of its built-in \texttt{teffects} package. We will also use an add-on package called \texttt{CEM} (for exact matching). To install it, use: \texttt{ssc install CEM, replace}
 
-\item Matching is a fundamentally an iterative process. Once the subset of observations within the range of common covariate support are identified, the actual matching of treatment to control units needs to take place by identifying one treatment unit, matching it it to one or more control units and then continuing with the next treatment unit. (Depending on whether matching is done {\em with replacement}, the matched control units might remain available for further matching.)
+Matching is a fundamentally an iterative process. Once the subset of observations within the range of common covariate support are identified, the actual matching of treatment to control units needs to take place by identifying one treatment unit, matching it it to one or more control units and then continuing with the next treatment unit. (Depending on whether matching is done {\em with replacement}, the matched control units might remain available for further matching.) As a result, it is hard to show how matching works ``behind-the-scenes''. You could do matching by-hand, by sort the data by covariate values and identify observations with matching covariate values (or matching propensity score values). But this is a tedious exercise. You're welcome to try it at home on your own. We'll instead let Stata do most of the work for us.
+
+\subsection*{Exact Matching}
+
+\item The first matching technique we can look at is exact matching (which is implemented via the CEM add-on in command \texttt{cem}). This command will print some information about the ability to find exact matches within the data and then create some new variables to identify matches that we can use in subsequent analysis.
+\item Try running cem with just a single covariate to see the output, for example: \texttt{cem educ} . Stata will report that it has formed several strata within the data of nearly-exact matches. We can see how our original variable is reflected in this set of strata by doing a simple cross-tabulation of the new variable against our original variable: \texttt{tab educ cem\_strata} .
+\item If we specify a \texttt{treatment()} option to \texttt{cem}, it will further identify which treatment and control cases can be matched. Try this with: \texttt{cem educ, tr(pubemp)} .
+\item Now try to specify a more complete list of covariates to match on. Depending on how many variables you use and the number of levels you should run up against the ``problem of dimensionality'' and no few or no matchable cases will be found. You could try, for example: \texttt{cem gender racebin educ married age hhchildren, tr(pubemp)}
+\item Looking at \texttt{tab cem\_strata}, you should find that each observation has been assigned to its own stratum and is, therefore, unmatchable.
+\item We can address the problem of dimensionality by coarsening our covariates. You can either do this manually (by recoding) variables, or you can specify ``cutpoints'' telling \texttt{cem} where to cut your variables. For example: \texttt{cem gender racebin educ (16) married age (25 50 75) hhchildren (1), tr(pubemp)} . The result is that some cases are now matched, while many remain unmatchable.
+\item \texttt{cem} prints the numbers of matched cases automatically, but you can also see these reflected in the \texttt{cem\_weights} variable. Cases that cannot be matched are given a weight of zero, while those can be matched are given a positive weight (the precise value of which depends on how many cases they are matched against).
+\item Recall that with exact matching we do not need to do post-matching balance testing because treatment and control groups are matched by definition; the only cases we included in the matched subset are those with an exactly matching counterpart in the other level of \texttt{pubemp}.
+
+\item Now, let's use this matched dataset to estimate a causal effect. We'll look at a few different measures, included in the do-file.
+\item Estimate the ``naive causal effect'' using either \texttt{pwmeans}, \texttt{ttest}, or \texttt{reg}. All three methods of estimating the difference-in-means between public and private employees on the \texttt{jobstress} variable should give the same results. For example: \texttt{reg jobstress pubemp}
+\item You can try the same using a binary outcome measure, like \texttt{bloodbin} and a logit model: \texttt{logit bloodbin pubemp}
+\item Now estimate these models on only the matched data. To do this we need to specify a ``weights'' option to the regression models. For example: \texttt{reg jobstress pubemp [iweight=cem\_weights]} or \texttt{logit bloodbin pubemp [iweight=cem\_weights]} . How do these results compare to the original results? How many cases are the results estimated on?
 
 \subsection*{Propensity Score Matching}
 
-\item % one covariate
-\item % exact matching
-
-\item Estimate a propensity score model using \texttt{logit} to predict \texttt{college} as a function of pretreatment covariates.
+\item Our experience with exact matching and coarsened exact matching shows that we have to discard a lot of data due to the ``problem of dimensionality.'' We can overcome this problem to some extent by estimating a propensity score model and matching exclusively on that.
+\item Estimate a propensity score model using \texttt{logit} to predict \texttt{pubemp} as a function of the imbalanced pretreatment covariates you identified above.
 \item Estimate propensity scores from the model using \texttt{predict} on both the linear (log-odds) and probability scales. For example: \texttt{predict pscore, pr} and \texttt{predict pscorexb, xb}.
 Plot the two versions of the propensity score to understand how the predicted probability is a simple non-linear transformation of the linear (log-odds) prediction: \texttt{twoway scatter pscore pscorexb}
+\item Assess (pre-matching) balance in the propensity scores using a comparative density plot:\\
+\texttt{twoway (kdensity pscore if pubemp == 1)\\ (kdensity pscore if pubemp == 0),\\ legend(label(1 Public) label(2 Private))}\\
+Note: These distributions should overlap (to have common support) but need not be identical since we haven't done any matching yet. If the distributions do not overlap much at all, repeat the steps in this section with different combinations of covariates until the propensity score distributions have greater overlap.
+\item We can now match on the propensity score using \texttt{cem} but this time using just \texttt{pscore} or \texttt{pscorexb} as a single covariate: \texttt{cem pscore, tr(pubemp)}. We should be able to produce greater numbers of matches than when matching directly on the covariates.
 
-\item Assess balance in the propensity scores using a comparative density plot:\\ \texttt{twoway (kdensity pscore if college == 1) (kdensity pscore if college == 0), legend(label(1 university) label(2 no university))} .
+\item Given that we're no longer using exact matching, we should assess balance before proceeding with estimating any effects on outcomes. We can do this the same was as pre-matching but we now need to account for how the observations are weighted by the matching procedure. The observations that are unmatchable are given weights of 0 in the \texttt{cem\_weights} variable and are therefore ignored when we assess balance. Start by assessing balance on the propensity scores using \texttt{by pubemp, sort: summ pscore [iweight=cem\_weights]} .
+\item Repeat the balance assessment for the original covariates, using the same syntax. Remember, this is what Kam and Palmer forgot to do!
+\item Now, using the same regression approaches as above, reestimate the effect of \texttt{pubemp} on outcomes. Do the results change? How many cases are the results estimated on?
 
-\item % \texttt{teffects overlap} to assess pscore overlap
+\subsection*{Propensity Score Subclassification}
 
-
-
-\item Use the techniques we used earlier to assess pre-matching balance in the covariates to assess post-matching balance in the covariates.
-
-\item % pscore matching
-% options for number of matches: \texttt{nneighborh(4)}
-% options for caliper: \texttt{caliper(.1)}
-% estimating ATET (only matches treatment units): \texttt{, atet vce(iid)}
-
-
-% psmatch2 t x1 x2, out(y) logit
-% reg y x1 x2 t [fweight=_weight] 
-
-% pscore subclassification
-\item Generate propensity score subclasses using the \texttt{egen} command: \texttt{egen pclass = cut(pscore), group(5)}. Note: the \texttt{group(5)} option indicates you are requesting five subclasses.
+\item We can further attempt to preserve cases by using propensity score subclassification. This process involves cutting our propensity score into a few discrete levels and then matching on those levels. Generate propensity score subclasses using the \texttt{egen} command: \texttt{egen pclass = cut(pscore), group(5)}. Note: the \texttt{group(5)} option indicates you are requesting five subclasses. You can use \texttt{tab pclass} to confirm that this variable has been created correctly and \texttt{twoway scatter pclass pscore} to see where Stata created the cutpoints and \texttt{tab pclass pubemp} to see the distribution of treated and control units across subclasses. You can also try more subclasses or manually creating the cutpoints by looking at the quantiles of the \texttt{pscore} variable.
+\item Again, we need to assess balance in the original covariates. By subclassifying, we're allowing units that are somewhat dissimilar on the propensity score to matched together. We need to know if this introduces imbalance in our original covariates.
+\item Now use \texttt{cem} to match on \texttt{pclass}. Then reestimate the effects on the outcomes using the updated weights. Do the results change? How many cases are the results estimated on?
 
 
+\subsection*{One-step matching and estimation}
 
-\item % effect estimation (ATE, regression, ATT)
-\item % compare matching to regression
+\item Stata's built-in \texttt{teffects} command implements matching and effect estimation in one step. This is convenient for quickly estimating effects from a propensity score model (or one of several other matching techniques) but it masks the procedures we just went through in order to produce matches. As a result, I prefer to use \texttt{cem}, but you can also use \texttt{teffects}. Here we'll show a few of the ways to use \texttt{teffects}. Note: They may not produce the same results do to differences in how the programs identify matches and estimate the resulting effects.
 
+\item The \texttt{teffects} command takes the form of:\\ \texttt{teffects psmatch (outcome) (treatment covariate1 covariate2 \dots)}\\ In other words, we combine the effect estimation with the matching procedure. Try it with the \texttt{jobstress} variable: \texttt{teffects psmatch (jobstress) (pubemp gender racebin educ married age hhchildren)} . Do the results change? How many cases are the results estimated on?
+\item By default, \texttt{teffects} make some relatively strong assumptions about how you want the matching procedure to proceed. In short, a nearest-neighbor algorithm is implemented that allows any treatment unit to be matched to any control unit. This means that all cases are automatically matched regardless of their similarity on the propensity score. We can adjust this tolerance using the \texttt{, caliper()} option, which specifies the maximum distance two units can be from each other (on the propensity score) in order to be considered matches. If you reestimate the effect with option \texttt{, caliper(1)} , the results will be identical. See what happens if you try setting a smaller caliper (e.g., 0.1 or 0.01). If a small caliper prevents Stata from matching a given unit, the procedure will fail.
 
-\subsection*{Coarsened Exact Matching}
+\item We can install another add-on package called \texttt{psmatch2} that handles these failures differently. Install it with: \texttt{ssc install psmatch2, replace} .
+\item \texttt{psmatch2}, unfortunately, again uses a different syntax for matching:\\ \texttt{psmatch2 (treatment covariate1 covariate2 \dots), outcome(outcome) ate}\\ Note: We need to specify the \texttt{ate} option to compare these results to those from \texttt{teffects}.
+\item Try reestimating our model using \texttt{psmatch2}: \texttt{psmatch2 (pubemp gender racebin educ married age hhchildren), outcome(jobstress) ate}
+\item Now, try specifying a small caliper. Now, \texttt{psmatch2} will simply discard unmatchable observations (those that fall off of ``common support'') and estimate the effect.
 
-\item % CEM installation
-\item % CEM recoding
-\item % CEM analysis
+\item Use the techniques we used earlier to assess pre-matching balance in the covariates to assess post-matching balance in the covariates. For example: \texttt{by pubemp, sort: summ educ [fweight=\_weight]}
 
-% cem y1973ThermNixon, tr(college)
-% reg y1982demonstrate college
-% reg y1982demonstrate college [iweight=cem_weights]
-
-
-\subsection*{Analyze Houston (2005) GSS data with Matching}
-
-\item Download the \texttt{GSS2002.dta} data file from Blackboard.
-\item Open the file and start a new \texttt{.do} file to contain the following analyses.
-
-\item Create a new variable, \texttt{pubemp}, to represent public employment, using \texttt{recode wrkgovt 2=0, gen(pubemp)}
-\item Use the balance testing techniques above to assess pre-matching balance of covariates. You may want to use the covariates we identified previously in GSS:
+\subsection*{Matching and Regression}
+\item Compare the following estimates of the effect of \texttt{pubemp} on \texttt{jobstress}:
 	\begin{itemize}
-	\item Female: \texttt{sex}
-	\item White: \texttt{race}
-	\item Education: \texttt{educ}
-	\item Income: \texttt{rincom98}
-	\item Occupational prestige: \texttt{prestg80}
-	\item Married: \texttt{marital}
-	\item Age: \texttt{age}
-	\item Children in household: a sum of \texttt{babies}, \texttt{preteen}, and \texttt{teens}
-	\item Community size (logged): \texttt{size}
-	\item Church attendance: \texttt{attend}
+	\item \texttt{reg jobstress pubemp [iweight=cem\_weights]}
+	\item \texttt{teffects psmatch (jobstress) (pubemp gender racebin educ married age hhchildren)}
+	\item \texttt{psmatch2 (pubemp gender racebin educ married age hhchildren), outcome(jobstress) ate}
+	\item \texttt{reg jobstress pubemp gender racebin educ married age hhchildren}
 	\end{itemize}
-But you are also welcome to use other measures.
+How do the results compare? Which should we trust?
 
-\item % effect of `pubemp` on outcomes
-\item % teffects psmatch
+\subsection*{Replicate Education's Effect on Political Participation}
 
-% psmatch2 pubemp educ, out(y) logit
-% reg voted pubemp [fweight=_weight] 
+If you have time or want to work on this more at home, consider replicating the Kam/Palmer and Henderson/Chatfield results. Note: You will not be able to do ``genetic matching'' because the technique is not implemented in Stata.
 
-% cem educ, tr(pubemp)
-% reg voted pubemp
-% reg voted pubemp [iweight=cem_weights]
+\item Download the \texttt{WhoMatches.dta} data file from Blackboard.
+\item Open the file and start a new \texttt{.do} file to contain the following analyses.
+\item The outcome participation measures are listed as ``y1982''. All have missing values coded as \texttt{99}. Recode these to missing using: \texttt{recode y1982vote76 y1982vote80 y1982meeting y1982other y1982button y1982money y1982communicate y1982demonstrate y1982community (99=.)}.
+\item Create an outcome variable \texttt{out} that is a sum of these variables.
+
+\item Use the balance testing techniques above to assess pre-matching balance of covariates and propensity scores, if appropriate.
+\item Use the matching procedures we've tried here to generate estimates of the effect of university education (the \texttt{college} variable) on the outcome participation index, and/or on individual types of participation.
+\item Use the balance testing techniques to assess post-matching balance of covariates and propensity scores, if appropriate.
 
 \end{enumerate}
 
