@@ -30,16 +30,39 @@ So-called "natural experiments", "regression discontinuity designs", and "interr
  
 
 ---
+background-image: url(http://i.imgur.com/EvJfY5h.png)
+
 
 ???
 
 Causal graph
+
+In regression and matching, we previously focused on closing backdoor paths.
+
+With IV, we focus on finding a variable that precedes our putatively causal variable and that exogenously influences it.
 
 
 ---
 ## Instruments
 
 
+
+---
+## Carrubba (2001)
+
+ - What is his argument?
+
+--
+
+ - Draw a causal graph of his causal argument.
+ 
+--
+
+ - Share with the person sitting next to you.
+ 
+???
+
+Have everyone come up and draw their graph
 
 ---
 ## IV Estimation
@@ -81,25 +104,39 @@ Causal graph
 ???
 
 Weak instruments give big SEs
- 
+
+
 ---
-## IV Credibility Checklist
+## Instruments versus treatments
+
+ - How does an instrument differ from a treatment variable?
+
+---
+## IV Checklist
+
+ 1. How/why is the instrument exogenous?
+ 
+ 2. How strong is the instrument?
+ 
+ 3. Are there other possible instruments?
 
 ???
 
 Sovey and Green checklist
 
+ 1. Instrument must temporally precede the putatively causal variable. There must be no backdoor paths through the instrument to the outcome, nor variables that confound the relationship between the instrument and the putative cause.
+ 
+ 2. The instrument must be related to the putative cause.
+ 
+ 3. Is this the only available instrument? Are there possibly stronger instruments? What other instruments have been used?
+
 ---
 ## Activity
 
- - List of instruments used in literature  
+ - List of instruments used in published literature
+ 
+ - Assess credibility of the instruments
   
----
-## Experiments and lotteries as instruments
-  - Conscription/Draft lotteries
-  - Boundaries as discontinuities
-  - Regression discontinuity (class size)
-
 ---
 ## Forward vs. Backward Causal Inference
 
@@ -110,6 +147,13 @@ Sovey and Green checklist
 ???
 
 IV can be used for both
+
+
+---
+## Experiments and lotteries as instruments
+  - Conscription/Draft lotteries
+  - Boundaries as discontinuities
+  - Regression discontinuity (class size)
 
 
 ---
