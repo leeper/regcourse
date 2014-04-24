@@ -26,7 +26,11 @@ So-called "natural experiments", "regression discontinuity designs", and "interr
 
  1. Measurement error
  
- 2. Endogeneity
+ 2. Confounding with unobservables
+ 
+???
+
+Because confounding is with unobserved factors, we can't use regression or matching
  
 
 ---
@@ -40,11 +44,6 @@ Causal graph
 In regression and matching, we previously focused on closing backdoor paths.
 
 With IV, we focus on finding a variable that precedes our putatively causal variable and that exogenously influences it.
-
-
----
-## Instruments
-
 
 
 ---
@@ -64,34 +63,175 @@ With IV, we focus on finding a variable that precedes our putatively causal vari
 
 Have everyone come up and draw their graph
 
+
+---
+## Instruments
+
+Instruments have to satisfy two properties:
+
+ 1. **Exogeneity**
+ 
+ 2. **Relevance**
+
+???
+
+What does **exogeneity** mean?
+
+What does **relevance** mean?
+
+ 
+
+---
+## Instruments
+
+Instruments have to satisfy two properties:
+
+ 1. **Exogeneity**
+ 
+   - `\( Z \)` temporally precedes `\( X \)`
+   
+   - `\( Cov(Z, \epsilon) = 0 \)`
+ 
+ 2. **Relevance**
+
+   - `\( Z \)` related to `\( X \)`
+   
+   - `\( Cov(Z, X) \neq 0 \)`
+
+ 
+---
+## Instruments
+
+ - **Exogeneity** is not testable
+
+???
+
+Why?
+
+--
+
+ - **Relevance** is testable
+
+???
+
+Why? How?
+ 
+ 
+---
+## Carrubba (2001)
+
+ - What are Carrubba's instruments?
+ 
+--
+
+ - Are they exogenous?
+ 
+--
+
+ - Are they relevant?
+
 ---
 ## IV Estimation
 
+ - Several ways to estimate IV model
+ 
+ - We'll focus on Two-Stage Least Squares (2SLS)
+ 
+???
+
+The reason for this is that 2SLS is flexible to multiple instruments
 
 ---
 ## Two-Stage Least Squares
 
+ - `\( Y = \beta_0 + \beta_1 X_{Confounded} + \epsilon \)`
+ 
+ - Estimate of `\( \beta_1 \)` is biased
+ 
+--
+
+ - `\( X_{Confounded} = \beta_0 + \beta_1 Z_{Instrument} + \nu \)`
+ 
+ - `\( Y = \beta_0 + \beta_1^{2SLS} \hat{X} + \epsilon \)`
+
 
 
 ---
-## IV in Stata
+## 2SLS IV Estimation in Stata
+
+```
+quietly reg endogenous instrument
+predict fitted
+
+* simple estimation
+reg outcome fitted
+
+* estimation with additional covariates
+reg outcome fitted covariates
+```
 
 ---
 ## Standard Errors
 
----
-## Why not logit/probit?
+ - Standard errors for IV estimates need to incorporate variance in Z
+ 
+ - So, the doing 2SLS manually produces incorrect SEs
 
- - Builds distributional assumptions into our estimate
+ - Luckily, `ivregress` provides functionality directly:
+
+```
+ivregress 
+
+NEED TO HASH OUT FULL EXAMPLE CALL
+
+```
+
+---
+## Standard Errors
+
+ - SEs are going to be large in 2SLS than OLS
+ 
+ - We can still use heteroskedasticity-consistent SEs in second stage
+ 
+???
+
+2SLS is less efficient than OLS which means:
+
+ 1. If we can eliminate confounding through straight OLS, we should do it
+ 
+ 2. If we have to do 2SLS, we need a larger sample size to obtain the same SEs. Thus it's harder to detect significant effects.
+
+Should we use robust SEs in first stage? No, because we don't care about them...they're irrelevant for generating `\( \hat{X} \)`
+
+---
+## An Aside
+
+ - Image the confounded variable `\( X \)` is an 0/1 indicator
+ 
+ - Should we use logit/probit to estimate the first stage equation?
+
+???
+
+No. Builds distributional assumptions into our estimate.
  
 
-
+ 
+ 
+ 
 ---
-## IV Assumptions
+
+WU-HAUSMAN TEST
+
+In Stata:
+
+```
+estat endogenous
+```
 
 
 ---
 ## Causal graphs
+
   - Backdoor criterion, again
 
 ---
@@ -107,9 +247,53 @@ Weak instruments give big SEs
 
 
 ---
+## How many instruments?
+
+ 1. Exactly identified
+ 
+   - Same number of instruments as confounded variables
+ 
+ 2. Overidentified
+ 
+   - More instruments than confounded variables
+ 
+ 3. Underidentified
+ 
+   - Fewer instruments than confounded variables
+
+???
+
+Realistically it is pretty rare in the published literature to use more than one instrument. This is generally because it's hard to find one instrument, let alone multiple.
+
+
+---
+
+OVERIDENTIFYING RESTRICTIONS
+
+In Stata:
+
+```
+estat overid
+```
+
+???
+
+
+
+---
 ## Instruments versus treatments
 
  - How does an instrument differ from a treatment variable?
+ 
+ - In other words, if instruments are so good why don't we just look at their direct effects on `\( Y \)`?
+ 
+???
+
+Well, technically an instrument should have no direct effect on Y.
+
+And, most instruments (at least in empirical literature) are things we don't actually care about.
+
+If your instrument is actually a randomized experimental treatment, then we may care about it.
 
 ---
 ## IV Checklist
