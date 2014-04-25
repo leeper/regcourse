@@ -34,7 +34,7 @@ Because confounding is with unobserved factors, we can't use regression or match
  
 
 ---
-background-image: url(http://i.imgur.com/EvJfY5h.png)
+background-image: url(http://i.imgur.com/nq4MsDF.png)
 
 
 ???
@@ -100,13 +100,19 @@ Instruments have to satisfy two properties:
 
  
 ---
+background-image: url(http://i.imgur.com/nq4MsDF.png)
+
+---
+background-image: url(http://i.imgur.com/ZPImMQw.png)
+
+---
 ## Instruments
 
  - **Exogeneity** is not testable
 
 ???
 
-Why?
+Why? We could test it if we had an unbiased estimate of the error term with which to correlate the instrument. If we think there is unobserved confounding, then `\( \beta_1 \)` is biased due to correlation with the error term and so our estimates of the error terms are also biased.
 
 --
 
@@ -115,8 +121,14 @@ Why?
 ???
 
 Why? How?
- 
- 
+
+
+---
+name: questions
+class: middle, center
+
+## Questions?
+
 ---
 ## Carrubba (2001)
 
@@ -124,12 +136,29 @@ Why? How?
  
 --
 
- - Are they exogenous?
+ - Are they relevant?
  
+???
+
+Yes, he shows the first stage equation
+
 --
 
- - Are they relevant?
+ - Are they exogenous?
+ 
+???
 
+We can't test this but we can discuss his defense and draw our own causal graph
+
+The problem is that party positions and public opinion are likely to be dynamic over-time in a game theoretic way (parties influence opinion and opinion influences positions).
+
+Demographics predict opinion at any point in time meaning they can't be instruments because they open back door paths between opinion and lagged party positions.
+
+A better instrument is one that produces a truly exogenous shock. Example: The Fukushima is an exogenous shock to public opinion on nuclear energy. Problem: it may also have directly affected party positions. It's hard to find an instrument for aggregate opinion (but you might be able to find individual-level instruments).
+
+For this question, it might be better to take a panel data or multi-level modelling approach.
+
+ 
 ---
 ## IV Estimation
 
@@ -180,16 +209,36 @@ reg outcome fitted covariates
  - Luckily, `ivregress` provides functionality directly:
 
 ```
-ivregress 
+ivregress 2sls outcome covariates (confounded = instrument)
 
 NEED TO HASH OUT FULL EXAMPLE CALL
+
+* option 'first' gives additional output
+ivregress 2sls outcome covariates (confounded = instrument), first
 
 ```
 
 ---
+## Discrete outcomes
+
+Binary outcome:
+
+```
+ivprobit outcome covariates (confounded = instrument)
+```
+
+Count outcome:
+
+```
+ivpoisson gmm outcome covariates (confounded = instrument)
+```
+
+.footnote[Note: `gmm` is an alternative estimation method to 2SLS.]
+
+---
 ## Standard Errors
 
- - SEs are going to be large in 2SLS than OLS
+ - SEs are going to be larger in 2SLS than OLS
  
  - We can still use heteroskedasticity-consistent SEs in second stage
  
@@ -214,25 +263,57 @@ Should we use robust SEs in first stage? No, because we don't care about them...
 
 No. Builds distributional assumptions into our estimate.
  
+But Cameron and Trivedi say you can and show you how to do it in Stata.
 
- 
+---
+template: questions
  
  
 ---
+## Assessing IV models
 
-WU-HAUSMAN TEST
+ - We can assess IV fit in the same way as in OLS
+ 
+   - Goodness of fit in first stage (relevance)
+   - Goodness of fit in second stage
 
-In Stata:
+---
+## First stage fit in Stata
 
 ```
+* full first stage results
+ivregress 2sls outcome covariates (confounded = instrument), first
+
+* additional first stage fit statistics
+estat firststage
+```
+   
+---
+## Assessing IV models
+
+ - We can assess IV fit in the same way as in OLS
+ 
+   - Goodness of fit in first stage (relevance)
+   - Goodness of fit in second stage
+
+ - Testing for confounding
+ 
+   - Durbin-Wu-Hausman Test
+   - Do residuals from the first stage relate to the outcome?
+
+---
+## DWH Test in Stata
+
+```
+quietly ivregress 2sls outcome covariates (confounded = instrument)
 estat endogenous
 ```
 
 
----
-## Causal graphs
 
-  - Backdoor criterion, again
+---
+template: questions
+
 
 ---
 ## Instruments
@@ -273,6 +354,7 @@ OVERIDENTIFYING RESTRICTIONS
 In Stata:
 
 ```
+quietly ivregress 2sls outcome covariates (confounded = instrument)
 estat overid
 ```
 
@@ -314,13 +396,24 @@ Sovey and Green checklist
  
  3. Is this the only available instrument? Are there possibly stronger instruments? What other instruments have been used?
 
+
+
+
+---
+template: questions
+
+
 ---
 ## Activity
 
  - List of instruments used in published literature
  
  - Assess credibility of the instruments
-  
+
+
+
+
+
 ---
 ## Forward vs. Backward Causal Inference
 
@@ -334,14 +427,62 @@ IV can be used for both
 
 
 ---
-## Experiments and lotteries as instruments
-  - Conscription/Draft lotteries
-  - Boundaries as discontinuities
-  - Regression discontinuity (class size)
+## Effect Heterogeneity
 
+
+
+
+---
+## Experiments and lotteries as instruments
+
+ - Draft (conscription) lotteries
+
+ - Geographical boundaries
+
+ - Weather
+ 
+ - Natural disasters
+ 
+???
+
+
+ 1. Angrist and Krueger
+ 
+ 2. Electoral districts in the United States are redrawn every ten years
+ 
+ 3. Weather is exogenous - nothing humans do can cause it (as far as we know).
+ 
+ 4. Natural disasters: Fukushima, Hurricanes, Floods
+ 
+
+
+---
+## Maimonide's Rule
+  
+  
+---
+## Problem's with discontinuities
+
+- Compensatory rivalry & equalization
+
+- Campbell's Law:
+
+> The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.
+
+???
+
+ 1. Units may behave differently due to their position relative to a threshold, either by trying to be more like the other group or by behaving differently because they know they are being treated. For example: Think about education; teachers in the small class may try harder because they feel like they're expected to do better since they have an easier teaching load. Similarly, those in the large class may try harder to compensate for the fact that they have more students. The discontinuity as instrument thus creates a backdoor path between class size and teacher quality.
+
+ 2. Knowing that decisions are based on threshholds, units may attempt to change their position relative to the threshold. Example: If class size determines class size, then parents might try to move their children into the smaller class. The discontinuity thus opens a backdoor path between class size and parental involvement.
+ 
+These are the problems with real-world "quasi-experiments". Discontinuities that appear to be random are often exploited or produce adverse behavior that makes them difficult to exploit for causal inference.
 
 ---
 ## Preview
 
- - Tomorrow
+ - Tomorrow:
    - IV in Stata
+   
+ - Next week:
+   - Missing Data
+   
