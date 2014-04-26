@@ -10,4 +10,76 @@ layout: remark
 # {{ page.day }} #
 
 ---
-## 
+## Let's review!
+
+ 1. What is matching? How does it work?
+ 
+--
+
+ 2. Why do we do it?
+ 
+--
+
+ 3. How do we know when our data our sufficiently matched?
+
+
+---
+## How do we know when units are sufficiently matched?
+
+ - Common covariate support
+ 
+ - Covariate (mean) balance
+ 
+ - Identical covariate distributions
+
+???
+
+Because there are unobserved covariates, we can never really know
+
+This is also a problem for regression; there are always omitted variables
+
+ 1. We get common covariate support in any matching exercise
+ 
+ 2. Mean balance is something we have to test (exact matching ignores it)
+ 
+   - We can do t-test, but do we need exactly identical means?
+   - Do we look at the propensity score or individual covariates?
+ 
+ 3. Identical distributions
+
+   - Is it necessary?
+   - How do we test?
+
+
+---
+## Matching vs. Experiments
+
+
+???
+
+Experiments only guarantee balance in expectation; that's what allows us to make a causal inference
+
+Matching focuses on balance in this realization of the data - so it's actually making the standard for drawing a causal inference higher than what is requied for causal inference.
+
+
+
+
+   
+---
+## Aside: Exact matching
+
+ - In **exact matching** we do not need to check balance
+ 
+ - All variables that we match on are, by definition, balanced
+
+
+ 
+---
+class: center, middle
+
+## Questions?
+
+???
+
+What lingering questions do you have about matching?
+
