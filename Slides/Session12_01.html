@@ -47,6 +47,18 @@ With IV, we focus on finding a variable that precedes our putatively causal vari
 
 
 ---
+## IV in Political Science
+
+ - Widely used in economics
+ 
+ - Increasingly common in political science, but still rare
+ 
+ - Especially common in experimental research
+
+.footnote[Sovey and Green (AJPS, 2010)]
+
+
+---
 ## Carrubba (2001)
 
  - What is his argument?
@@ -429,11 +441,68 @@ IV can be used for both
 ---
 ## Effect Heterogeneity
 
+ - Esimation of any effect is more difficult if we think effects vary across units
+ 
+ - We can estimate a Local Average Treatment Effect (LATE)
+ 
+ - This only applies to "compliers"
 
+???
+
+If the effects of `\( X \)` is constant across individuals (i.e., homogeneous effects), then the IV estimate is an estimate of each individual's causal effect.
+
+But! we rarely believe that all individuals experience the same effect. Instead we think effects vary across individuals. If that's the case, then the IV estimate doesn't represent the effect for everyone. Instead, it is the average effect for a subset of individuals called "compliers".
 
 
 ---
-## Experiments and lotteries as instruments
+## Four subpopulations
+
+Imagine a binary `\( X \)` and a binary instrument `\( Z \)`
+
+ - Compliers: `\( X = 1 \)` only if `\( Z = 1 \)`
+ - Always-takers: `\( X = 1 \)` regardless of `\( Z \)`
+ - Never-takers: `\( X = 0 \)` regardless of `\( Z \)`
+ - Defiers: `\( X = 1 \)` only if `\( Z = 0 \)`
+
+???
+
+ - Compliers: military service if drafted
+ - Always-takers: military service regardless of draft
+ - Never-takers: no military service regardless of draft (maybe medically ineligible)
+ - Defiers: military service only if not drafted
+
+
+If we think effects vary across individuals, then IV only estimates the effect for compliers (those who are treated when the instrument is 1 and untreated when the instrument is 0).
+
+Estimation is the same as under constant effects
+
+How do we know which individual units are in which subpopulation? We can't know! Thus the problem with IV estimation under heterogeneous effects is that the external validity of the results is basically undefined.
+
+Because the instrument does not affect `\( X \)` for always-takers and never-takers, we can't use the instrument to say anything about the effect of `\( X \)` on `\( Y \)` for those units.
+
+A big assumption is that there are **no defiers** (an assumption called monotonicity).
+
+
+---
+## Aside: Experimentation
+
+ - Earlier, we noted that IV is common in experimental research
+ 
+ - Experiments often involve **noncompliance**
+ 
+   - Some individuals do not take the treatment they are assigned
+   
+ - IV allows us to estimate the ATE for those who comply with treatment
+ 
+ - Useful for both true experiments and "natural experiments"
+ 
+???
+
+Natural experiment is a real-world assignment process that is random or nearly random
+
+
+---
+## Nearly random instruments
 
  - Draft (conscription) lotteries
 
@@ -445,7 +514,6 @@ IV can be used for both
  
 ???
 
-
  1. Angrist and Krueger
  
  2. Electoral districts in the United States are redrawn every ten years
@@ -455,13 +523,32 @@ IV can be used for both
  4. Natural disasters: Fukushima, Hurricanes, Floods
  
 
+ 
+---
+## "Sharp" and "Fuzzy" discontinuities
+
+ - If an instrument imperfectly causes `\( X \)`, then it produces a **fuzzy** discontinuity
+ 
+ - If an instrument perfectly causes `\( X \)`, then it produces a **sharp** discontinuity
+ 
+???
+
+Fuzzy discontinuities can be analyzed as IV, like we've discussed up to this point.
+ 
+Sharp discontinuities can be analyzed as randomized experiments. We might even have multiple instruments, then we can match on them or regress on them because we have a complete understanding of the causal process.
 
 ---
-## Maimonide's Rule
-  
-  
+## Example: 
+
+
 ---
-## Problem's with discontinuities
+## Example: Maimonide's Rule
+  
+ - What is Maimonide's Rule?
+ 
+
+---
+## Problems with discontinuities
 
 - Compensatory rivalry & equalization
 
@@ -473,7 +560,7 @@ IV can be used for both
 
  1. Units may behave differently due to their position relative to a threshold, either by trying to be more like the other group or by behaving differently because they know they are being treated. For example: Think about education; teachers in the small class may try harder because they feel like they're expected to do better since they have an easier teaching load. Similarly, those in the large class may try harder to compensate for the fact that they have more students. The discontinuity as instrument thus creates a backdoor path between class size and teacher quality.
 
- 2. Knowing that decisions are based on threshholds, units may attempt to change their position relative to the threshold. Example: If class size determines class size, then parents might try to move their children into the smaller class. The discontinuity thus opens a backdoor path between class size and parental involvement.
+ 2. Knowing that decisions are based on thresholds, units may attempt to change their position relative to the threshold. Example: If class size determines class size, then parents might try to move their children into the smaller class. The discontinuity thus opens a backdoor path between class size and parental involvement.
  
 These are the problems with real-world "quasi-experiments". Discontinuities that appear to be random are often exploited or produce adverse behavior that makes them difficult to exploit for causal inference.
 
