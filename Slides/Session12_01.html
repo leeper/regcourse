@@ -517,6 +517,62 @@ Because the instrument does not affect `\( X \)` for always-takers and never-tak
 
 A big assumption is that there are **no defiers** (an assumption called monotonicity).
 
+---
+## Estimating LATE
+
+ - Intention-to-treat effect (`\( ITT \)`)
+  
+   - `\( E[Y|Z=1] - E[Y|Z=0] \)`
+
+???
+
+This is a weighted average of the four populations:
+
+ 1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
+ 
+ 2. We assume no defiers.
+ 
+ 3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
+
+--
+   
+ - Estimated proportion of compliers (`\( \pi_Compliers \)`)
+ 
+   - `\( Pr(X=1|Z=1) - Pr(X=1|Z=0) \)`
+
+???
+
+Left-hand is Pr(Always-takers) + Pr(Compliers). There are no Never-takers by definition.
+
+Right-hand is Pr(Never-takers) + Pr(Compliers). There are no Always-takers by definition.
+
+We need **monotonicity** (assume no defiers) otherwise the estimated proportion of compliers would be biased because some of the people serving in the control group would be defiers and some of those not serving in the treatment group would be defiers.
+
+Note: We only know the proportion of compliers, not which units actually are compliers due to the fundamental problem of causal inference.
+
+--
+
+ - Result: `\( LATE = \frac{ITT}{\pi_Compliers} \)`
+ 
+???
+
+If there are defiers, the LATE estimate is biased but we don't know by how much or in what direction. We can get monotonicity by design or by assumption.
+
+We can estimate this using two-stage least squares estimator.
+
+---
+template: questions
+
+---
+## Stop and think
+
+ - Are the SATE (ATE for whole sample) and LATE (ATE for compliers) the same?
+ 
+ - Do we care about the LATE? If so, why? What inferences can we make from it?
+ 
+???
+
+In the draft lottery example, it is telling us about the effect of military service for people who serve because of the draft. It doesn't necessarily tell us about the effect of military service in general. Instead it tell us about the effect of compulsory service.
 
 ---
 ## Aside: Experimentation
@@ -614,6 +670,9 @@ Sharp discontinuities can be analyzed as randomized experiments. We might even h
  2. Knowing that decisions are based on thresholds, units may attempt to change their position relative to the threshold. Example: If class size determines class size, then parents might try to move their children into the smaller class. The discontinuity thus opens a backdoor path between class size and parental involvement.
  
 These are the problems with real-world "quasi-experiments". Discontinuities that appear to be random are often exploited or produce adverse behavior that makes them difficult to exploit for causal inference.
+
+---
+template: questions
 
 ---
 ## Preview
