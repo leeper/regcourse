@@ -30,6 +30,14 @@ name: outline
  
  3. Regression discontinuity designs
 
+ 
+---
+background-image: url(http://i.imgur.com/Rq3M5Zk.png)
+
+???
+
+I keep my promises - I promised you way back in week 3 when we talked about solving causal graphs that you would learn one more strategy called instrumental variables in week 12. It's week 12 and I'm keeping my promise. I'm sure you've just been dying with anticipation for the last 9 week.
+
 ---
 ## When do we use instrumental variables?
 
@@ -200,7 +208,7 @@ The reason for this is that 2SLS is flexible to multiple instruments
  
 --
 
- - `\( X_{Confounded} = \beta_0 + \beta_1 Z_{Instrument} + \nu \)`
+ - `\( X_{Confounded} = \rho_0 + \rho_1 Z_{Instrument} + \nu \)`
  
  - `\( Y = \beta_0 + \beta_1^{2SLS} \hat{X} + \epsilon \)`
 
@@ -231,8 +239,6 @@ reg outcome fitted covariates
 
 ```
 ivregress 2sls outcome covariates (confounded = instrument)
-
-NEED TO HASH OUT FULL EXAMPLE CALL
 
 * option 'first' gives additional output
 ivregress 2sls outcome covariates (confounded = instrument), first
@@ -276,15 +282,17 @@ Should we use robust SEs in first stage? No, because we don't care about them...
 ---
 ## An Aside
 
- - Image the confounded variable `\( X \)` is an 0/1 indicator
+ - Imagine the confounded variable `\( X \)` is an 0/1 indicator
  
  - Should we use logit/probit to estimate the first stage equation?
 
 ???
 
-No. Builds distributional assumptions into our estimate.
+Differing opinions on this:
+
+ 1. Some say no because it builds distributional assumptions into our estimate.
  
-But Cameron and Trivedi say you can and show you how to do it in Stata.
+ 2. But Cameron and Trivedi say you can and show you how to do it in Stata.
 
 ---
 template: questions
@@ -369,10 +377,15 @@ Realistically it is pretty rare in the published literature to use more than one
 
 
 ---
+## Overidentifying restrictions
 
-OVERIDENTIFYING RESTRICTIONS
+ - With multiple instruments we can evaluate a null hypothesis that all instruments are valid
+ 
+ - Rejection of the null implies that at least one of the instruments is invalid
+ 
+ - Failure to reject implies nothing
 
-In Stata:
+ - In Stata:
 
 ```
 quietly ivregress 2sls outcome covariates (confounded = instrument)
@@ -381,7 +394,9 @@ estat overid
 
 ???
 
+This is an omnibus test of all of the instruments to see whether they relate to the confounded `\( X \)` variable
 
+In reality, it's rare that we will even have one instrument let alone enough to test overidentifying restrictions
 
 ---
 ## Instruments versus treatments
@@ -407,6 +422,8 @@ If your instrument is actually a randomized experimental treatment, then we may 
  
  3. Are there other possible instruments?
 
+ 
+.footnote[Sovey and Green (AJPS, 2010)]
 ???
 
 Sovey and Green checklist
@@ -432,12 +449,6 @@ template: questions
  - Assess credibility of the instruments
 
 
-
-
-
----
-template: outline
-
 ---
 ## Forward vs. Backward Causal Inference
 
@@ -447,7 +458,19 @@ template: outline
   
 ???
 
-IV can be used for both
+What are definitions of these ideas?
+
+IV can be used for both, but searching for instruments to solve a particular problem (i.e., backward inference) is really hard. Carrubba tried to find instruments but they weren't great.
+
+Economists tend to use instruments to do forward causal inference. They find an instrument and then leverage it to 
+
+---
+template: questions
+
+
+---
+template: outline
+
 
 
 ---
@@ -455,7 +478,7 @@ IV can be used for both
 
  - Esimation of any effect is more difficult if we think effects vary across units
  
- - We can estimate a Local Average Treatment Effect (LATE)
+ - But we can estimate a **Local Average Treatment Effect (LATE)**
  
  - This only applies to "compliers"
 
@@ -504,7 +527,7 @@ A big assumption is that there are **no defiers** (an assumption called monotoni
  
    - Some individuals do not take the treatment they are assigned
    
- - IV allows us to estimate the ATE for those who comply with treatment
+ - IV allows us to estimate the LATE for those who comply with treatment
  
  - Useful for both true experiments and "natural experiments"
  
@@ -550,10 +573,6 @@ Fuzzy discontinuities can be analyzed as IV, like we've discussed up to this poi
 Sharp discontinuities can be analyzed as randomized experiments. We might even have multiple instruments, then we can match on them or regress on them because we have a complete understanding of the causal process.
 
 ---
-## Example: 
-
-
----
 ## Example: Maimonides' Rule
   
  - What is Maimonides' Rule?
@@ -564,15 +583,19 @@ Sharp discontinuities can be analyzed as randomized experiments. We might even h
  
 --
 
- - 
+ - How does it differ from a randomized experiment?
 
 ???
 
-STARS experiment: Tennessee class sizes randomly assigned
+ 1. Classes larger than 40 split
 
-Maimonides rule is like an experiment but assignment is only random at the point of the discontinuity
+ 2. Maimonides rule is like an experiment but assignment is only random at the point of the discontinuity. The question is about "bandwidth" - for how many children to the left and to the right of the discontinuity is the discontinuity as-if random? Can we compare a school with 36 children to a school with 44 children? Or can we only compare a school with 39 children to a school with 41?
 
-Class size effect is null
+     What do they find? Class size effect is null
+
+ 3. STARS experiment: Tennessee class sizes randomly assigned
+
+
 
 
 ---
