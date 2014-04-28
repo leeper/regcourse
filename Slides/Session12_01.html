@@ -306,6 +306,17 @@ template: questions
    - Goodness of fit in first stage (relevance)
    - Goodness of fit in second stage
 
+   
+???
+
+Strong instruments have high relevance. 
+
+Weak instruments have low relevance.
+
+Both have to be credible.
+
+When an instrument is weak, the SEs that we get from IV estimation are going to be very large. We therefore want strong instruments.
+
 ---
 ## First stage fit in Stata
 
@@ -328,32 +339,34 @@ estat firststage
  - Testing for confounding
  
    - Durbin-Wu-Hausman Test
-   - Do residuals from the first stage relate to the outcome?
 
 ---
 ## DWH Test in Stata
+
+ - Do residuals from the first stage relate to the outcome?
+ 
+   - `\( Y = \beta_0 + \beta_1 X_{Confounded} + \beta_2 \nu + \epsilon\)`
+ 
+   - `\( \nu \)` are the residuals from the first stage
+ 
+ - In Stata:
 
 ```
 quietly ivregress 2sls outcome covariates (confounded = instrument)
 estat endogenous
 ```
 
+???
 
+Null hypothesis is that X is exogenous (non-confounded).
+
+If the residuals of the first stage have no effect on Y, then X is non-confounded.
+
+If the residuals of the first stage affect Y, then X is confounded.
 
 ---
 template: questions
 
-
----
-## Instruments
- 
- - Credible/strong instruments
- 
- - Weak instruments
- 
-???
-
-Weak instruments give big SEs
 
 
 ---
