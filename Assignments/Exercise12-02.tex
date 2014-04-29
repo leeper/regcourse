@@ -44,7 +44,7 @@ How do coefficient estimates and SEs from \texttt{ivregress} compare to the esti
 
 \subsection*{First-stage diagnostics}
 
-\item To include additional details in the output, we can specify some options when we call \texttt{ivregress}. Add the \texttt{, firststage} option and compare the output to the output from your manual estimation of the first stage.
+\item To include additional details in the output, we can specify some options when we call \texttt{ivregress}. Add the \texttt{, first} option and compare the output to the output from your manual estimation of the first stage.
 \item You can also use \texttt{estat firststage} to instead just report summary statistics for the first stage without the coefficient estimates. Note how much of the output from \texttt{estat firststage} is the same as the summary statistics we obtain from any regression. The key statistic here is the F-statistic. Recall that in a regression with one regressor, the F-statistic is simply the square of the t-statistic for the coefficient. A rule-of-thumb is that an F-statistic greater than 10 is required for the instrument to be considered strong.
 \item The bottom half of the \texttt{estat firststage} output is something new. It lists critical values (in F-statistic terms) above which we can reject a null hypothesis of having a weak instrument(s). Does the F-statistic exceed these critical values?
 
