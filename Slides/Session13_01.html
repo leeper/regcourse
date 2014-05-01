@@ -70,7 +70,10 @@ name: outline
 .footnote[Wooldridge p.314]
 
 
+---
+## Mising Data In Practice
 
+ - Ideally we don't have any missing data
 
 
 ---
@@ -183,6 +186,57 @@ What do these assumptions mean?
 
 Unfortunately, we can't really test them.
 
+---
+## MCAR
+
+ 1. Statistical efficiency
+ 
+ 2. Comparability of analyses
+ 
+ 3. Representativeness
+ 
+ 4. Scale construction
+ 
+ 5. Causal inference
+
+???
+
+Which of these is a problem?
+
+---
+## MAR/Ignorable
+
+ 1. Statistical efficiency
+ 
+ 2. Comparability of analyses
+ 
+ 3. Representativeness
+ 
+ 4. Scale construction
+ 
+ 5. Causal inference
+
+???
+
+Which of these is a problem?
+
+---
+## NI
+
+ 1. Statistical efficiency
+ 
+ 2. Comparability of analyses
+ 
+ 3. Representativeness
+ 
+ 4. Scale construction
+ 
+ 5. Causal inference
+
+???
+
+Which of these is a problem?
+
 
 ---
 template: outline
@@ -219,12 +273,36 @@ Consequence: replacement of missing values is potentially arbitrary; if missingn
  - Single value (e.g. zero, mean)
 
  - Random value
-   - At what proportions?
-   - At what precision?
+ 
+ - Inferred value
 
  - Hot deck
+ 
+ - Regression
     
 ???
+
+ 1. Single value. What effect does this have on mean, variance, correlations? None, smaller, smaller
+ 
+ 2. Random value.
+   - What distribution to draw from? Allowed values, allowed value weighted by their prevalence in the data? Continuous distribution?
+   - What effect does this have on mean, variance, correlations? None, none, smaller
+ 
+ 3. Inferred value.
+   - Use other data to infer a value. If income is missing, but R said they are unemployed, income is presumably zero.
+   - What effect does this have on mean, variance, correlations? some, some, some
+ 
+ 4. Hot deck.
+   - Use information in the dataset to infer values.
+   - Based on cross-tabulation.
+   - All cases that have the same set of observed values will have the same imputed value (no account for random variation)
+   - What effect does this have on mean, variance, correlations? some, some, some
+ 
+ 5. Regression.
+   - Use information in the dataset to infer values.
+   - Uses standard regression techniques to make out-of-sample predictions. Fitted value from regression is used as imputed value.
+   - All cases that have the same set of observed values will have the same imputed value (no account for random variation).
+   - What effect does this have on mean, variance, correlations? some, some, some
 
 
 ---
