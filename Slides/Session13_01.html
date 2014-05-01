@@ -180,11 +180,35 @@ Challenging because you need to identify all of your variables in advance of run
  
  3. **Nonignorable** (NI)
 
+--
+
+ 4. **Censoring**
+ 
 ???
 
 What do these assumptions mean?
 
-Unfortunately, we can't really test them.
+Unfortunately, we can't really test them. We can see whether missingness is independent of observed variables, but not unobserved variables.
+
+We don't talk about censoring in this course, but it is when missingness on a variable depends on the variable itself
+
+---
+## Examples?
+
+ 1. **Missing Completely At Random** (MCAR)
+ 
+--
+
+ 2. **Missing At Random** (MAR; Ignorable)
+ 
+--
+
+ 3. **Nonignorable** (NI)
+
+???
+
+
+
 
 ---
 ## MCAR
@@ -303,6 +327,7 @@ Consequence: replacement of missing values is potentially arbitrary; if missingn
    - Uses standard regression techniques to make out-of-sample predictions. Fitted value from regression is used as imputed value.
    - All cases that have the same set of observed values will have the same imputed value (no account for random variation).
    - What effect does this have on mean, variance, correlations? some, some, some
+   - Note: We can use regression and then add random error onto the imputed values to inflate our variance estimates.
 
 
 ---
@@ -347,8 +372,59 @@ There are different algorithms for doing this:
 
  - Still not very common in political science
  
- - Doesn't solve NI missingness
+ - Doesn't necessarily solve NI missingness
 
 
  
+---
+## Aggregating MI Results
 
+ 1. Run analysis on each imputed dataset
+ 
+ 2. Each analysis produces a test statistic `\( \hat{\beta}_m \)`
+ 
+ 3. Overall test statistic is `\( \Sigma_1^M \hat{\beta}_m \)`
+ 
+ 4. Calculating variance is a sum of two things:
+ 
+   - *within*-imputation variance
+   - *between*-imputation variance
+   
+---
+## Variance of MI Estimates
+
+ - Within-imputation variance:
+ 
+    `\( Within = \Sigma_1^M \hat{V}_m \)`
+
+ - Between-imputation variance:
+ 
+    `\( Between = \frac{1}{m-1} \Sigma_1^M (\hat{\beta}_m - \hat{\beta})^2 \)`
+     
+ - Total variance is:
+
+    `\( V_{\beta} = Within + (1 + \frac{1}{m}) \beta \)`
+
+---
+## An Example
+
+???
+
+Have people do MI calculation by hand
+
+
+---
+template: question
+
+---
+## Summary
+
+ - Missing data is a common problem
+ 
+ - Multiple strategies for coping with it
+ 
+ - Some better than others
+ 
+ - For exam and real life, be prepared to justify your strategy for addressing missing data
+ 
+ 

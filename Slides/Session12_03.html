@@ -14,7 +14,7 @@ layout: remark
 name: outline
 ## Outline
 
- 1. Instrumental Variables
+ 1. LATE
  
  2. Missing data
  
@@ -84,8 +84,13 @@ This is a weighted average of the four populations:
  
  3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
 
---
-   
+---
+## Estimating LATE
+
+ - Intention-to-treat effect (`\( ITT \)`)
+  
+   - `\( E[Y|Z=1] - E[Y|Z=0] \)`
+  
  - Estimated proportion of compliers (`\( \pi_Compliers \)`)
  
    - `\( Pr(X=1|Z=1) - Pr(X=1|Z=0) \)`
@@ -100,7 +105,16 @@ We need **monotonicity** (assume no defiers) otherwise the estimated proportion 
 
 Note: We only know the proportion of compliers, not which units actually are compliers due to the fundamental problem of causal inference.
 
---
+---
+## Estimating LATE
+
+ - Intention-to-treat effect (`\( ITT \)`)
+  
+   - `\( E[Y|Z=1] - E[Y|Z=0] \)`
+  
+ - Estimated proportion of compliers (`\( \pi_Compliers \)`)
+ 
+   - `\( Pr(X=1|Z=1) - Pr(X=1|Z=0) \)`
 
  - Result: `\( LATE = \frac{ITT}{\pi_Compliers} \)`
  
