@@ -17,17 +17,49 @@ Gilens (2001)
 Simmons and Hopkins (2003)
 
 
-Representativeness
+---
+name: outline
+## Outline
 
-Comparability of analyses
+ 1. Instrumental Variables
+ 
+ 2. Missing data
+ 
+ 3. Single imputation methods
+ 
+ 4. Multiple imputation
 
-Statistical efficiency (loss of information; effect on SEs)
 
-Scale construction (measurement error due to missingness)
+---
+## Missing data
 
-Problem from a causal perspective: if missingness perfectly determined by a third variable, then we're estimating an implicit interaction and only seeing the effect for those with available data.
+ - What is it?
+ 
+--
 
+ - Why are data missing?
+ 
+--
 
+ - How often do we encounter missing data?
+
+???
+
+ - Most data we work with is organized, cleaned, etc.
+ - In reality, data are never clean
+   - We either have to make them or we get them from someone else
+   - Not clean means badly coded and/or full of missing values
+   - Coding is something we can handle, missing data is a big problem
+ - What do we do when we have missing values?
+
+---
+## An Exercise
+
+ - Find your 3rd assignment for this course
+ 
+ - What was the sample size for your model?
+
+ 
 ---
 ## Wooldridge
 
@@ -37,132 +69,208 @@ Problem from a causal perspective: if missingness perfectly determined by a thir
 
 .footnote[Wooldridge p.314]
 
+
+
+
+
 ---
-## Messy data
-  - Most data we work with is organized, cleaned, etc.
-  - In reality, data are never clean
-    - We either have to make them or we get them from someone else
-    - Not clean means badly coded and/or full of missing values
-    - Coding is something we can handle, missing data is a big problem
-  - What do we do when we have missing values?
+## Effects of Missing Data
+
+ 1. Statistical efficiency
+ 
+ 2. Comparability of analyses
+ 
+ 3. Representativeness
+ 
+ 4. Scale construction
+ 
+ 5. Causal inference
+
+???
+
+Statistical efficiency (loss of information; effect on SEs)
+
+Representativeness
+
+Comparability of analyses
+
+Scale construction (measurement error due to missingness)
+
+Problem from a causal perspective: if missingness perfectly determined by a third variable, then we're estimating an implicit interaction and only seeing the effect for those with available data.
+
+
+
 ---
 ## Scaling
   - We haven't talked a lot about scaling in this class
   - Scaling is a good example of the problems associated with missing data
   - How do we build scales with missing values?
+
+
 ---
-## Complete case analysis
-  - Available case
-    - Remove any observations with missing values for a given analysis
-    - This is "standard" practice
-    - Benefits
-      - Easy
-      - Statistical software defaults to this
-      - Uses as much data as possible for any given analysis
-    - Consequences
-      - Loss of information
-      - Loss of sample representativeness
-      - Analyses are not comparable to one another
-  - Case/listwise deletion
-    - Remove any observations with missing values before all analyses
-    - Benefits
-      - Easy
-      - All analyses are comparable to one another
-    - Consequences
-      - Loss of information (more than available case)
-      - Loss of sample representativeness
+## Two Default Approaches
+
+ 1. Complete Case Analysis
+ 
+   - i.e., listwise deletion
+   
+ 2. Available Case Analysis
+ 
+   - This is our default
+
+---
+## Available Case Analysis
+  
+ - Software default
+
+ - Remove any observations with missing values for a given analysis
+ 
+ - Benefits
+    - Easy
+    - Uses as much data as possible for any given analysis
+
+ - Consequences
+    - Loss of information
+    - Analyses are not comparable to one another
+    - Loss of sample representativeness?
+
+???
+
+Worst solution because it is the default. It's done unconsciously.
+
+---
+## Complete Case Analysis
+
+ - Listwase or case deletion
+ 
+ - Remove any observations with missing values before all analyses
+ 
+ - Benefits
+    - Easy
+    - All analyses are comparable to one another
+
+ - Consequences
+    - Loss of information (more than available case)
+    - Loss of sample representativeness?
+
+???
+
+Challenging because you need to identify all of your variables in advance of running any analyses, so you can drop those with missing values
+
+
+
+---
+## What can we do about missing data?
+
+ - Use default strategies
+ 
+ - Impute missing values once
+ 
+ - Run analyses multiple times with different imputations
+
+---
+## Missing Data Assumptions
+
+ 1. **Missing Completely At Random** (MCAR)
+ 
+ 2. **Missing At Random** (MAR; Ignorable)
+ 
+ 3. **Nonignorable** (NI)
+
+???
+
+What do these assumptions mean?
+
+Unfortunately, we can't really test them.
+
+
+---
+template: outline
+
 ---
 ## Single imputation
-  - Rather than discard observations, fill in missing values (once)
-  - This is not common
-  - Benefits
-    - Preserve information and obserations
-    - Preserve sample representativeness
-    - Fairly easy
-  - Consequences
-    - Arbitrary replacement of missing values
-    - Potentially false sense of precision about imputed values
-    - Modifies the features of univariate and multivariate distributions
+
+ - Impute missing values once
+ 
+ - Benefits
+   - Increases statistical efficiency
+   - Comparable analyses
+   - Easy (depends on technique)
+   - Preserve representativeness?
+ 
+ - Consequences
+   - Bias (depends on technique)
+   - Analyses do not reflect uncertainty due to missingness
+
+   
+???
+
+In practice this is not all that common.
+
+Consequence: replacement of missing values is potentially arbitrary; if missingness is ignorable (MAR), we need to model the missingness
+
+- Modifies the features of univariate and multivariate distributions
       - Might change central tendency (mean, median), variance, etc.
     - How to calculate standard errors?
-  - Methods
-    - Single value (e.g. zero, mean)
-    - Random
-      - At what proportions?
-      - At what precision?
-    - Hot deck
+
+---
+## Single Imputation Methods
+
+ - Single value (e.g. zero, mean)
+
+ - Random value
+   - At what proportions?
+   - At what precision?
+
+ - Hot deck
     
 ???
 
-```
-* randomly impute from levels of the variable
 
-gen ran= runiform() //gen uniform random variable
-sort ran //sorts after ran
-
-levelsof var1,loc(lvl) //creates local macro containing values of var1 - replace var1 with variable name
-tab var1 //replace var1 with var name
-sca tr = r(r) //gen scalar = number of unique values of var1
-loc i = 1 //counter
-//gen scalars containg values of var1
-foreach lv of loc lvl { 
-sca s`i' = `lv' 
-loc ++i
-}
-
-loc obs = 1 //counter for observation number
-gen repvar = . //gen new var to contain values of var1
-local i = 1 
-
-while `obs' <= _N { //foreach obs in data
-replace repvar = s`i' in `obs' //replaces repvar with succesive values of var1 
-loc ++obs //next observation
-loc ++i 
-if `i' <= tr continue 
-else if `i' > tr loc i = 1 
-}
-clonevar newvar1 = var1 //replace names
-replace newvar=repvar if newvar==.
-```
-
-
-```
-* random imputation from distribution of observed values
-* assumes that missing values are missing completely at random
-sort missvar
-quietly tab missvar
-gen imputedvar = missvar[round((r(N)-1)*uniform(),1)+1]
-```
-
-```
-* hot deck imputation
-sort varlist
-edit missingvar varlist
-```
-
-```
-* regression imputation
-reg missvar varlist
-predict fitted
-gen missvarimputed = missvar
-replace missvarimputed = fitted if missvar==.
-```
+---
+template: outline
 
 
 ---
-## Mutliple imputation
-  - Rather than discard observations, fill in missing values
-  - This is not common, either (but increasingly so)
-  - Create multiple datasets, using different imputations each time
-    - Different algorithms for doing this
-    - Details are not important for us but...
-      - Random imputation
-      - Model-based imputation
-  - Perform analysis on each dataset and aggregate the results
-    - Generate standard errors by aggregating results
-  - Benefits
-    - All the benefits of single imputation
-    - Handle uncertainty about missing values
-  - Consequences
-    - Difficult to analyze
-    - Multiple algorithms to choose from, may produce different results
+## Multiple Imputation (MI)
+
+ 1. Engage a single imputation method
+ 
+ 2. Repeat this method multiple times
+ 
+ 3. Run analysis on each imputed dataset
+ 
+ 4. Combine estimates and calculate combined variances
+
+???
+
+There are different algorithms for doing this:
+ - King et al. have one
+ - Gelman and Hill have another one
+ - There are others
+
+---
+## Multiple Imputation (MI)
+
+ - Benefits
+   - Increases statistical efficiency
+   - Account for uncertainty due to missingness
+   - Comparable analyses
+   - Better than single imputation if MAR
+   
+ - Consequences
+   - Somewhat computationally expensive
+   - Challenging with large datasets
+   - Software may not handle all statistical tests in an MI framework
+
+
+---
+## Multiple Imputation (MI)
+
+ - Still not very common in political science
+ 
+ - Doesn't solve NI missingness
+
+
+ 
+

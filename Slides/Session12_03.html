@@ -8,3 +8,183 @@ layout: remark
 
 # {{ page.title }} #
 # {{ page.day }} #
+
+
+---
+name: outline
+## Outline
+
+ 1. Instrumental Variables
+ 
+ 2. Missing data
+ 
+ 3. Single imputation methods
+ 
+ 4. Multiple imputation
+
+ 
+---
+## Effect Heterogeneity
+
+ - Esimation of any effect is more difficult if we think effects vary across units
+ 
+ - But we can estimate a **Local Average Treatment Effect (LATE)**
+ 
+ - This only applies to "compliers"
+
+???
+
+If the effects of `\( X \)` is constant across individuals (i.e., homogeneous effects), then the IV estimate is an estimate of each individual's causal effect.
+
+But! we rarely believe that all individuals experience the same effect. Instead we think effects vary across individuals. If that's the case, then the IV estimate doesn't represent the effect for everyone. Instead, it is the average effect for a subset of individuals called "compliers".
+
+
+---
+## Four subpopulations
+
+Imagine a binary `\( X \)` and a binary instrument `\( Z \)`
+
+ - Compliers: `\( X = 1 \)` only if `\( Z = 1 \)`
+ - Always-takers: `\( X = 1 \)` regardless of `\( Z \)`
+ - Never-takers: `\( X = 0 \)` regardless of `\( Z \)`
+ - Defiers: `\( X = 1 \)` only if `\( Z = 0 \)`
+
+???
+
+ - Compliers: military service if drafted
+ - Always-takers: military service regardless of draft
+ - Never-takers: no military service regardless of draft (maybe medically ineligible)
+ - Defiers: military service only if not drafted
+
+
+If we think effects vary across individuals, then IV only estimates the effect for compliers (those who are treated when the instrument is 1 and untreated when the instrument is 0).
+
+Estimation is the same as under constant effects
+
+How do we know which individual units are in which subpopulation? We can't know! Thus the problem with IV estimation under heterogeneous effects is that the external validity of the results is basically undefined.
+
+Because the instrument does not affect `\( X \)` for always-takers and never-takers, we can't use the instrument to say anything about the effect of `\( X \)` on `\( Y \)` for those units.
+
+A big assumption is that there are **no defiers** (an assumption called monotonicity).
+
+---
+## Estimating LATE
+
+ - Intention-to-treat effect (`\( ITT \)`)
+  
+   - `\( E[Y|Z=1] - E[Y|Z=0] \)`
+
+???
+
+This is a weighted average of the four populations:
+
+ 1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
+ 
+ 2. We assume no defiers.
+ 
+ 3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
+
+--
+   
+ - Estimated proportion of compliers (`\( \pi_Compliers \)`)
+ 
+   - `\( Pr(X=1|Z=1) - Pr(X=1|Z=0) \)`
+
+???
+
+Left-hand is Pr(Always-takers) + Pr(Compliers). There are no Never-takers by definition.
+
+Right-hand is Pr(Never-takers) + Pr(Compliers). There are no Always-takers by definition.
+
+We need **monotonicity** (assume no defiers) otherwise the estimated proportion of compliers would be biased because some of the people serving in the control group would be defiers and some of those not serving in the treatment group would be defiers.
+
+Note: We only know the proportion of compliers, not which units actually are compliers due to the fundamental problem of causal inference.
+
+--
+
+ - Result: `\( LATE = \frac{ITT}{\pi_Compliers} \)`
+ 
+???
+
+If there are defiers, the LATE estimate is biased but we don't know by how much or in what direction. We can get monotonicity by design or by assumption.
+
+We can estimate this using two-stage least squares estimator.
+
+---
+name: questions
+class: middle, center
+
+## Questions?
+
+---
+## Stop and think
+
+ - Are the SATE (ATE for whole sample) and LATE (ATE for compliers) the same?
+ 
+ - Do we care about the LATE? If so, why? What inferences can we make from it?
+ 
+???
+
+In the draft lottery example, it is telling us about the effect of military service for people who serve because of the draft. It doesn't necessarily tell us about the effect of military service in general. Instead it tell us about the effect of compulsory service.
+
+
+
+---
+## "Sharp" and "Fuzzy" discontinuities
+
+ - If an instrument imperfectly causes `\( X \)`, then it produces a **fuzzy** discontinuity
+ 
+ - If an instrument perfectly causes `\( X \)`, then it produces a **sharp** discontinuity
+ 
+???
+
+Fuzzy discontinuities can be analyzed as IV, like we've discussed up to this point.
+ 
+Sharp discontinuities can be analyzed as randomized experiments. We might even have multiple instruments, then we can match on them or regress on them because we have a complete understanding of the causal process.
+
+---
+## Example: Maimonides' Rule
+  
+ - What is Maimonides' Rule?
+ 
+--
+
+ - Why is it a valid (credible) instrument? (Or why isn't it?)
+ 
+--
+
+ - How does it differ from a randomized experiment?
+
+???
+
+ 1. Classes larger than 40 split
+
+ 2. Maimonides rule is like an experiment but assignment is only random at the point of the discontinuity. The question is about "bandwidth" - for how many children to the left and to the right of the discontinuity is the discontinuity as-if random? Can we compare a school with 36 children to a school with 44 children? Or can we only compare a school with 39 children to a school with 41?
+
+     What do they find? Class size effect is null
+
+ 3. STARS experiment: Tennessee class sizes randomly assigned
+
+
+
+
+---
+## Problems with discontinuities
+
+- Compensatory rivalry & equalization
+
+- Campbell's Law:
+
+> The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.
+
+???
+
+ 1. Units may behave differently due to their position relative to a threshold, either by trying to be more like the other group or by behaving differently because they know they are being treated. For example: Think about education; teachers in the small class may try harder because they feel like they're expected to do better since they have an easier teaching load. Similarly, those in the large class may try harder to compensate for the fact that they have more students. The discontinuity as instrument thus creates a backdoor path between class size and teacher quality.
+
+ 2. Knowing that decisions are based on thresholds, units may attempt to change their position relative to the threshold. Example: If class size determines class size, then parents might try to move their children into the smaller class. The discontinuity thus opens a backdoor path between class size and parental involvement.
+ 
+These are the problems with real-world "quasi-experiments". Discontinuities that appear to be random are often exploited or produce adverse behavior that makes them difficult to exploit for causal inference.
+
+---
+template: questions
+
