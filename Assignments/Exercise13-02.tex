@@ -13,7 +13,6 @@
 
 \subsection*{The Problem}
 
-
 \item % regression model with little missing data
 \item % regression model with lots of missing data
 \item % both regression models on complete cases
@@ -21,22 +20,85 @@
 
 \subsection*{Descriptive Statistics}
 
-\item % Counts of missingness
-\item % Plots of missingness
+\item The simplest way to assess missingness in a variable is simply to tabulate it using the \texttt{tab} command and the option \texttt{, miss}. Of course, you can only tabulate one variable at a time. Another option that allows you to quickly count missing values in variables is available in an add-on package called \texttt{nmissing}. You can install this using \texttt{ssc install nmissing}. Then, you can just type \texttt{nmissing} to see counts of missing values in all variables in the dataset. By specifying a list of variables you can limit the results to just the specified variables. Try this out.
+
+% could also us \texttt{mi misstable} here.
+
+\item The \texttt{nmissing} command only shows us raw counts of missingness, but that doesn't help us to understand {\em where} the missing values are in the data. For example, it's possible that a given observation has many missing values while other observations have few or no missing values. This can emerge for example, if a survey respondent terminates a survey interviewing before the end of the survey, or if a country stops reporting a particular measure (e.g., inflation) during years of dictatorship. To see how missingness is distributed across variables for a particular observation, we want to see {\em patterns} of missingness. We'll need another add-on package to do this. It is called \texttt{mvpatterns} and you can install it by using \texttt{findit mvpatterns}.
+
+
+\item To use \texttt{mvpatterns}, simply call \texttt{mvpatterns varlist}, where \texttt{varlist} includes the name of one or more variables. The output will include two tables. The first provides counts of missing values in variables (a la \texttt{nmissing}). The second part of the output provides quite a bit of additional information. Here's an example:
+\begin{verbatim}
+Patterns of missing values
+  +------------------------+
+  | _pattern   _mv   _freq |
+  |------------------------|
+  |     ++++     0    1393 |
+  |     ...+     3     484 |
+  |     +++.     1     482 |
+  |     ....     4     400 |
+  |     ..++     2       4 |
+  |------------------------|
+  |     ++..     2       1 |
+  |     ..+.     3       1 |
+  +------------------------+
+\end{verbatim}
+
+The first column shows {\em patterns} of missingness, with a \texttt{+} indicating a present value and \texttt{.} indicating a missing value. So, if four variables are included in the varlist (as in the above example), the first row with pattern \texttt{++++} indicates that there are 1393 observations with no missing values in these four variables. The second row indicates that there are 484 observations with missing values in the first, second, and third variables but a present value in the fourth variable. At the bottom of the table you see there is also one observation with three missing values reflecting a different pattern of missingness (the first, second, and fourth variable values are missing but the third variable for that case is observed). This output thus lets us know not only how much missingness there is, but how it is distributed across observations and variables.
+
+Now that you understand the output of \texttt{mvpatterns}, try it out on your data.
+
+%\item % Plots of missingness
+
 \item % Correlations between missingness and other factors (MAR/MCAR assumptions)
 
 \subsection*{Single Imputation}
 
-\item % Zero
-\item % Mean
-\item % Random draw
-\item % Hot deck
+\item Single imputation is basically just recoding, so you already know how to do it. For the simplest methods of zero and mean imputation, you simply are using the \texttt{recode} command and/or \texttt{gen} command. It's good practice when doing single imputation (as in any recoding) to generate new post-imputation variables rather than overwrite the original variables.
+\item Try out zero imputation. % Zero
+\item Try out mean imputation. % Mean
+\item Random value imputation is a bit more challenging. Recall we might use random imputation because we want to preserve the mean and variance of the variable being imputed. While the code to do this is relatively easily, it does require a few lines of code. First, we need to sort the data, then tabulate the variable to figure out how many missing values there are in the variable, and finally replace the missing values with random draws from the observed values. Here's an example:
+\begin{verbatim}
+sort missvar
+quietly tab missvar
+gen imputedvar = missvar[round((r(N)-1)*uniform(),1)+1]
+\end{verbatim}
+
+Here \texttt{missvar} can be any variable and \texttt{imputedvar} is the name of the new imputed variable you want to generate.
+
+\item Hot deck imputation is a classic multivariate single imputation method that dates to when most analysis was performed with punchcards and tabulating machines designed by Herman Hollerith and IBM. A punchcard would consist of a single observation and the Hollerith machine was able to sort observations based on values stored on the punchcard, which could then be analyzed by hand. With cards sorted based on observed values, a resulting ``deck'' of punchcards would be produced. Hot deck imputation involved manually going through the stack of punchcards until a missing value was found. That observation's missing value would then be imputed by taking the value from the preceding punchcard via a process called ``last observation carried forward''.
+
+The technique was innovative because it incorporates multivariate information in deciding what value to impute, but the sorting process also means that the process is highly sensitive to the sort order of the data. For example, sorting by age first then sex then income might yield a different set of imputed values than sorting by sex, then age, then income.
+
+We can emulate the hot deck imputation process in Stata by sorting our data according to a list of variables and then manually imputing the values. This never a recommended technique (in part because it is time consuming and moreso because the process is prone to human error) but it is value to try it out to get a sense of how it works and how much easier research has gotten in the last thirty years. All you have to do is sort your dataset by a specified list of variables, then use the \texttt{edit} command to open the data editor. An example set of commands is:
+\begin{verbatim}
+sort varlist
+edit missingvar varlist
+\end{verbatim}
+
+You can then follow the ``last observation carried forward'' rule, starting from the top of the dataset whenever there are missing values. 
+
+\item A final single imputation technique that we can consider is {\em regression imputation}, which is a form of within-sample prediction. In regression imputation, we predict a partially missing variable based on a regression model. We then use that estimated model to calculate predicted values for all observations. For observations where the variable is missing, we use the imputed values and we use the observed values for all other observations. We can repeat this for multiple variables that contain missingness. Here's an example:
+
+\begin{verbatim}
+quietly reg missvar varlist
+predict fitted
+gen missvarimputed = missvar
+replace missvarimputed = fitted if missvar==.
+\end{verbatim}
 
 \subsection*{Multiple Imputation}
+
+\item Single imputation using regression is a logical segue to multiple imputation, which uses the same basic logic of building an imputation model but instead of imputing values once, we construct multiple imputed datasets, estimate our desired test statistic(s), and then average across the results from each imputed dataset.
 
 \item % multiple imputation
 
 
+\subsection*{Replicate Your Previous Results}
+
+\item Revisit your data and analysis for Assignment 3 using the GSS dataset.
+\item Using the tools you've learned so far, identify patterns of missing data in the variables you used in the analysis.
+\item Using several of the single imputation techniques and multiple imputation, reestimate your results using datasets that are completely observed on all relevant variables. That is, you should impute missing values using one of the techniques, rerun your analysis, and record the results. Then repeat this process using some of the other imputation techniques. How do they compare? How do the coefficients vary across imputed datasets? How does the size of standard errors compare across the results?
 
 
 \end{enumerate}
