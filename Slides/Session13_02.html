@@ -67,8 +67,9 @@ edit missingvar varlist
 
 ```
 * regression imputation
-reg missvar varlist
+quietly reg missvar varlist
 predict fitted
 gen missvarimputed = missvar
 replace missvarimputed = fitted if missvar==.
 ```
+
