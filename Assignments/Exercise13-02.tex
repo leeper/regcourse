@@ -50,7 +50,9 @@ Now that you understand the output of \texttt{mvpatterns}, try it out on your da
 
 %\item % Plots of missingness
 
-\item % Correlations between missingness and other factors (MAR/MCAR assumptions)
+
+
+\item If data are MCAR (missing completely at random), then our estimates in any analysis are unbiased but may be inefficient. We can rely on almost any imputation technique to increase our sample size and thus reduce variance. If data are MAR (missing at random/ignorable), however, we should rely on multiple imputation, which will both produce a more complete dataset and should eliminate any bias due to missingness attributable to observed variables. We cannot test whether data are MCAR but we can test whether missingness is plausibly MAR/ignorable by regressing an indicator variable for missingness in a variable on other observed (ideally fully observed) variables. To do this, generate a new variable to represent missingness and run a logistic regression of the new variable on other variables in the dataset. You can repeat this process for any variable that has missingness. If any of the variables are related to the missingness indicator, the data are --- at least partially --- ignorable. It may still be the case that they are also missing due to unobserved variables, but this is something we cannot test.
 
 \subsection*{Single Imputation}
 
@@ -66,11 +68,7 @@ gen imputedvar = missvar[round((r(N)-1)*uniform(),1)+1]
 
 Here \texttt{missvar} can be any variable and \texttt{imputedvar} is the name of the new imputed variable you want to generate.
 
-\item Hot deck imputation is a classic multivariate single imputation method that dates to when most analysis was performed with punchcards and tabulating machines designed by Herman Hollerith and IBM. A punchcard would consist of a single observation and the Hollerith machine was able to sort observations based on values stored on the punchcard, which could then be analyzed by hand. With cards sorted based on observed values, a resulting ``deck'' of punchcards would be produced. Hot deck imputation involved manually going through the stack of punchcards until a missing value was found. That observation's missing value would then be imputed by taking the value from the preceding punchcard via a process called ``last observation carried forward''.
-
-The technique was innovative because it incorporates multivariate information in deciding what value to impute, but the sorting process also means that the process is highly sensitive to the sort order of the data. For example, sorting by age first then sex then income might yield a different set of imputed values than sorting by sex, then age, then income.
-
-We can emulate the hot deck imputation process in Stata by sorting our data according to a list of variables and then manually imputing the values. This never a recommended technique (in part because it is time consuming and moreso because the process is prone to human error) but it is value to try it out to get a sense of how it works and how much easier research has gotten in the last thirty years. All you have to do is sort your dataset by a specified list of variables, then use the \texttt{edit} command to open the data editor. An example set of commands is:
+\item Hot deck imputation is a classic multivariate single imputation method that dates to when most analysis was performed with punchcards and tabulating machines. We can emulate the hot deck imputation process in Stata by sorting our data according to a list of variables and then manually imputing the values. This never a recommended technique (in part because it is time consuming and moreso because the process is prone to human error) but it is value to try it out to get a sense of how it works and how much easier research has gotten in the last thirty years. All you have to do is sort your dataset by a specified list of variables, then use the \texttt{edit} command to open the data editor. An example set of commands is:
 \begin{verbatim}
 sort varlist
 edit missingvar varlist
@@ -86,6 +84,8 @@ predict fitted
 gen missvarimputed = missvar
 replace missvarimputed = fitted if missvar==.
 \end{verbatim}
+
+In many applications of regression imputation we would also add an additional amount of randomness to the imputations (such as a draw from the Normal distribution with mean zero and a variance equal to the variance of the residuals from the imputation model). We won't do this here, but it's important to keep in mind that the above form of deterministic imputation understates uncertainty.
 
 \subsection*{Multiple Imputation}
 
