@@ -355,6 +355,8 @@ Consequence: replacement of missing values is potentially arbitrary; if missingn
     
 ???
 
+Notes:
+
  1. Single value. What effect does this have on mean, variance, correlations? None, smaller, smaller
  
  2. Random value.
@@ -500,7 +502,7 @@ The basic idea in most of these is to model all of the variables with missingnes
 ---
 ## An Example
 
-| Dataset | `\( \beta_Educ \)` | `\( SE_\beta_Educ \)` |
+| Dataset | `\( \beta_Educ \)` | `\( SE_\beta \)` |
 | --- | --- | --- |
 | 1 | 4.32 | 0.95 |
 | 2 | 4.15 | 1.16 |
@@ -510,11 +512,11 @@ The basic idea in most of these is to model all of the variables with missingnes
 
  - What is the overall `\( \beta_Educ \)` ?
  
- - What is the overall `\( SE_\beta_Educ \)` ?
+ - What is the overall `\( SE_{\beta} \)` ?
 
 ???
 
-| Dataset | `\( \beta_Educ \)` | `\( SE_\beta_Educ \)` | `\( Var(\beta_Educ) \)` |
+| Dataset | `\( \beta_Educ \)` | `\( SE_\beta \)` | `\( Var(\beta_Educ) \)` |
 | --- | --- | --- | --- |
 | 1 | 4.32 | 0.95 | 0.9025 |
 | 2 | 4.15 | 1.16 | 1.3456 |
@@ -522,11 +524,11 @@ The basic idea in most of these is to model all of the variables with missingnes
 | 4 | 3.98 | 1.04 | 1.0816 |
 | 5 | 4.50 | 0.91 | 0.8281 |
 
-`\( \beta_Overall = 4.362 \)`
+`\( \beta_{Overall} = 4.362 \)`
  
-`\( Var_Within = \frac{1}{5} (0.9025 + 1.3456 + 0.6889 + 1.0816 + 0.8281) = \frac{4.8467}{5} = 0.96934\)`
+`\( Var_{Within} = \frac{1}{5} (0.9025 + 1.3456 + 0.6889 + 1.0816 + 0.8281) = \frac{4.8467}{5} = 0.96934\)`
 
-`\( Var_Between = \frac{1}{m-1}(-0.042^2 + 0.212^2 + 0.498^2 + -0.382^2 + 0.138^2) = \frac{0.45968}{4} = 0.11492 \)`
+`\( Var_{Between} = \frac{1}{m-1}(-0.042^2 + 0.212^2 + 0.498^2 + -0.382^2 + 0.138^2) = \frac{0.45968}{4} = 0.11492 \)`
 
 `\( Var_\beta = W + (1 + \frac{1}{m}) B = 0.96934 + (1 + .2) (0.11492) = 1.107244 \)`
 
