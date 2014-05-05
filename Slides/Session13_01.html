@@ -381,6 +381,17 @@ Notes:
    - Note: We can use regression and then add random error onto the imputed values to inflate our variance estimates.
 
 ---
+## Hot Deck Imputation
+
+ - Originally used when data was stored on punchcards
+ 
+???
+
+Hot deck imputation is a classic multivariate single imputation method that dates to when most analysis was performed with punchcards and tabulating machines designed by Herman Hollerith and IBM. A punchcard would consist of a single observation and the Hollerith machine was able to sort observations based on values stored on the punchcard, which could then be analyzed by hand. With cards sorted based on observed values, a resulting ``deck'' of punchcards would be produced. Hot deck imputation involved manually going through the stack of punchcards until a missing value was found. That observation's missing value would then be imputed by taking the value from the preceding punchcard via a process called ``last observation carried forward''.
+
+The technique was innovative because it incorporates multivariate information in deciding what value to impute, but the sorting process also means that the process is highly sensitive to the sort order of the data. For example, sorting by age first then sex then income might yield a different set of imputed values than sorting by sex, then age, then income.   
+
+---
 ## Regression Imputation
 
  - Fill in missing values using fitted values from a regression model
