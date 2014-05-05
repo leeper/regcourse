@@ -45,6 +45,8 @@ name: outline
 
 ???
 
+Notes:
+
  - Most data we work with is organized, cleaned, etc.
  - In reality, data are never clean
    - We either have to make them or we get them from someone else
@@ -75,6 +77,7 @@ name: outline
 
  - Ideally we don't have any missing data
 
+ - Since this is never the case we have to respond to it
 
 ---
 ## Effects of Missing Data
@@ -105,11 +108,40 @@ Problem from a causal perspective: if missingness perfectly determined by a thir
 
 ---
 ## Scaling
+
   - We haven't talked a lot about scaling in this class
-  - Scaling is a good example of the problems associated with missing data
+  
   - How do we build scales with missing values?
 
 
+---
+## An Example
+
+ - We often use simple additive scales
+ 
+???
+
+Examples: 
+
+ - Number of acts of political participation
+ - Number of correct political knowledge questions
+ - Number of features of a democracy
+
+--
+
+| Case | Item 1 | Item 2 | Item 3 | Sum |
+| --- | --- | --- | --- | --- |
+| A | 1 | 2 | 1 | ? |
+| B | 1 | . | 3 | ? |
+| C | . | 1 | 1 | ? |
+| D | 2 | 1 | 2 | ? |
+| E | 1 | . | . | ? |
+| F | . | . | . | ? |
+
+???
+
+What are the scores for each case in this dataset?
+  
 ---
 ## Two Default Approaches
 
@@ -190,24 +222,34 @@ What do these assumptions mean?
 
 Unfortunately, we can't really test them. We can see whether missingness is independent of observed variables, but not unobserved variables.
 
-We don't talk about censoring in this course, but it is when missingness on a variable depends on the variable itself
+We don't talk about censoring in this course, but it is when missingness on a variable depends on the variable itself. There are various strategies for addressing this like Heckman selection models, Tobit models, etc. All of these are forms of Generalized Linear Models.
 
 ---
 ## Examples?
 
  1. **Missing Completely At Random** (MCAR)
  
+???
+
+Randomly didn't ask some people some questions on a survey.
+
+You as the researcher were carrying the data on paper in a randomly shuffled order and some of the pages blew away in the wind.
+
 --
 
  2. **Missing At Random** (MAR; Ignorable)
  
+???
+
+Responses to a survey question are determined by demographic characteristics. E.g., whether or not someone reports their ideology is a function of their age, sex, and education. We can model missingness in the ideology variable based upon those demographics.
+
 --
 
  3. **Nonignorable** (NI)
 
 ???
 
-
+Whether or not someone reports their ideology is a function of their ideology, or worse an unmeasured third variable (e.g., their personality)
 
 
 ---
@@ -260,6 +302,13 @@ Which of these is a problem?
 ???
 
 Which of these is a problem?
+
+
+---
+name: questions
+class: middle, center
+
+## Questions?
 
 
 ---
@@ -329,6 +378,25 @@ Consequence: replacement of missing values is potentially arbitrary; if missingn
    - What effect does this have on mean, variance, correlations? some, some, some
    - Note: We can use regression and then add random error onto the imputed values to inflate our variance estimates.
 
+---
+## Regression Imputation
+
+ - Fill in missing values using fitted values from a regression model
+ 
+ - We can use any variable in this model
+   - There is no need to respect causal ordering
+ 
+ - Should we impute missing outcome values?
+ 
+???
+
+There seems to be a view that we should not impute missing outcome data. This is a point of contention and there are advocates of imputing all variables.
+
+The challenge is that when you impute missing data for an outcome as a function of covariates and then use those covariates to model the outcome, it is no surprise that the outcome is a function of those covariates.
+
+
+---
+template: questions
 
 ---
 template: outline
@@ -339,7 +407,7 @@ template: outline
 
  1. Engage a single imputation method
  
- 2. Repeat this method multiple times
+ 2. Repeat this method multiple times to create multiple imputed datasets
  
  3. Run analysis on each imputed dataset
  
@@ -347,10 +415,16 @@ template: outline
 
 ???
 
+How many imputed datasets do we need?
+
+The answer is surprisingly small. Generally 5. Unless there is a dramatic amount of missingness, this is only 5% less efficient than imputing an infinite number of times.
+
 There are different algorithms for doing this:
  - King et al. have one
  - Gelman and Hill have another one
  - There are others
+ 
+The basic idea in most of these is to model all of the variables with missingness as a multivariate function of all other variables. The computation details aren't really important.
 
 ---
 ## Multiple Imputation (MI)
@@ -364,15 +438,18 @@ There are different algorithms for doing this:
  - Consequences
    - Somewhat computationally expensive
    - Challenging with large datasets
-   - Software may not handle all statistical tests in an MI framework
-
+   - Software may not, by default, handle all statistical tests in an MI framework
 
 ---
 ## Multiple Imputation (MI)
 
- - Still not very common in political science
+ - Easy if missingness only on one variable
  
- - Doesn't necessarily solve NI missingness
+ - More complicated if missingness on multiple variables
+ 
+ - Still not very commonly used in political science
+ 
+ - Doesn't solve NI missingness
 
 
  
@@ -395,7 +472,7 @@ There are different algorithms for doing this:
 
  - Within-imputation variance:
  
-    `\( Within = \Sigma_1^M \hat{V}_m \)`
+    `\( Within = \frac{1}{m}\Sigma_1^M \hat{V}_m \)`
 
  - Between-imputation variance:
  
@@ -403,18 +480,62 @@ There are different algorithms for doing this:
      
  - Total variance is:
 
-    `\( V_{\beta} = Within + (1 + \frac{1}{m}) \beta \)`
+    `\( V_{\beta} = Within + (1 + \frac{1}{m}) Between \)`
 
 ---
 ## An Example
 
-???
-
-Have people do MI calculation by hand
-
+ - What is the effect of university education on an individuals' political tolerance?
+   - University education is a binary indicator
+   - Tolerance is on an 11-point scale
+ 
+ - Missingness in various covariates
+ 
+ - Multiply impute missing values
+ 
+ - On each imputed dataset, we regress Tolerance on Education + Controls
+ 
+ - Our test statistic is `\( \beta_Educ \)`
 
 ---
-template: question
+## An Example
+
+| Dataset | `\( \beta_Educ \)` | `\( SE_\beta_Educ \)` |
+| --- | --- | --- |
+| 1 | 4.32 | 0.95 |
+| 2 | 4.15 | 1.16 |
+| 3 | 4.86 | 0.83 |
+| 4 | 3.98 | 1.04 |
+| 5 | 4.50 | 0.91 |
+
+ - What is the overall `\( \beta_Educ \)` ?
+ 
+ - What is the overall `\( SE_\beta_Educ \)` ?
+
+???
+
+| Dataset | `\( \beta_Educ \)` | `\( SE_\beta_Educ \)` | `\( Var(\beta_Educ) \)` |
+| --- | --- | --- | --- |
+| 1 | 4.32 | 0.95 | 0.9025 |
+| 2 | 4.15 | 1.16 | 1.3456 |
+| 3 | 4.86 | 0.83 | 0.6889 |
+| 4 | 3.98 | 1.04 | 1.0816 |
+| 5 | 4.50 | 0.91 | 0.8281 |
+
+`\( \beta_Overall = 4.362 \)`
+ 
+`\( Var_Within = \frac{1}{5} (0.9025 + 1.3456 + 0.6889 + 1.0816 + 0.8281) = \frac{4.8467}{5} = 0.96934\)`
+
+`\( Var_Between = \frac{1}{m-1}(-0.042^2 + 0.212^2 + 0.498^2 + -0.382^2 + 0.138^2) = \frac{0.45968}{4} = 0.11492 \)`
+
+`\( Var_\beta = W + (1 + \frac{1}{m}) B = 0.96934 + (1 + .2) (0.11492) = 1.107244 \)`
+
+`\( SE_\beta = \sqrt{1.107244} = 1.052257 \)`
+
+( The raw mean of SEs is 0.978. The sqrt of the mean of the raw variances is 0.96934. )
+
+---
+template: questions
 
 ---
 ## Summary
