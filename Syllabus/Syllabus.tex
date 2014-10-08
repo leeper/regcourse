@@ -1,0 +1,579 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\usepackage{setspace,mdwlist,comment}
+\setlength{\marginparwidth}{.5in}
+\setlength{\parindent}{0in}
+
+% mini table of contents
+\usepackage{minitoc}
+\dosecttoc % make section toc
+\setcounter{secttocdepth}{2} % subsection depth
+\renewcommand{\stctitle}{} % no title
+\nostcpagenumbers
+
+\usepackage{natbib}
+
+% Two lines to create in-text full citations for a syllabus
+% And comment out my other standard bibtex commands
+\usepackage{bibentry}
+\newcommand{\reading}[2][]{\noindent -- {#1}\bibentry{#2}.\vspace{.25em}\\}
+\newcommand{\textbook}[2][]{\noindent -- {#2}, {#1}.\vspace{.25em}\\}
+\newcommand{\thomas}{\vspace{1em}\noindent Instructor: Thomas\vspace{1em}\\}
+\newcommand{\david}{\vspace{1em}\noindent Instructor: David\vspace{1em}\\}
+\newcommand{\seealso}{\noindent \emph{See Also:}\\}
+\newcommand{\topic}[1]{\noindent \textbf{#1}\\}
+
+\usepackage{hyperref}
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={Syllabus: Quantitative Political Analysis},    % title
+    pdfauthor={David Hendry and Thomas J. Leeper},     % author
+    pdfsubject={Political Science},   % subject of the document
+    pdfnewwindow=true,      % links in new window
+    pdfborder={0 0 0}
+}
+
+\title{Syllabus for \textit{Quantitative Political Analysis}}
+\author{David Hendry \& Thomas J. Leeper\\
+Department of Political Science and Government\\
+Aarhus University}
+
+\begin{document}
+\nobibliography*
+
+\maketitle
+
+\faketableofcontents
+
+%\section{Introduction}
+
+Individuals working in the public and private sectors are often tasked with analyzing quantitative data or making use of analyses performed by others. The purpose of this course is to expand and improve significantly participants' ability to perform quantitative analyses of political science data and, further, to better evaluate the use of quantitative research results. Several advanced statistical and analytic techniques will be introduced and applied to research questions from political science. Participants will leave the course with the ability to better assess published research, better perform their own analyses of quantitative data, and better describe and understand the results of such analyses. 
+
+\vspace{1em}
+Among others, the course will discuss the following techniques and topics:
+
+\begin{itemize*}
+\item Linear regression analysis
+\item Interpretation of interactions in regression models
+\item Regression with binary, categorical, and count outcomes
+\item Analysis of data gathered over time and across geographies
+\item Research design for causal inference 
+\item Using Stata for statistical analysis
+\end{itemize*}
+
+In addition, topics such as hypothesis generation and research design will be discussed throughout the course. The course does not have a unified theoretical or empirical focus, but we will touch upon and read empirical literature from most areas of political science including comparative politics, public administration, and international relations.
+
+\vspace{1em}
+Each week, the course will consist of two sessions:
+
+\begin{itemize*}
+\item Lecture % add location and time when available
+\item Hands-on lab session % add location and time when available
+\end{itemize*}
+
+
+\clearpage
+\section{Objectives}
+The learning objectives for the course are as follows. By the end of the course, students should be able to:
+
+\begin{enumerate*}
+\item Describe politically relevant research questions and hypotheses
+\item Evaluate and deduce observable implications from political science theories 
+\item Explain statistical procedures and their appropriate usages
+\item Apply statistical procedures to relevant research problems
+\item Synthesize results from statistical analyses into well-written and well-structured essays
+\item Demonstrate how to use Stata for statistical analysis
+\end{enumerate*}
+
+\section{Exam and Weekly Assignments}
+
+\subsection{Exam (Only for MA/Kandidater)}
+The final exam is a seven-day written assignment analyzing a topic outlined by the instructors using quantitative data. In addition, the students must write four essays during the course on topics defined by the instructors as a prerequisite for the exam
+
+The essays (3-5 pages) must be written in English and are due via email to the appropriate instructor at 12:00 on the dates listed below. The students will receive feedback on the essays and they must all be approved before taking the final exam.
+
+\begin{enumerate*}
+\item Essay 1 due February 27 to David % Something on OLS?
+\item Essay 2 due March 20 to Thomas % Something on causality/research design?
+\item Essay 3 due April 10 to David % Something on panel/multilevel?
+\item Essay 4 due May 1 to Thomas % Something on GLM?
+\end{enumerate*}
+
+\subsection{For PhD Students}
+
+Students can choose from the following course elements:
+
+\begin{enumerate*}
+\item ``Regression with Matrices and MLE'' (1 essay, 2 ECTS)
+\item Sessions 1--5 (1 essay, 7 ECTS)
+\item Sessions 1--5, plus one additional session (2 essays, 9 ECTS)
+\item Sessions 1--5, plus two additional sessions (3 essays, 11 ECTS)
+\item Sessions 1--5, plus three additional sessions (3 essays, 12 ECTS)
+\item Entire course (4 essays, 15 ECTS)
+\end{enumerate*}
+
+PhD students must notify the course instructors of their choice by the end of Session 5.
+
+
+\clearpage
+\section{Reading Material}
+The assigned material for the course includes about 2400 pages including several textbooks and empirical research articles, all of which are available online or in the printed course packet. All readings should be completed for the day they are described. {\em There is reading assigned on the first day.} The textbooks for the course are as follows:\\
+
+\reading{CameronTrivedi2010}
+\reading{Sonderskov2011}
+\reading{AngristPischke2008}
+\reading{Long1997}
+\reading{Allison2009} % Panel book
+%\reading{} % OLS book
+% others?
+
+PhD students are additionally required to obtain:
+
+\reading{Fox2009} % ``Mathematical Primer for Social Scientists''
+
+\section{Course Website}
+All information about the course will be posted on Blackboard. Any changes to the syllabus or additional notes will be made available there.
+
+
+
+
+
+\clearpage
+\section{Schedule}
+The general schedule for the course is as follows. Details on topics covered and the readings for each week are provided on the following pages.
+
+\secttoc
+
+\clearpage
+
+\subsection{Introduction and Research Design (Week 6)}
+\emph{What topics will we cover in this course? How do we think about causality for the purposes of research design? How can experiments help us understand causal relationships?}
+
+\thomas
+
+\subsection*{Lecture}
+
+\begin{itemize*}
+\item Course overview
+    \begin{itemize*}
+    \item Readings and textbooks
+    \item Exam
+    \item Four essays
+    \item Plan for the course
+    \end{itemize*}
+\item Asking good research questions
+\item Research design
+\item Philosophies of causality
+\item Experiments and matching
+\end{itemize*}
+
+\subsubsection*{Readings}
+\textbook[Ch. 2]{Angrist and Pischke}
+
+\seealso
+
+\subsection*{Lab}
+\begin{itemize*}
+\item Basics in Stata
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+\textbook[Ch. 1--3]{S{\o}nderskov}
+
+
+
+
+
+
+\clearpage
+\subsection{Research Design for Causal Inference (Week 7)}
+\emph{motivating puzzles}
+
+\david
+
+\subsection*{Lecture}
+
+\begin{itemize*}
+\item % Topics to be covered
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+\subsection*{Lab}
+\begin{itemize*}
+\item Further basics in Stata
+\end{itemize*}
+
+
+\subsubsection*{Readings for lab}
+\textbook[Ch. 4--6]{S{\o}nderskov}
+
+
+
+
+
+\clearpage
+\subsection{Ordinary Least Squares Regression (Week 8)}
+\emph{How do we estimate causal effects using regression analysis? How do we interpret linear regression coefficients for different types of variables? What do goodness-of-fit measures tell us?}
+
+\thomas
+
+\subsection*{Lecture}
+
+\begin{itemize*}
+\item OLS method
+\item Interpretation of coefficients
+\item Standard errors, t-tests, and p-values
+\item Goodness-of-fit measures
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+\subsection*{Lab}
+\begin{itemize*}
+\item OLS in Stata
+\item Reporting regression results
+\end{itemize*}
+
+
+\subsubsection*{Readings for lab}
+\textbook[Ch. 8--9]{S{\o}nderskov}
+
+
+
+
+\clearpage
+\subsection{Ordinary Least Squares Regression II (Week 9)}
+\emph{How do state and test hypotheses about heterogeneous effects? How do we interpret those effects in OLS interaction terms? When do we need to estimate alternative standard errors for OLS estimates?}
+
+\david
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Effect heterogeneity and interaction terms
+\item Standard errors
+\item Heteroskedasticity
+\item Clustered standard errors
+\end{itemize*}
+
+\subsubsection*{Readings}
+\textbook[293--315]{Angrist and Pischke}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item Estimating and interpreting interaction terms
+\item Heteroskedasticity-consistent standard errors
+\item Clustered standard errors
+\item Stata factor variables
+\item The \verb|margins| command
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+\textbook[Ch. 10]{S{\o}nderskov}
+
+
+
+
+
+\clearpage
+\subsection{Practical Data Issues (Week 10)}
+\emph{}
+
+\thomas
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Multivariate scaling and reliability
+\item Variable transformations
+\item Missing data, case deletion, and imputation
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item Scaling and reliability
+\item Variable transformations and regression interpretation
+\item Missing data imputation
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Research Designs for Causal Inference (Week 11)}
+\emph{}
+
+\thomas
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Instrumental Variables
+\item Regression Discontinuity Designs
+\item Difference-in-Differences
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Panel Analysis for Continuous Outcomes (Week 12)}
+\emph{}
+
+\david
+
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Difference-in-differences, continued
+\item First-differences and fixed effects
+%\item Random effects models?
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item Data in ``wide'' and ``long'' formats
+\item Panel regression
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Multi-level Modeling (Week 13)}
+\emph{}
+
+\david
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Maximum Likelihood Estimation (Week 14 or 15)} % Easter Th Apr 2 - Mon Apr 6 (Meet in wk 14 if Mon/Tu class; otherwise meet in wk 15)
+\emph{}
+
+\david
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Maximum Likelihood Estimation
+\item Generalized Linear Models
+\item Logistic regression
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+\clearpage
+\subsection*{No class (Week 16)} % MPSA
+
+
+\clearpage
+\subsection{Generalized Linear Models (Week 17)}
+\emph{}
+
+\thomas
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Logit versus Probit
+\item Heterogeneous effects and interaction terms
+\item Interpretation in Generalized Linear Models
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item \verb|margins| for generalized linear models
+\item \verb|marginsplot|
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{GLMs for Ordered, Multinomial, and Count Outcomes (Week 18)}
+\emph{}
+
+\david
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Ordered logit and probit
+\item Multinomial logit
+\item Count outcomes
+    \begin{itemize*}
+    \item Poisson regression
+    \item Dispersion and alternative count models
+    \end{itemize*}
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Survival and Duration Analysis (Week 19)}
+\emph{}
+
+\david
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
+
+
+\clearpage
+\subsection{Panel Analysis for Discrete Outcomes (Week 20)} % Ascension Th May 14
+\emph{}
+
+\thomas
+
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+\subsection*{Lab for lab}
+
+\begin{itemize*}
+\item % topics
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+
+
+
+\clearpage
+\subsection{Conclusion and Wrap-up (Week 21)} 
+\emph{What have we learned? What didn't we learn?}
+
+\david
+\thomas
+
+\vspace{1em}
+\subsection*{Lecture}
+\begin{itemize*}
+\item Wrap-up
+\item Course evaluations
+\item Questions about the exam
+\end{itemize*}
+
+\subsubsection*{Readings}
+
+\seealso
+
+
+
+
+
+% load bibtext, but don't generate a bibliography
+\bibliographystyle{plain}
+\nobibliography{Syllabus}
+
+\end{document}
