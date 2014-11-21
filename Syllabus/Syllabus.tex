@@ -102,7 +102,7 @@ The essays (3-5 pages) must be written in English and are due via email to the a
 \item Essay 1 due February 27 to David % Something on OLS?
 \item Essay 2 due March 20 to Thomas % Something on causality/research design?
 \item Essay 3 due April 10 to David % Something on panel/multilevel?
-\item Essay 4 due May 1 to Thomas % Something on GLM?
+\item Essay 4 due May 8 to Thomas % Something on GLM?
 \end{enumerate*}
 
 \subsection{For PhD Students}
@@ -114,7 +114,7 @@ Students can choose from the following course elements:
 \item Sessions 1--5 (1 essay, 7 ECTS)
 \item Sessions 1--5, plus one additional session (2 essays, 9 ECTS)
 \item Sessions 1--5, plus two additional sessions (3 essays, 11 ECTS)
-\item Sessions 1--5, plus three additional sessions (3 essays, 12 ECTS)
+\item Sessions 1--5, plus three additional sessions (3 essays, 13 ECTS)
 \item Entire course (4 essays, 15 ECTS)
 \end{enumerate*}
 
@@ -126,14 +126,15 @@ PhD students must notify the course instructors of their choice by the end of Se
 The assigned material for the course includes about 2400 pages including several textbooks and empirical research articles, all of which are available online or in the printed course packet. All readings should be completed for the day they are described. {\em There is reading assigned on the first day.} The textbooks for the course are as follows:\\
 
 \reading{CameronTrivedi2010}
-\reading{Sonderskov2011}
+\reading{Sonderskov2014} %second edition
 \reading{AngristPischke2008}
 \reading{Long1997}
 \reading{Allison2009} % Panel book
-%\reading{} % OLS book
-% others?
+\reading{Berry1993} % OLS book
 
-PhD students are additionally required to obtain:
+\noindent Note: The S{\o}nderskov text is also available in English from the publisher.
+
+\noindent PhD students are additionally required to obtain:
 
 \reading{Fox2009} % ``Mathematical Primer for Social Scientists''
 
@@ -174,7 +175,10 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\textbook[Ch. 2]{Angrist and Pischke}
+\textbook[Ch.2]{Angrist and Pischke}
+\reading{HoImaiKingStuart2007}
+% experimental example
+\reading{HendersonChatfield2011} % or Rubin on tobacco
 
 \seealso
 
@@ -192,7 +196,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \clearpage
-\subsection{Research Design for Causal Inference (Week 7)}
+\subsection{Research Design II (Week 7)}
 \emph{motivating puzzles}
 
 \david
@@ -200,10 +204,15 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lecture}
 
 \begin{itemize*}
-\item % Topics to be covered
+\item Defining causality in a regression framework
+\item Model-building
+\item Reporting regression results
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[Ch.3 (up to p.69)]{AngristPishke2009}
+% KKV Ch.3 (causality) and Ch.5 (issues)
+\reading{Holland1986}
 
 \seealso
 
@@ -236,6 +245,11 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[pp.1--67]{Berry1993}
+\textbook[Ch.3 (from p.69)]{AngristPishke2009}
+\textbook{CameronTrivedi}
+\reading{Englebert2000}
+
 
 \seealso
 
@@ -243,6 +257,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \begin{itemize*}
 \item OLS in Stata
 \item Reporting regression results
+\item Stata factor variables
+% other standard error stuff?
 \end{itemize*}
 
 
@@ -263,11 +279,16 @@ The general schedule for the course is as follows. Details on topics covered and
 \item Effect heterogeneity and interaction terms
 \item Standard errors
 \item Heteroskedasticity
-\item Clustered standard errors
+%\item Clustered standard errors
 \end{itemize*}
 
 \subsubsection*{Readings}
 \textbook[293--315]{Angrist and Pischke}
+\textbook[p.67 to end]{Berry1993}
+% clustering?
+% Friederich articles on interactions
+\reading{BramborClarkGolder2006}
+% application
 
 \seealso
 
@@ -278,8 +299,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \item Estimating and interpreting interaction terms
 \item Heteroskedasticity-consistent standard errors
 \item Clustered standard errors
-\item Stata factor variables
-\item The \verb|margins| command
+\item The \texttt{margins} command
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
@@ -303,6 +323,9 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+\reading[Excerpt from ]{Lohr2009}
+% something we can replicate (see Greg Huber)
+% data gathering
 
 \seealso
 
@@ -333,6 +356,11 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+\reading[Ch.4,6]{AngristPischke2009}
+\reading{Carrubba2001}
+% Acemoglu, Johnson, Robinson IV example?
+% Duflo Dams?
+% Serritzlew Danish municipality reform article
 
 \seealso
 
@@ -340,7 +368,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab}
 
 \begin{itemize*}
-\item % topics
+\item Regression Discontinuity Design analysis
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
@@ -358,10 +386,13 @@ The general schedule for the course is as follows. Details on topics covered and
 \begin{itemize*}
 \item Difference-in-differences, continued
 \item First-differences and fixed effects
-%\item Random effects models?
+\item Random effects models
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[Ch.5]{AngristPischke2009}
+\textbook[Ch.1,2]{Allison2009}
+
 
 \seealso
 
@@ -374,7 +405,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-
+\textbook[sections]{CameronTrivedi}
 
 
 \clearpage
@@ -385,7 +416,10 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsection*{Lecture}
 \begin{itemize*}
-\item % topics
+\item Multi-level data structures
+\item Logic of multi-level models
+\item Hierarchical linear model
+\item Random effects versus fixed effects
 \end{itemize*}
 
 \subsubsection*{Readings}
@@ -396,15 +430,18 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab}
 
 \begin{itemize*}
-\item % topics
+\item Estimation
+\item Testing for fixed versus random effects
+\item Interpretation
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-
+% stata book
+% Cameron and Trivedi
 
 
 \clearpage
-\subsection{Maximum Likelihood Estimation (Week 14 or 15)} % Easter Th Apr 2 - Mon Apr 6 (Meet in wk 14 if Mon/Tu class; otherwise meet in wk 15)
+\subsection{Maximum Likelihood Estimation (Week 14)} % Easter Th Apr 2 - Mon Apr 6 (Meet in wk 14 if Mon/Tu class; otherwise meet in wk 15)
 \emph{}
 
 \david
@@ -417,6 +454,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[Ch.1--3]{Long1997}
+
 
 \seealso
 
@@ -424,10 +463,45 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab}
 
 \begin{itemize*}
-\item % topics
+\item Interpretation of logistic regression coefficients
+\item Interpret Wald tests and likelihood ratio tests
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
+
+
+\clearpage
+\subsection{Interpretation of GLMs (Week 15)}
+\emph{}
+
+\thomas
+
+\subsection*{Lecture}
+\begin{itemize*}
+\item Logit versus Probit % or maybe this willl be covered in previous week
+\item Heterogeneous effects and interaction terms
+\item Predicted probabilities and marginal effects
+\item Interpretation in Generalized Linear Models
+\end{itemize*}
+
+\subsubsection*{Readings}
+% Cameron and Trivedi
+% Long Ch.4
+% Hobolt
+% marginal effects article (Golder?)
+
+\seealso
+
+
+\subsection*{Lab}
+
+\begin{itemize*}
+\item \texttt{margins} for generalized linear models
+\item \texttt{marginsplot}
+\end{itemize*}
+
+\subsubsection*{Readings for lab}
+
 
 
 \clearpage
@@ -435,36 +509,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \clearpage
-\subsection{Generalized Linear Models (Week 17)}
-\emph{}
-
-\thomas
-
-\subsection*{Lecture}
-\begin{itemize*}
-\item Logit versus Probit
-\item Heterogeneous effects and interaction terms
-\item Interpretation in Generalized Linear Models
-\end{itemize*}
-
-\subsubsection*{Readings}
-
-\seealso
-
-
-\subsection*{Lab}
-
-\begin{itemize*}
-\item \verb|margins| for generalized linear models
-\item \verb|marginsplot|
-\end{itemize*}
-
-\subsubsection*{Readings for lab}
-
-
-
-\clearpage
-\subsection{GLMs for Ordered, Multinomial, and Count Outcomes (Week 18)}
+\subsection{GLMs for Ordered, Multinomial, and Count Outcomes (Week 17)}
 \emph{}
 
 \david
@@ -481,6 +526,10 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[Ch.5,6,8]{Long1997}
+% multinomial article
+% ordered article
+% Shields and Huang
 
 \seealso
 
@@ -488,15 +537,19 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab}
 
 \begin{itemize*}
-\item % topics
+\item Estimation of ordered, multinomial, and count models
+\item Interpretation of results
+\item Presentation of results
+\item Testing for overdispersion
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
+% Long and Freese
 
 
 
 \clearpage
-\subsection{Survival and Duration Analysis (Week 19)}
+\subsection{Survival and Duration Analysis (Week 18)}
 \emph{}
 
 \david
@@ -507,6 +560,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
+% Box-Steffensmeier and Jones section
 
 \seealso
 
@@ -514,7 +568,9 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab}
 
 \begin{itemize*}
-\item % topics
+\item Estimation of different models
+\item Model testing and comparison
+\item Interpretation
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
@@ -522,7 +578,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \clearpage
-\subsection{Panel Analysis for Discrete Outcomes (Week 20)} % Ascension Th May 14
+\subsection{Panel Analysis for Discrete Outcomes (Week 19)}
 \emph{}
 
 \thomas
@@ -530,10 +586,15 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsection*{Lecture}
 \begin{itemize*}
-\item % topics
+\item Panel binary outcome models
+\item Panel count models
 \end{itemize*}
 
 \subsubsection*{Readings}
+\textbook[Ch.3,4]{Allison2009}
+% Cameron and Trivedi
+% example of panel data using binary outcome
+% Bowers participation article using socialization dataset
 
 \seealso
 
@@ -541,7 +602,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsection*{Lab for lab}
 
 \begin{itemize*}
-\item % topics
+\item Estimating these
+\item Interpretation
 \end{itemize*}
 
 \subsubsection*{Readings}
@@ -550,7 +612,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \clearpage
-\subsection{Conclusion and Wrap-up (Week 21)} 
+\subsection{Conclusion and Wrap-up (Week 20)} % May 13
 \emph{What have we learned? What didn't we learn?}
 
 \david
