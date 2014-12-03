@@ -454,38 +454,53 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-% stata book
-% Cameron and Trivedi
+\textbook[(Review previous sections)]{Rabe-HeskethSkrondal2008}
+\textbook[(56--58; 305--316)]{CameronTrivedi2010}
 
 
 \clearpage
 \subsection{Maximum Likelihood Estimation (Week 14)} % Easter Th Apr 2 - Mon Apr 6 (Meet in wk 14 if Mon/Tu class; otherwise meet in wk 15)
-\emph{}
+\emph{What is the likelihood theory of statistical inference? What do we do when our dependent variable is binary? What is the relationship between classical linear regression models and generalized linear models?}
 
 \david
 
 \subsection*{Lecture}
 \begin{itemize*}
+\item Probability distributions
+  \begin{itemize*}
+  \item Discrete, continuous
+  \end{itemize*}
 \item Maximum Likelihood Estimation
 \item Generalized Linear Models
 \item Logistic regression
 \end{itemize*}
 
-\subsubsection*{Readings}
-\textbook[Ch.1--3]{Long1997}
+\subsubsection*{Readings}        % pages
+\textbook[Ch.1--3]{Long1997}     % 84
+\reading{Hobolt2007}             % 32
+\reading{PriceZaller1993}        % 32
 
 
 \seealso
+
+\textbook[(13--26)]{Maddala1986}
+\textbook[Ch.1--3]{King1989}
+\textbook[Ch.1--4]{Gill2000}
+\reading{Ragsdale1984}
+\reading{McCarthyMcPhailSmith1996}
 
 
 \subsection*{Lab}
 
 \begin{itemize*}
+\item Estimation of maximum likelihood models
 \item Interpretation of logistic regression coefficients
 \item Interpret Wald tests and likelihood ratio tests
 \end{itemize*}
 
-\subsubsection*{Readings for lab}
+
+\subsubsection*{Readings for lab}                             % pages
+\textbook[Ch.3--4 (skim sections on probit)]{LongFreese2005}  % 108
 
 
 \clearpage
@@ -528,7 +543,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \clearpage
 \subsection{GLMs for Ordered, Multinomial, and Count Outcomes (Week 17)}
-\emph{}
+\emph{What do we do when our dependent variable is qualitative, categorical, or a count? How can we make predictions from qualitative, categorical, or count models? What are the similarities between linear and generalized linear models when it comes to inference?}
 
 \david
 
@@ -543,14 +558,15 @@ The general schedule for the course is as follows. Details on topics covered and
     \end{itemize*}
 \end{itemize*}
 
-\subsubsection*{Readings}
-\textbook[Ch.5,6,8]{Long1997}
-% multinomial article
-% ordered article
-% Shields and Huang
+\subsubsection*{Readings}      % pages
+\textbook[Ch.5,6,8]{Long1997}  % 107
+\reading{WhittenPalmer1996}    % 30
 
 \seealso
 
+\reading{ShieldsHuang1995}     % 14
+\reading{Michelson2003}
+\reading{AlvarezNagler1998}
 
 \subsection*{Lab}
 
@@ -558,42 +574,54 @@ The general schedule for the course is as follows. Details on topics covered and
 \item Estimation of ordered, multinomial, and count models
 \item Interpretation of results
 \item Presentation of results
-\item Testing for overdispersion
+\item Testing for overdispersion in Poisson models
 \end{itemize*}
 
-\subsubsection*{Readings for lab}
-% Long and Freese
+\subsubsection*{Readings for lab}    % pages
+\textbook[Ch.5,6,8]{LongFreese2005}  % 171
 
 
 
 \clearpage
 \subsection{Survival and Duration Analysis (Week 18)}
-\emph{}
+\emph{What do we do if the quantity that we want to model is time? What if the phenomenon that we want to examine is political change? How can we study the duration and timing of political events? What are the similarities between duration models and other regression models when it comes to estimation and interpretation?}
 
 \david
 
 \subsection*{Lecture}
 \begin{itemize*}
-\item % topics
+\item The logic of survival/duration analysis
+\item Maximum likelihood survival models
+\item The Cox model
+\item The proportional hazards assumption
+\item Model diagnostics
 \end{itemize*}
 
-\subsubsection*{Readings}
-% Box-Steffensmeier and Jones section
+\subsubsection*{Readings}                        % pages
+\reading{Box-SteffensmeierJones1997}             % 48
+\textbook[Ch.3,4,8]{Box-SteffensmeierJones2004}  % 70
+\reading{Box-SteffensmeierZorn2001}              % 17
 
 \seealso
 
+\reading{Box-SteffensmeierReiterZorn2003}
+\reading{Bennett1997}
+\reading{Ahlquist2010}
+\reading{Cunningham2011}
+\reading{SimmonsElkins2004}
 
 \subsection*{Lab}
 
 \begin{itemize*}
-\item Estimation of different models
+\item Estimation of maximum likelihood survival models
 \item Model testing and comparison
-\item Interpretation
+\item Estimation of Cox models
+\item Testing the proportional hazards assumption
+\item Interpretation of coefficients
 \end{itemize*}
 
-\subsubsection*{Readings for lab}
-
-
+\subsubsection*{Readings for lab}                                            % pages
+\textbook[(47--77, 129--144, 203--211, 245--268)]{ClevesGouldGutierrez2003}  % 80
 
 \clearpage
 \subsection{Panel Analysis for Discrete Outcomes (Week 19)}
