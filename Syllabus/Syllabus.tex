@@ -1,5 +1,6 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{natbib}
 
 \usepackage{setspace,mdwlist,comment}
 \setlength{\marginparwidth}{.5in}
@@ -18,7 +19,7 @@
 % And comment out my other standard bibtex commands
 \usepackage{bibentry}
 \newcommand{\reading}[2][]{\noindent -- {#1}\bibentry{#2}.\vspace{.25em}\\}
-\newcommand{\textbook}[2][]{\noindent -- {#2}, {#1}.\vspace{.25em}\\}
+\newcommand{\textbook}[2][]{\noindent -- {#1}#2.\vspace{.25em}\\}
 \newcommand{\thomas}{\vspace{1em}\noindent Instructor: Thomas\vspace{1em}\\}
 \newcommand{\david}{\vspace{1em}\noindent Instructor: David\vspace{1em}\\}
 \newcommand{\seealso}{\noindent \emph{See Also:}\\}
@@ -93,7 +94,7 @@ The learning objectives for the course are as follows. By the end of the course,
 
 \section{Exam and Weekly Assignments}
 
-\subsection{Exam (Only for MA/Kandidater)}
+\subsection{Exam (Only for Master/KA)}
 The final exam is a seven-day written assignment analyzing a topic outlined by the instructors using quantitative data. In addition, the students must write four essays during the course on topics defined by the instructors as a prerequisite for the exam
 
 The essays (3-5 pages) must be written in English and are due via email to the appropriate instructor at 12:00 on the dates listed below. The students will receive feedback on the essays and they must all be approved before taking the final exam.
@@ -126,14 +127,16 @@ PhD students must notify the course instructors of their choice by the end of Se
 The assigned material for the course includes about 2400 pages including several textbooks and empirical research articles, all of which are available online or in the printed course packet. All readings should be completed for the day they are described. {\em There is reading assigned on the first day.} The textbooks for the course are as follows:\\
 
 \reading{CameronTrivedi2010}
-\reading{Sonderskov2014}\footnote{An English-language translation of the S{\o}nderskov text is also available from the same publisher.}
-\reading{AngristPischke2008}
+\reading{Sonderskov2014}
+\reading{AngristPischke2009}
 \reading{Long1997}
 \reading{Allison2009} % Panel book
 \reading{Berry1993} % OLS book
-\noindent PhD students are additionally required to obtain:
 
-\reading{Fox2009} % ``Mathematical Primer for Social Scientists''
+\noindent Note: An English-language translation of the S{\o}nderskov book, with identical content, is also available from the same publisher.\\
+
+\noindent PhD students are additionally required to obtain:\\
+\reading{Fox2009}
 
 \section{Course Website}
 All information about the course will be posted on Blackboard. Any changes to the syllabus or additional notes will be made available there.
@@ -150,7 +153,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \clearpage
 
-\subsection{Introduction and Research Design (Week 6)}
+\subsection{Introduction and Research Design I (Week 6)}
 \emph{What topics will we cover in this course? How do we think about causality for the purposes of research design? How can experiments help us understand causal relationships?}
 
 \thomas
@@ -172,8 +175,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\textbook[Ch.2]{Angrist and Pischke}
-\reading{HoImaiKingStuart2007}
+\textbook[Ch.2 from ]{Angrist and Pischke}
+\reading{ImaiKingStuart2008}
 % experimental example
 \reading{HendersonChatfield2011} % or Rubin on tobacco
 
@@ -185,7 +188,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-\textbook[Ch. 1--3]{S{\o}nderskov}
+\textbook[Ch. 1--3 from ]{S{\o}nderskov}
 
 
 
@@ -207,9 +210,9 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}                         % pages
-\textbook[Ch.3 (up to p.69)]{AngristPischke2009}  % 43
-\textbook[Ch.3]{KingKeohaneVerba1994}             % 40
-\textbook[(17--25)]{Gujarati2002}                 % 9
+\textbook[Ch.3 (up to p.69) from ]{Angrist and Pischke}  % 43
+\reading[Ch.3 from ]{KingKeohaneVerba1994}             % 40
+\reading[pp.17--25 from ]{Gujarati2002}                 % 9
 \reading{Holland1986}                             % 16
 
 \seealso
@@ -224,7 +227,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \subsubsection*{Readings for lab}   % pages
-\textbook[Ch. 4--6]{S{\o}nderskov}  % 96
+\textbook[Ch. 4--6 from ]{S{\o}nderskov}  % 96
 
 
 
@@ -246,9 +249,9 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\textbook[pp.1--67]{Berry1993}
-\textbook[Ch.3 (from p.69)]{AngristPishke2009}
-\textbook{CameronTrivedi}
+\textbook[pp.1--67 from ]{Berry}
+\textbook[Ch.3 (from p.69) from ]{Angrist and Pishke}
+\textbook[TBD from ]{Cameron and Trivedi}
 \reading{Englebert2000}
 
 
@@ -264,7 +267,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \subsubsection*{Readings for lab}
-\textbook[Ch. 8--9]{S{\o}nderskov}
+\textbook[Ch. 8--9 from ]{S{\o}nderskov}
 
 
 
@@ -284,8 +287,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}                 % pages
-\textbook[293--315]{AngristPischke2009}   % 23
-\textbook[p.67 to end]{Berry1993}         % 24
+\textbook[pp.293--315 from ]{Angrist and Pischke}   % 23
+\textbook[p.67 to end from ]{Berry}         % 24
 \reading{Friedrich1982}                   % 37
 \reading{BramborClarkGolder2006}          % 20
 \reading{MitchellMoore2002}               % 15
@@ -307,7 +310,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-\textbook[Ch. 10]{S{\o}nderskov}
+\textbook[Ch. 10 from ]{S{\o}nderskov}
 
 
 
@@ -315,19 +318,20 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \clearpage
 \subsection{Practical Data Issues (Week 10)}
-\emph{}
+\emph{How do we construct, tidy, and transform empirical observations into an organized rectangular dataset for use in our analyses? What problems do we encounter when dealing with real-world data? How do we address those challenges?}
 
 \thomas
 
 \subsection*{Lecture}
 \begin{itemize*}
+\item Data cleaning and transformations
 \item Multivariate scaling and reliability
 \item Variable transformations
 \item Missing data, case deletion, and imputation
 \end{itemize*}
 
 \subsubsection*{Readings}
-\reading[Excerpt from ]{Lohr2009}
+\reading[TBD from ]{Lohr2009}
 % something we can replicate (see Greg Huber)
 % data gathering
 
@@ -348,7 +352,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \clearpage
 \subsection{Research Designs for Causal Inference (Week 11)}
-\emph{}
+\emph{What kinds of naturally occurring variation can we utilize to make meaningful causal inferences? What sorts of research designs (and associated analyses) that do not involve researcher-created randomization allow us to infer causal relationships?}
 
 \thomas
 
@@ -360,7 +364,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\reading[Ch.4,6]{AngristPischke2009}
+\textbook[Ch.4,6 from ]{Angrist and Pischke}
 \reading{Carrubba2001}
 % Acemoglu, Johnson, Robinson IV example?
 % Duflo Dams?
@@ -394,9 +398,9 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}            % pages
-\textbook[Ch.5]{AngristPischke2009}  % 27
-\textbook[Ch.1,2]{Allison2009}       % 27
-\textbook[Ch.16]{Gujarati2002}       % 20
+\textbook[Ch.5 from ]{Angrist and Pischke}  % 27
+\textbook[Ch.1,2 from ]{Allison}       % 27
+\reading[Ch.16 from]{Gujarati2002}       % 20
 \reading{FinkelSmith2011}            % 19
 \reading{GerberHuber2010}            % 21
 
@@ -416,7 +420,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}    % pages
-\textbook[Ch.8]{CameronTrivedi2010}  % 50
+\textbook[Ch.8 from ]{CameronTrivedi2010}  % 50
 
 
 \clearpage
@@ -435,12 +439,12 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}                               % pages
-\textbook[(51--83; 91--130)]{Rabe-HeskethSkrondal2008}  % 73
-\textbook[Ch.1--3]{RaudenbushBryk2002}                  % 65
+\reading[(51--83; 91--130) from ]{Rabe-HeskethSkrondal2008}  % 73
+\reading[Ch.1--3 from ]{RaudenbushBryk2002}                  % 65
 
 \seealso
 
-\reading{S{\o}nderskov2011a}
+\reading{Sonderskov2011a}
 \reading{FieldhouseTranmerRussell2007}
 \reading{SteenbergenJones2002}
 
@@ -454,8 +458,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-\textbook[(Review previous sections)]{Rabe-HeskethSkrondal2008}
-\textbook[(56--58; 305--316)]{CameronTrivedi2010}
+\reading[(Review previous sections) from ]{Rabe-HeskethSkrondal2008}
+\textbook[(56--58; 305--316) from ]{Cameron and Trivedi}
 
 
 \clearpage
@@ -476,16 +480,16 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}        % pages
-\textbook[Ch.1--3]{Long1997}     % 84
+\textbook[Ch.1--3 from ]{Long}     % 84
 \reading{Hobolt2007}             % 32
 \reading{PriceZaller1993}        % 32
 
 
 \seealso
 
-\textbook[(13--26)]{Maddala1986}
-\textbook[Ch.1--3]{King1989}
-\textbook[Ch.1--4]{Gill2000}
+\reading[(13--26) from ]{Maddala1986}
+\reading[Ch.1--3 from ]{King1989}
+\reading[Ch.1--4 from ]{Gill2000}
 \reading{Ragsdale1984}
 \reading{McCarthyMcPhailSmith1996}
 
@@ -500,12 +504,12 @@ The general schedule for the course is as follows. Details on topics covered and
 
 
 \subsubsection*{Readings for lab}                             % pages
-\textbook[Ch.3--4 (skim sections on probit)]{LongFreese2005}  % 108
+\reading[Ch.3--4 (skim sections on probit) from ]{LongFreese2005}  % 108
 
 
 \clearpage
 \subsection{Interpretation of GLMs (Week 15)}
-\emph{}
+\emph{How do we interpret the results of models involving binary outcomes? How can we translate regression results for these models into meaningful quantities of interest and interpretable graphical results?}
 
 \thomas
 
@@ -559,7 +563,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}      % pages
-\textbook[Ch.5,6,8]{Long1997}  % 107
+\textbook[Ch.5,6,8 from ]{Long}  % 107
 \reading{WhittenPalmer1996}    % 30
 
 \seealso
@@ -578,7 +582,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}    % pages
-\textbook[Ch.5,6,8]{LongFreese2005}  % 171
+\reading[Ch.5,6,8 from ]{LongFreese2005}  % 171
 
 
 
@@ -599,7 +603,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsubsection*{Readings}                        % pages
 \reading{Box-SteffensmeierJones1997}             % 48
-\textbook[Ch.3,4,8]{Box-SteffensmeierJones2004}  % 70
+\reading[Ch.3,4,8 from ]{Box-SteffensmeierJones2004}  % 70
 \reading{Box-SteffensmeierZorn2001}              % 17
 
 \seealso
@@ -621,11 +625,11 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}                                            % pages
-\textbook[(47--77, 129--144, 203--211, 245--268)]{ClevesGouldGutierrez2003}  % 80
+\reading[(47--77, 129--144, 203--211, 245--268) from ]{ClevesGouldGutierrez2003}  % 80
 
 \clearpage
 \subsection{Panel Analysis for Discrete Outcomes (Week 19)}
-\emph{}
+\emph{How do we analyze data involving both repeated observation of the same units and non-continuous outcomes?}
 
 \thomas
 
@@ -637,7 +641,8 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\textbook[Ch.3,4]{Allison2009}
+\textbook[Ch.3,4 from ]{Allison}
+\textbook[pp.615--641 from ]{Cameron and Trivedi}
 % Cameron and Trivedi
 % example of panel data using binary outcome
 % Bowers participation article using socialization dataset
@@ -683,5 +688,6 @@ The general schedule for the course is as follows. Details on topics covered and
 % load bibtext, but don't generate a bibliography
 \bibliographystyle{plain}
 \nobibliography{Syllabus}
+
 
 \end{document}
