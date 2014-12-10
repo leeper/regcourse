@@ -20,9 +20,9 @@
 \usepackage{bibentry}
 \newcommand{\reading}[2][]{\noindent -- {#1}\bibentry{#2}.\vspace{.25em}\\}
 \newcommand{\textbook}[2][]{\noindent -- {#1}#2.\vspace{.25em}\\}
-\newcommand{\thomas}{\vspace{1em}\noindent Instructor: Thomas\vspace{1em}\\}
-\newcommand{\david}{\vspace{1em}\noindent Instructor: David\vspace{1em}\\}
-\newcommand{\seealso}{\noindent \emph{See Also:}\\}
+\newcommand{\thomas}{\vspace{1em}\noindent Instructor: Thomas\\}
+\newcommand{\david}{\vspace{1em}\noindent Instructor: David\\}
+\newcommand{\seealso}{\noindent \emph{See Also:}}
 \newcommand{\topic}[1]{\noindent \textbf{#1}\\}
 
 \usepackage{hyperref}
@@ -40,10 +40,9 @@
     pdfborder={0 0 0}
 }
 
-\title{Syllabus for \textit{Quantitative Political Analysis}}
-\author{David Hendry \& Thomas J. Leeper\\
-Department of Political Science and Government\\
-Aarhus University}
+\title{Syllabus for \textit{Quantitative Political Analysis}\\Department of Political Science and Government\\Aarhus University\\Spring Term 2015}
+\author{David Hendry\thanks{Office 1341-124, \url{mailto:david.hendry@ps.au.dk}} \and
+Thomas J. Leeper\thanks{Office 1340-232, \url{mailto:tleeper@ps.au.dk}}}
 
 \begin{document}
 \nobibliography*
@@ -137,6 +136,11 @@ The assigned material for the course includes about 2400 pages including several
 
 \noindent PhD students are additionally required to obtain:\\
 \reading{Fox2009}
+
+\section{Software}
+The course will use \href{http://www.stata.com/}{Stata 13} for all all in-class activities, lab sessions, homework, and the exam. Stata is not free, but a student license can be purchased for 200kr. Details on purchasing Stata are available here: \href{http://studerende.au.dk/en/selfservice/local-it-services-and-support/it-at-bss/analytics-tools/stata/}{http://studerende.au.dk/en/selfservice/local-it-services-and-support/it-at-bss/analytics-tools/stata/}. Laboratory sessions will meet in Room 1341-315, which has computers with Stata available for free use.\\
+
+Note: PhD students will also use R for the ``Regression with Matrices and MLE'' module. R can be freely downloaded from \href{http://cran.r-project.org/}{http://cran.r-project.org/}.
 
 \section{Course Website}
 All information about the course will be posted on Blackboard. Any changes to the syllabus or additional notes will be made available there.
@@ -246,7 +250,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \begin{itemize*}
 \item OLS method
 \item Interpretation of coefficients
-\item Standard errors, t-tests, and p-values
+\item Standard errors, t-tests, p-values, and confidence intervals
 \item Goodness-of-fit measures
 \end{itemize*}
 
@@ -255,15 +259,19 @@ The general schedule for the course is as follows. Details on topics covered and
 \textbook[Ch.3 (from p.69) from ]{Angrist and Pishke}
 \textbook[Ch.3 (up to p.103) from ]{Cameron and Trivedi}
 \reading{Englebert2000}
-
+\reading{CusackIversenSoskice2007}
 
 \seealso
+
+\reading{Wooldridge2013}
+\reading[Ch.2,4--5 from ]{Freedman2009}
+
 
 \subsection*{Lab}
 \begin{itemize*}
 \item OLS in Stata
+\item Interpretation of coefficients for continuous and factor variables
 \item Reporting regression results
-\item Stata factor variables
 % other standard error stuff?
 \end{itemize*}
 
@@ -326,6 +334,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsection*{Lecture}
 \begin{itemize*}
+\item Data acquisition
 \item Data cleaning and transformations
 \item Multivariate scaling and reliability
 \item Variable transformations
@@ -333,24 +342,30 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings}
-\reading[TBD from ]{Lohr2009}
+\reading[Sections 8.4--8.9 (pp. 338--356) from ]{Lohr2009}
+\reading{KastellecLeoni2007}
 % something we can replicate (see Greg Huber)
 % data gathering
 
 \seealso
+
 \reading{Allison2002}
 \reading{Little1992}
+\reading{Wickham2014}
+\reading{Tufte1983}
+
 
 \subsection*{Lab}
 
 \begin{itemize*}
-\item Scaling and reliability
-\item Variable transformations and regression interpretation
-\item Missing data imputation
+\item Data cleaning, tidying, and transformation
+\item Multivariate scaling and reliability
+\item Variable transformations in regression
+\item Missing data handling
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-\textbook{Ch. 2 from }{Cameron and Trivedi}
+\textbook[Ch. 2 from ]{Cameron and Trivedi}
 
 
 \clearpage
@@ -361,9 +376,10 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsection*{Lecture}
 \begin{itemize*}
-\item Instrumental Variables
-\item Regression Discontinuity Designs
-\item Difference-in-Differences
+\item Instrumental Variables (IV) regression
+\item Regression Discontinuity (RD) designs
+\item Difference-in-differences (DID)
+%\item Synthetic cohorts
 \end{itemize*}
 
 \subsubsection*{Readings}
@@ -371,17 +387,22 @@ The general schedule for the course is as follows. Details on topics covered and
 \reading{AcemogluJohnsonRobinson2001}
 \reading{Carrubba2008}
 \reading{LassenSerritzlew2011}
+\reading{CampbellRoss1968}
 
 \seealso
+
 \reading{Rosenbaum2002}
 \reading{MorganWinship2007}
 \reading{ShadishCookCampbell2001}
-
+\reading{AngristImbensRubin1996}
+\reading{BertrandDufloMullainathan2004}
+\reading{EriksonStoker2011}
 
 \subsection*{Lab}
 
 \begin{itemize*}
-\item Regression Discontinuity Design analysis
+\item Instrumental variables
+\item Analyzing regression discontinuity designs
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
@@ -520,30 +541,31 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsection*{Lecture}
 \begin{itemize*}
-\item Logit versus Probit % or maybe this will be covered in previous week
+\item Logit versus Probit models % or maybe this will be covered in previous week
 \item Heterogeneous effects and interaction terms
 \item Predicted probabilities and marginal effects
-\item Interpretation in Generalized Linear Models
+\item Interpretation of GLMs
 \end{itemize*}
 
 \subsubsection*{Readings}
-\textbook[Ch. 4 from ]{Long}
-\textbook[Ch.14 from ]{Cameron and Trivedi}
+\textbook[Ch.4 from ]{Long}
 \reading{BramborClarkGolder2006}
 \reading{Houston2006}
 
 \seealso
-\reading{Hobolt2007}
 
+\reading{Hobolt2007}
+\reading{AiNorton2003}
 
 \subsection*{Lab}
 
 \begin{itemize*}
+\item Predicted probabilities and visualization (e.g., \texttt{marginsplot})
 \item \texttt{margins} for generalized linear models
-\item \texttt{marginsplot}
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
+\textbook[Ch.14 from ]{Cameron and Trivedi}
 
 
 \clearpage
@@ -647,23 +669,25 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsubsection*{Readings}
 \textbook[Ch.3,4 from ]{Allison}
-\textbook[pp.615--641 from ]{Cameron and Trivedi}
 % example of panel data using binary outcome
-% Bowers participation article using socialization dataset
+\reading{JenningsMarkus1984}
+\reading{Wawro2001}
 
 
 \seealso
-\reading[Ch.5 from ]{AndresGolschSchmidt2013}
-\reading[Ch.17.4 from ]{Greene2012}
 
-\subsection*{Lab for lab}
+\reading[Ch.5 from ]{AndresGolschSchmidt2013}
+\reading[Ch.17.4 from ]{Greene2013}
+
+\subsection*{Lab}
 
 \begin{itemize*}
 \item Estimating panel models for binary outcomes
 \item Model interpretation
 \end{itemize*}
 
-\subsubsection*{Readings}
+\subsubsection*{Readings for lab}
+\textbook[pp.615--641 from ]{Cameron and Trivedi}
 
 
 
@@ -685,6 +709,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \subsubsection*{Readings}
 \reading{SimmonsHopkins2005}
+\reading{LauPatelFahmyKaufman2014}
 
 \seealso
 % time-series
