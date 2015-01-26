@@ -110,15 +110,15 @@ The essays (3-5 pages) must be written in English and are due via email to the a
 Students can choose from the following course elements:
 
 \begin{enumerate*}
-\item ``Regression with Matrices and MLE'' (1 essay, 2 ECTS)
 \item Sessions 1--5 (1 essay, 7 ECTS)
 \item Sessions 1--5, plus one additional session (2 essays, 9 ECTS)
 \item Sessions 1--5, plus two additional sessions (3 essays, 11 ECTS)
 \item Sessions 1--5, plus three additional sessions (3 essays, 13 ECTS)
 \item Entire course (4 essays, 15 ECTS)
+\item ``Regression Computation (Matrices, bootstrapping, and MLE)'' (1 essay, 2 ECTS)
 \end{enumerate*}
 
-PhD students must notify the course instructors of their choice by the end of Session 5.
+PhD students must notify the course instructors of their choice by the end of Session 5. \textit{Note that the ``Regression Computation'' module is required and will meet at a time place to-be-determined during Weeks 20 and 21.}
 
 
 \clearpage
@@ -329,7 +329,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \clearpage
 \subsection{Practical Data Issues (Week 10)}
-\emph{How do we construct, tidy, and transform empirical observations into an organized rectangular dataset for use in our analyses? What problems do we encounter when dealing with real-world data? How do we address those challenges?}
+\emph{How do we construct, tidy, and transform empirical observations into an organized rectangular dataset for use in our analyses? What problems do we encounter when dealing with real-world data? How do we address those challenges and make data easy to work with?}
 
 \thomas
 
@@ -337,14 +337,15 @@ The general schedule for the course is as follows. Details on topics covered and
 \begin{itemize*}
 \item Data acquisition
 \item Data cleaning and transformations
-\item Multivariate scaling and reliability
+%\item Multivariate scaling and reliability
 \item Missing data, case deletion, and imputation
+\item Data sharing
 \item Data visualization
 \end{itemize*}
 
 \subsubsection*{Readings}
 \reading[Sections 8.4--8.9 (pp. 338--356) from ]{Lohr2009}  % 18
-\reading{KastellecLeoni2007}                                % 17
+\reading{King1995}
 % something we can replicate (see Greg Huber)
 % data gathering
 
@@ -360,7 +361,7 @@ The general schedule for the course is as follows. Details on topics covered and
 
 \begin{itemize*}
 \item Data cleaning, tidying, and transformation
-\item Multivariate scaling and reliability
+%\item Multivariate scaling and reliability
 \item Variable transformations in regression
 \item Missing data handling
 \end{itemize*}
@@ -447,7 +448,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \end{itemize*}
 
 \subsubsection*{Readings for lab}
-\textbook[Ch.8 from ]{CameronTrivedi2010}  % 50
+\textbook[Ch.8 from ]{Cameron and Trivedi}  % 50
 
 
 \clearpage
@@ -533,7 +534,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \subsubsection*{Readings for lab}
 \textbook[pp.~459--479 from ]{Cameron and Trivedi}
 \reading[pp.~75--128; 157--177 (just skimming sections on probit) from ]{LongFreese2005}  % 108
-\textbook[Ch.~11 from ]{Sonderskov2014}                             % 27
+\textbook[Ch.~11 from ]{S{\o}nderskov}                             % 27
 
 \clearpage
 \subsection{Interpretation of GLMs (Week 15)}
@@ -547,11 +548,12 @@ The general schedule for the course is as follows. Details on topics covered and
 \item Heterogeneous effects and interaction terms
 \item Predicted probabilities and marginal effects
 \item Interpretation of GLMs
+\item Data visualization
 \end{itemize*}
 
 \subsubsection*{Readings}
-
-\reading{Houston2006}                                         % 19
+\reading{Houston2006}                                       % 19
+\reading{KastellecLeoni2007}                                % 17
 
 \seealso
 
@@ -713,7 +715,7 @@ The general schedule for the course is as follows. Details on topics covered and
 \reading{SimmonsHopkins2005}                           % 9
 \reading{LauPatelFahmyKaufman2014}                     % 21
 
-\seealso
+%\seealso
 % time-series
 % more hierarchical models
 % experiments
