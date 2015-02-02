@@ -1,6 +1,6 @@
-\documentclass[12pt]{beamer} %Makes presentation
-
 \input{preamble}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
 
 \title{Welcome and First Lecture}
 
@@ -16,44 +16,361 @@
 \section{Research Design}
 \frame{\tableofcontents[currentsection]}
 
+
+\frame<1-2>[label=science]{
+	\frametitle{Scientific Method}
+	\begin{enumerate}\itemsep1em
+    	\item<2-> Research question
+		\item<3-> Theory development
+    	\item<4-> Hypotheses
+    		\begin{itemize}
+    			\item<5-> Expectations about differences in outcomes across levels of a putatively causal variable
+    		\end{itemize}
+    	\item<6-> Design
+    	\item<7-> Analysis
+    		\begin{itemize}
+        		\item<8-> This is the topic of our class
+    		\end{itemize}
+	\end{enumerate}
+}
+
 \frame{
-	\frametitle{Research Questions and Hypotheses}
-	\begin{itemize}\itemsep2em
-		\item 
-	\end{itemize}
+	\frametitle{What makes for an interesting question?}
+	\begin{enumerate}\itemsep1em
+    	\item<2-> Politically important
+    	\item<3-> Contribute to scientific understanding/literature
+    	\vspace{1em}
+    	\item<4-> Personally interesting
+    	\item<5-> Unresolved
+	\end{enumerate}
 }
 
 
 \frame{
-	\frametitle{Research designs}
-	\begin{itemize}\itemsep2em
+	\frametitle{Three Types of Research Questions}
+	\begin{enumerate}\itemsep2em
 		\item Prevalence
 		\item Changes
 		\item Causal Effects
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{Causal Questions}
+	\begin{itemize}\itemsep2em
+		\item Forward causal questions
+			\begin{itemize}
+    			\item<2-> What effect(s) does X have?
+    			\item<3-> ``What if?'' questions
+			\end{itemize}
+		\item Backward causal questions
+			\begin{itemize}
+    			\item<4-> What causes Y?
+			\end{itemize}
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{Causal Effects}
+	\frametitle{Why not backward causal questions?}
 	\begin{itemize}\itemsep2em
-		\item 
+		\item<2-> The set of potential X's is infinite
+		\item<3-> We can only test a few at a time
+		\item<4-> Some X's might be unobservable or unknown
+		\item<5-> Showing that X1 causes Y doesn't tell us anything about whether X2 causes Y
+	\end{itemize}
+}
+
+\againframe<2-3>{science}
+
+\frame{
+	\frametitle{Concepts}
+	\begin{quote}
+    ``The empiricist perspective seems reasonable on the face of things. And yet we are unable to talk about questions of fact without getting caught up in the language that we use to describe these facts. To be sure, things exist the world separate from the language we use to describe them. However, we cannot talk about them unless and until we introduce linguistic symbols.'' (Gerring 2012)
+	\end{quote}
+}
+
+\frame{
+	\frametitle{Concepts}
+	\begin{itemize}\itemsep2em
+    	\item Term/label
+    	\item Attributes (i.e., definition)
+    	\item Indicators (i.e., operationalization)
+    	\vspace{2em}
+    	\item<2-> \textit{Example: Democracy}
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{Matching}
+	\frametitle{Evaluating Concepts}
+	\begin{enumerate}\itemsep1em
+    	\item Resonance: is it intuitive?
+    	\item Domain: where does it apply?
+    	\item Extension: how many referants?
+    	\item Fecundity: is it useful?
+    	\item Utility: can we observe it? how?
+	\end{enumerate}
+}
+
+
+\frame{
+	\frametitle{Theory Development}
 	\begin{itemize}\itemsep2em
-		\item 
+    	\item Caveat: Not the focus of this course
+    	\item Theories are arguments \textit{and} explanations
+    	\item Theories are causal in nature
+    	\item Often involve claims about mechanisms
+    	\item Rooted in past evidence or observation
+	\end{itemize}
+}
+
+
+\againframe<3-6>{science}
+
+\frame{
+	\frametitle{From Hypotheses to Design}
+	\begin{itemize}\itemsep2em
+		\item Definitions
+			\begin{itemize}
+				\item Hypothesis: Expectations about differences in outcomes across levels of a putatively causal variable
+				\item Design: Selection and arrangement of evidence (Gerring 2012)
+			\end{itemize}
+		\item<2-> Design must reveal evidence about our hypotheses
+			\begin{itemize}
+    			\item<3-> Selection of observations/units
+    			\item<4-> Observation of outcome(s)
+    			\item<5-> Observation of variation on the causal variable
+    			\item<6-> \textit{Causal identification}
+			\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{History of Political Science Methods}
+	\begin{itemize}\itemsep1em
+		\item Early methods
+	    	\begin{itemize}
+		    	\item Philosophy
+	        	\item History
+	        	\item Formal legalism	    	
+	    	\end{itemize}
+    	\item Behavioral revolution (1950s)
+    		\begin{itemize}
+        		\item Sample surveys
+        		\item Basic quantitative methods
+    		\end{itemize}
+    	\item Credibility revolution (1960s, 1980s, 2000s)
+    		\begin{itemize}
+        		\item Matching
+        		\item Experiments
+        		\item Quasi-experiments (see Week 11)
+    		\end{itemize}
+		\item Post-positivists (21st century)
+			\begin{itemize}
+    			\item Qualitative and interpretive methods
+			\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Causal Inference}
+	\begin{itemize}\itemsep2em
+    	\item<1-> Full discussion of causality next week
+    	\item<2-> ``Correlation does not prove causation''
+    	\item<3-> Correlation is causation when:
+    		\begin{itemize}
+        		\item<4-> X temporally precedes Y
+        		\item<5-> No confounding
+    		\end{itemize}
+    	\item<6-> How do we know there is no confounding?
+	\end{itemize}
+}
+
+\frame{
+	\begin{center}
+	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw<1-5,7>[->] (0,0) node[left] (X) {X} -- (5,0) node[right] (Y) {Y};
+        \draw<6>[->] (0,0) node[left] (X) {X} -- (2.5,0) node[right] (D) {D};
+        \draw<6>[->] (3.1,0) -- (5,0) node[right] (Y) {Y};
+        \draw<2->[->] (-3,4) node[above] (Z) {Z} -- (X);
+        \draw<2->[->] (Z) -- (Y);
+        \draw<3-6>[->] (5,2) node[above] (A) {A} -- (Y);
+        \draw<4-6>[->] (-2,0) node[left] (B) {B} -- (X);
+        \draw<5-6>[->] (X) -- (2,-2) node[right] (C) {C};
+    \end{tikzpicture}
+    \end{center}
+}
+
+\frame{
+	\frametitle{Observational Causal Inference}
+	\begin{itemize}\itemsep2em
+		\item Find all variables Z
+		\item Control for influence of Z to identify effect of $X \rightarrow Y$
+		\item<2-> One common strategy is \textit{matched sampling} or \textit{matching}
+		\item<3-> Regression is similar, but we'll talk about that later
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Matching I}
+	\begin{itemize}\itemsep2em
+    	\item Example: Effect of Education on Participation
+    	\item Our design involves:
+    		\begin{itemize}
+    		\item Measure outcome (participation)
+    		\item Measure putative cause (education; university degree)
+    		\item Correlate outcome and cause
+    		\end{itemize}
+    	\item Is that correlation a valid causal inference?
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Matching II}
+	\begin{itemize}\itemsep2em
+    	\item Temporal ordering is correct here
+    		\begin{itemize}
+    		\item Note: Timing of measurement may be unimportant
+    		\end{itemize}
+    	\item<2-> What about confounding?
+    		\begin{enumerate}
+    		\item<3-> Hide outcome data
+    		\item<4-> List all potential confounds (Z)
+    		\item<5-> Match observations so sample consists of pairs of observations (1 with degree; 1 without) that are identical (or at least similar) on all variables
+    		\item<6-> Discard all observations that cannot be matched
+    		\item<7-> Estimate $Corr(X,Y)$
+    		\end{enumerate}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Think--Pair--Share}
+	\begin{itemize}\itemsep1em
+    	\item Does matching always get us to a clear and uncontroversial causal inference?
+    	\item Think for 15 seconds to yourself
+    	\item Then discuss with the person sitting next to you
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{The Experimental Ideal}
+	\begin{itemize}\itemsep1em
+    	\item Randomized experiment, or randomized control trial
+    		\begin{itemize}
+    			\item \textit{The observation of units after, and possibly before, a randomly assigned intervention in a controlled setting, which tests one or more precise causal expectations}
+    		\end{itemize}
+    	\item A correctly executed experiment always provides clear causal inference
+    	\item It solves both the temporal ordering and confounding problems
+    		\begin{itemize}
+        		\item Treatment (X) is applied by the researcher before outcome (Y)
+        		\item Randomization means there are no confounding (Z) variables
+    		\end{itemize}
 	\end{itemize}
 }
 
 \frame{
 	\frametitle{Experiments}
-	\begin{itemize}\itemsep2em
-		\item 
+	\begin{itemize}\itemsep1em
+		\item American Political Science Association president A. Lawrence Lowell (1909):\\ \textit{``We are limited by the impossibility of experiment. Politics is an observational, not an experimental science...''}
+		\item First political science experiment: Gosnell (1926)
+		\item Experiments prominent in psychology and the physical sciences
+		\item King, Keohane, and Verba (1994) only mentions experiments once
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{Causal Inference in Experiments I}
+	\begin{itemize}\itemsep1em
+    	\item<1-> Causal inference is a comparison of two \textit{potential outcomes}
+    	\item<2-> A potential outcome is the value of the outcome (Y) for a given unit (i) after receiving a particular version/level/amount of the treatment (X)
+    	\item<3-> Each unit has multiple \textit{potential} outcomes, but we only observe one of them
+    	\item<4-> A \textit{causal effect} is the difference between two potential outcomes (e.g., $Y_{X=1} - Y_{X=0}$), all else constant
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Causal Inference in Experiments II}
+	\begin{itemize}\itemsep2em
+    	\item<1-> We cannot see individual-level causal effects
+    	\item<2-> We can see \textit{average causal effects}
+    		\begin{itemize}
+        		\item<2-> Ex.: Average difference in participation between those with and without university degrees
+    		\end{itemize}
+    	\item<3-> We want to know: $TE_i = Y_{1i} - Y_{0i}$
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Causal Inference in Experiments III}
+	\begin{itemize}\itemsep2em
+		\item<1-> We want to know: $TE_i = Y_{1i} - Y_{0i}$
+		\item<2-> We can average: $ATE = E[Y_{1i} - Y_{0i}] = E[Y_{1i}] - E[Y_{0i}]$
+		\item<3-> But we still only see one potential outcome for each unit:\\ \vspace{1em}
+    		$ATE_{naive} = E[Y_{1i} | X = 1] - E[Y_{0i} | X = 0]$
+    	\item<4-> Is this what we want to know?
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Causal Inference in Experiments IV}
+	\begin{itemize}\itemsep2em
+	\item What we want and what we have:
+		\begin{align}
+		ATE & = E[Y_{1i}] - E[Y_{0i}] \\[1em]
+		ATE_{naive} & = E[Y_{1i} | X = 1] - E[Y_{0i} | X = 0]
+		\end{align}		
+	\item<2-> Are the following statements true?\\
+  		\begin{itemize}\itemsep1em
+      		\item<2-> $E[Y_{1i}] = E[Y_{1i} | X = 1]$
+      		\item<2-> $E[Y_{0i}] = E[Y_{0i} | X = 0]$
+  		\end{itemize}
+  	\item<3-> Not in general!
+  	\end{itemize}
+}
+
+\frame{
+	\frametitle{Causal Inference in Experiments V}
+	\begin{itemize}\itemsep1em
+    	\item Only true when both of the following hold:
+    	\begin{align}
+    	E[Y_{1i}] = E[Y_{1i} | X = 1] = E[Y_{1i} | X = 0]\\
+    	E[Y_{0i}] = E[Y_{0i} | X = 1] = E[Y_{0i} | X = 0]
+    	\end{align}
+    	\item In that case, potential outcomes are \textit{independent} of treatment assignment
+		\item If true, then:
+    	\begin{align*}
+    	ATE_{naive} & = E[Y_{1i} | X = 1] - E[Y_{0i} | X = 0] \tag{5}\\
+    	& = E[Y_{1i}] - E[Y_{0i}]\\
+    	& = ATE
+    	\end{align*}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Causal Inference in Experiments VI}
+	\begin{itemize}\itemsep2em
+    	\item This holds in experiments because of randomization\\
+    		\begin{itemize}
+        		\item Units differ only in what side of coin was up
+        		\item Experiments randomly reveal potential outcomes
+    		\end{itemize}
+    	\item<2-> Potential outcomes are not independent of treatment assignment when there is confounding
+    	\item<3-> Matching attempts to eliminate those confounds, such that:
+    	\begin{align*}
+    	E[Y_{1i} | Z] = E[Y_{1i} | X = 1, Z] = E[Y_{1i} | X = 0, Z]\\
+    	E[Y_{0i} | Z] = E[Y_{0i} | X = 1, Z] = E[Y_{0i} | X = 0, Z]
+    	\end{align*}
+	\end{itemize}
+}
+
+
+\frame{\frametitle{Questions?}}
+
+
+\againframe<6-7>{science}
+
+
+\frame{\frametitle{Questions?}}
 
 
 \section{Course Overview}
@@ -62,62 +379,112 @@
 \frame{
 	\frametitle{Course Objectives}
 	\footnotesize
-	\begin{enumerate}\itemsep0.5em
-		\item 
+	\begin{enumerate}\itemsep1em
+		\item Describe politically relevant research questions and hypotheses
+		\item Evaluate and deduce observable implications from political science theories 
+		\item Explain statistical procedures and their appropriate usages
+		\item Apply statistical procedures to relevant research problems
+		\item Synthesize results from statistical analyses into well-written and well-structured essays
+		\item Demonstrate how to use Stata for statistical analysis
 	\end{enumerate}
 }
 
 
 \frame{
-	\frametitle{Stata}
-	\begin{itemize}\itemsep1em
-		\item 
+	\frametitle{Software for the Course}
+	\begin{itemize}\itemsep2em
+		\item Stata 13
+		\item Purchase online (200kr):  \href{http://studerende.au.dk/en/selfservice/local-it-services-and-support/it-at-bss/analytics-tools/stata/}{http://studerende.au.dk/en/selfservice/local-it-services-and-support/it-at-bss/analytics-tools/stata/}
+		\item Available in the lab (1341--315)
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{Laboratory Sessions}
-	\begin{itemize}\itemsep1em
-		\item 
+	\frametitle{Why Stata?}
+	\begin{itemize}\itemsep2em
+		\item SPSS is outdated
+		\item SAS is too expensive (and too ugly)
+		\item R is perceived as having a steep learning curve
+		\item Stata is popular in political science and does everything we need
 	\end{itemize}
 }
-
 
 
 \frame{
 	\frametitle{Textbooks and Readings}
 	\begin{itemize}\itemsep1em
-		\item 
+		\item Cameron and Trivedi
+		\item S{\o}nderskov
+		\item Angrist and Pischke
+		\item Long
+		\item Allison
+		\item Berry
+		\item Chapters in compendium
+		\item Everything else can be found online
 	\end{itemize}
 }
 
 
-
 \frame{
 	\frametitle{Exam}
-	\begin{itemize}\itemsep1em
-		\item 
+	\begin{itemize}\itemsep2em
+		\item 7-day written exam
+		\item Answer 1 or 2 questions applying techniques learned in the course
+		\item Choice of 2--3 research topics and datasets
+		\item Write-up a mini research paper
 	\end{itemize}
 }
 
 \frame{
 	\frametitle{Four Assignments}
 	\begin{itemize}\itemsep1em
-		\item 
+		\item Required!
+		\item Purpose
+			\begin{itemize}
+    			\item Practice techniques learned in the course
+    			\item Receive feedback before the exam
+			\end{itemize}
+		\item Schedule:\\
+			\begin{itemize}
+				\item Essay 1 due February 27 to David % Something on OLS?
+				\item Essay 2 due March 20 to Thomas % Something on causality/research design?
+				\item Essay 3 due April 10 to David % Something on panel/multilevel?
+				\item Essay 4 due May 8 to Thomas % Something on GLM?
+			\end{itemize}
+		\item On Blackboard about two weeks before deadline
+		\item Submit via Blackboard
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Weekly Activities}
+	\begin{itemize}\itemsep2em
+		\item Lecture
+		\item Partner/group activities
+		\item Laboratory sessions
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{Weekly Activities}
-	\begin{itemize}\itemsep1em
-		\item 
+	\frametitle{Laboratory Sessions}
+	\begin{itemize}\itemsep2em
+		\item Hands-on practice with Stata
+		\item Wednesday, 14:00--16:00
+		\item Building/Room 1341-315
 	\end{itemize}
 }
+
 
 \frame{
 	\frametitle{Course Outline}
 	\begin{itemize}\itemsep1em
-		\item 
+		\item Research design (2 weeks)
+		\item OLS Regression (2 weeks)
+		\item Data handling (1 week)
+		\item Causal inference (1 week)
+		\item Panel and multi-level regression (2 weeks)
+		\item GLMs (5 weeks)
 	\end{itemize}
 }
 
@@ -128,16 +495,31 @@
 
 \frame{
 	\frametitle{Your Instructors}
+	\begin{enumerate}\itemsep2em
+    	\item Thomas
+    		\begin{itemize}
+        		\item Office 1340-232
+        		\item \href{mailto:tleeper@ps.au.dk}{tleeper@ps.au.dk}
+    		\end{itemize}
+    	\item David
+    		\begin{itemize}
+        		\item Office 1341-124
+        		\item \href{mailto:david.hendry@ps.au.dk}{david.hendry@ps.au.dk}
+    		\end{itemize}
+	\end{enumerate}
 }
 
 
 \frame{
 	\frametitle{Introductions}
 	\begin{itemize}\itemsep2em
-		\item What is your name?
-		\item Where are you from?
-		\item Why are you in this class?
-		\item What do you plan to do after AU?
+		\item Please post an introduction on Blackboard
+		\item Go to:\\
+			Materials from students >\\
+			\hspace{1em} Discussion Board >\\
+			\hspace{2em} The Facebook >\\
+			\hspace{3em} Introductions
+		\item Post a photo and give us a short presentation of yourself
 	\end{itemize}
 }
 
