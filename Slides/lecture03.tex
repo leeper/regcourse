@@ -2,6 +2,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 \usetikzlibrary{decorations.pathreplacing}
+\usepackage{tikz-3dplot}
 
 \title{Ordinary Least Squares (Linear) Regression}
 
@@ -32,7 +33,7 @@
 
 \frame{
 	\frametitle{Descriptive Inference}
-	\begin{enumerate}
+	\begin{enumerate}\itemsep1em
 	\item We want to understand a \textit{population} of cases
 	\item We cannot observe them all, so:
 		\begin{enumerate}
@@ -48,8 +49,8 @@
 	\frametitle{Parameter Estimation}
 	\begin{itemize}\itemsep1em
     	\item We want to observe population \textit{parameter} $\theta$
-    	\item If we obtain a representative sample of population units:
-    		\begin{itemize}
+    	\item If we obtain a representative sample of population units:\\
+    		\begin{itemize}\itemsep1em
         		\item Our sample statistic $\hat{\theta}$ is an unbiased estimate of $\theta$
         		\item Our sampling procedure dictates how uncertain we are about the value of $\theta$
     		\end{itemize}
@@ -57,37 +58,36 @@
 }
 
 \frame{
-	\frametitle{Sample Estimate of Population Mean}
-	We want to know $Y$ (population mean)\\
-	Our \textit{estimator} is the sample mean formula which produces the sample \textit{estimate} $\bar{y}$:
+	\frametitle{An Example}
+	\begin{itemize}
+	\item We want to know $\bar{Y}$ (population mean)
+	\item Our \textit{estimator} is the sample mean formula which produces the sample \textit{estimate} $\bar{y}$:
+		\begin{equation}
+		\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_i
+		\end{equation}
+	\item The \textit{sampling variance} is our uncertainty:
 	\begin{equation}
-	\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_i
+	Var(\bar{y}) = \frac{s^2}{n}
 	\end{equation}
-	where $y_i = $ value for a unit, and\\
-	$n = $ sample size
-	
-	\begin{equation}
-	SE_{\bar{y}} = \sqrt{(1-f)\frac{s^2}{n}}
-	\end{equation}
-	where $f = $ proportion of population sampled,\\
-	$s^2 = $ sample element variance, and\\
-	$n = $ sample size
+	where $s^2 = $ sample element variance
+	\end{itemize}
 }
 
 \frame{
 	\frametitle{Uncertainty}
 	\begin{itemize}\itemsep1em
 		\item We never know $\theta$
-		\item $\hat{\theta}$ is an estimate that may not equal $\theta$
+		\item Our $\hat{\theta}$ is an estimate that may not equal $\theta$
 			\begin{itemize}
     			\item Unbiased due to \textbf{Law of Large Numbers}
     			\item For $\bar{y}$: $N(Y, \sigma^2) $
 			\end{itemize}
-    	\item The size of $SE_{\bar{\theta}}$ depends on:
+    	\item The size of sampling variance depends on:
     		\begin{itemize}
         		\item Element variance
-        		\item Sample size
+        		\item Sample size!
     		\end{itemize}
+    	\item Note: $SE(\bar{y}) = \sqrt{Var(\bar{y})}$
     	\item We may want to know $\hat{\theta}$ per se, but we are mostly interested in it as an estimate of $\theta$
 	\end{itemize}
 }
@@ -104,27 +104,15 @@
 
 \frame{\frametitle{Questions about philosophical assumptions?}}
 
-
-% OLS equation
-
-\frame{
-	\frametitle{Three Equations}
-	\begin{enumerate}\itemsep2em
-	\item Population: $Y = \beta_0 + \beta_1 X \hspace{0.5em} (+ \epsilon)$
-	\item Sample: $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
-	\item Unit: $y_i = \hat{\beta}_0 + \hat{\beta}_1 x_i + e_i$
-	\end{enumerate}
-}
-
-\frame<1-2>[label=ways]{
+\frame<1-5,2>[label=ways]{
 	\frametitle{Ways of Thinking About OLS}
 	\begin{enumerate}\itemsep1em
     	\item<2-> Estimating Unit-level Causal Effect
     	\item<3-> Ratio of $Cov(X,Y)$ and $Var(X)$
-    	\item<4-> Minimizing residual sum of squares (RSS)
+    	\item<4-> Minimizing residual sum of squares (SSR)
+    	\item<5-> Line (or surface) of best fit
 	\end{enumerate}
 }
-
 
 
 \frame{
@@ -137,6 +125,19 @@
 	\end{itemize}
 }
 
+
+\frame{
+	\frametitle{Three Equations}
+	\begin{enumerate}\itemsep2em
+	\item Population: $Y = \beta_0 + \beta_1 X \hspace{0.5em} (+ \epsilon)$
+	\item Sample estimate: $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
+	\item Unit:
+		\begin{align*}
+		y_i & = \hat{\beta}_0 + \hat{\beta}_1 x_i + e_i\\
+		    & = \bar{y}_{0i} + (y_{1i} - y_{0i}) x_i + (y_{0i} - \bar{y}_{0i})
+		\end{align*}
+	\end{enumerate}
+}
 
 
 \frame<1-2>[label=dummy]{
@@ -213,11 +214,11 @@
 	\begin{itemize}\itemsep1em
     	\item Systematic: Regression line (slope)
     		\begin{itemize}
-    		\item Linear regression fits the conditional mean of the data (i.e., $E[Y|X=x]$)
+    		\item Linear regression estimates the conditional means of the population data (i.e., $E[Y|X]$)
     		\end{itemize}
     	\item Unsystematic: Error term is the deviation of observations from the line
     		\begin{itemize}
-        		\item The difference between each value $Y_i$ and $E[Y|X=X_i]$ is the \textit{residual}: $e_i$
+        		\item The difference between each value $y_i$ and $\hat{y}_i$ is the \textit{residual}: $e_i$
         		\item OLS produces an estimate of the relationship between X and Y that minimizes the \textit{residual sum of squares}
     		\end{itemize}
 	\end{itemize}
@@ -242,7 +243,7 @@
 	\begin{itemize}\itemsep1em
 	\item $Y$ is continuous
 	\item $X$ is continuous (and randomized)
-	\item How do we know if the treatment $X$ had an effect on $Y$?
+	\item How do we know if the treatment $X$ had an effect on $Y$?\\
 		\begin{itemize}
 		\item Correlation coefficient ($\rho$)
 		\item Regression coefficient (slope; $\beta_1$)
@@ -253,7 +254,7 @@
 \frame<1>[label=correlation]{
 	\frametitle{Correlation Coefficient ($\rho$)}
 	\begin{itemize}\itemsep1em
-	\item Measures how well a scatterplot is represented by a straight line
+	\item Measures how well a scatterplot is represented by a straight (non-horizontal) line
 	\item<2-> Formal definition: 
 		$\frac{Cov(X,Y)}{\sigma_X \sigma_y}$
 	\item<2-> As a reminder:\\
@@ -302,7 +303,7 @@
     		\end{itemize}
     	\item<7-> Can we have highly correlated regressors?
     		\begin{itemize}
-    		\item<8-> Generally no.
+    		\item<8-> Generally no (due to multicollinearity)
     		\end{itemize}
 	\end{enumerate}
 }
@@ -426,51 +427,20 @@
 
 \againframe<5-11>{scatter}
 
+\frame{\frametitle{Questions about OLS calculations?}}
 
 
-
-\frame{
+\frame[label=anygood]{
 	\frametitle{Are Our Estimates Any Good?}
-	\begin{itemize}\itemsep1em
-    	\item Yes, if:\\
-    		\begin{enumerate}\itemsep1em
-        		\item Works mathematically
-        		\item Causally valid theory
-        		\item Linear relationship between $X$ and $Y$
-        		\item $X$ is measured without error
-        		\item No missing data
-        		\item No confounding
-    		\end{enumerate}
-    	\item Let's go through these points
-	\end{itemize}
-}
-
-
-\frame{
-	\frametitle{Aside: Three Meanings of ``Endogeneity''}
-	Formally endogeneity is when $Cov(X,\epsilon) \neq 0$
-	\vspace{1em}
+	Yes, if:\\
 	\begin{enumerate}\itemsep1em
-	\item Measurement error in regressors
-	\item Omitted variables associated with included regressors 
-		\begin{itemize}
-		\item ``Specification error''
-		\item Confounding
-		\end{itemize}
-	\item Lack of temporal precedence
+   		\item Works mathematically
+   		\item Causally valid theory
+   		\item Linear relationship between $X$ and $Y$
+   		\item $X$ is measured without error
+   		\item No missing data (or MCAR; see Lecture 5)
+   		\item No confounding
 	\end{enumerate}
-}
-
-
-\frame{
-	\frametitle{Aside: Squared vs. Absolute Deviations}
-	\begin{itemize}\itemsep1em
-	\item Conventionally use SSR
-	\item Using absolute deviations is also unbiased
-	\item SSR has a smaller variance
-	\item SSR more heavily weights outliers
-	\item Thus OLS is BLUE
-	\end{itemize}
 }
 
 
@@ -532,9 +502,9 @@
     	\item We want effect of $x$, but we observe $x^{*}$, where $x = x^{*} + w$:
     	\begin{align*}
     	y & = \beta_0 + \beta_1 x^{*} + \epsilon\\
-    	y & = \beta_0 + \beta_1 (x - w) + \epsilon\\
-    	y & = \beta_0 + \beta_1 x + (\epsilon - \beta_1 w)\\
-    	y & = \beta_0 + \beta_1 x + v
+    	 & = \beta_0 + \beta_1 (x - w) + \epsilon\\
+    	 & = \beta_0 + \beta_1 x + (\epsilon - \beta_1 w)\\
+    	 & = \beta_0 + \beta_1 x + v
     	\end{align*}
 	\end{itemize}
 }
@@ -547,6 +517,7 @@
     	\item But they are \textit{biased} estimates of our population equation
     		\begin{itemize}
     		\item This applies to all $\hat{\beta}$ in a multivariate regression
+    		\item Direction of bias is unknown
     		\end{itemize}
 	\end{itemize}
 }
@@ -558,7 +529,7 @@
     	\item Not necessarily a problem
     	\item If \textit{random} (i.e., uncorrelated with $x$), it costs us precision
     	\item If \textit{systematic}, who knows?!
-    	\item Special case: \textit{censoring} (see Lectures 11 and/or 12)
+    	\item If \textit{censored}, see Lectures 11 and/or 12
 	\end{itemize}
 }
 
@@ -575,9 +546,9 @@
 	\frametitle{Confounding (Selection Bias)}
 	\begin{itemize}\itemsep1em
 	\item If $x$ is not randomly assigned, potential outcomes are not independent of $x$
-	\item Other factors explain why units received their particular value $x_i$
+	\item Other factors explain why a unit $i$ received their particular value $x_i$
 	\vspace{1em}
-	\item In matching, we obtain \textit{conditional independence} by comparing units that are identical on all confounding variables
+	\item In matching, we obtain this \textit{conditional independence} by comparing units that are identical on all confounding variables
 	\end{itemize}
 }
 
@@ -589,13 +560,6 @@
 	$\underbrace{E[Y_{1i}|X_i =1] - E[Y_{0i} | X_i = 1]}_{\text{Treatment Effect on Treated (ATT)}} + \underbrace{E[Y_{0i}|X_i = 1] - E[Y_{0i}|X_i=0]}_{\text{Selection Bias}}$
 	}
 	\vspace{1em}
-}
-
-
-\frame{
-
-SHOW BIAS HERE
-
 }
 
 \frame[label=causalgraph]{
@@ -611,6 +575,55 @@ SHOW BIAS HERE
     \end{tikzpicture}
     \end{center}
 }
+
+\frame{
+	\frametitle{Omitted Variable Bias}
+	\begin{itemize}
+	\item We want to estimate:
+	\begin{align*}
+	Y = \beta_0 + \beta_1 X + \beta_2 Z + \epsilon
+	\end{align*}
+	\item We actually estimate:
+	\begin{align*}
+	\tilde{y} & = \tilde{\beta_0} + \tilde{\beta_1} x + \epsilon\\
+	& = \tilde{\beta_0} + \tilde{\beta_1} x + (0 * z) + \epsilon\\
+	& = \tilde{\beta_0} + \tilde{\beta_1} x + \nu
+	\end{align*}
+	\item Bias: $\tilde{\beta}_1 = \hat{\beta}_1 + \hat{\beta}_2 \tilde{\delta}_1$, where $\tilde{z} = \tilde{\delta}_0 + \tilde{\delta}_1 x$
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Size and Direction of Bias}
+	\begin{itemize}
+	\item Bias: $\tilde{\beta}_1 = \hat{\beta}_1 + \hat{\beta}_2 \tilde{\delta}_1$, where $\tilde{z} = \tilde{\delta}_0 + \tilde{\delta}_1 x$
+	\end{itemize}
+	\vspace{1em}
+	\begin{center}
+	\begin{tabular}{lll}
+		              & $Corr(x,z)<0$ & $Corr(x,z)>0$ \\ \hline
+		$\beta_2 < 0$ & Positive      & Negative      \\
+		$\beta_2 > 0$ & Negative      & Positive      \\ \hline
+	\end{tabular}
+	\end{center}
+}
+
+
+\frame{
+	\frametitle{Aside: Three Meanings of ``Endogeneity''}
+	Formally endogeneity is when $Cov(X,\epsilon) \neq 0$
+	\vspace{1em}
+	\begin{enumerate}\itemsep1em
+	\item Measurement error in regressors
+	\item Omitted variables associated with included regressors 
+		\begin{itemize}
+		\item ``Specification error''
+		\item Confounding
+		\end{itemize}
+	\item Lack of temporal precedence
+	\end{enumerate}
+}
+
 
 \frame{
 	\frametitle{Example: Englebert}
@@ -629,10 +642,12 @@ SHOW BIAS HERE
     	\item<3-> Condition on some variables
     	\item<4-> Condition on all observables
 	\end{enumerate}
+	\vspace{1em}
+	\onslide<5->{Which of these are good strategies?}
 }
 
 
-\frame<1-3>[label=what]{
+\frame<1-2>[label=what]{
 	\frametitle{What goes in our regression?}
 	\begin{itemize}\itemsep1em
     	\item Use theory to build causal models
@@ -652,9 +667,13 @@ SHOW BIAS HERE
 
 \againframe{causalgraph}
 
+\againframe<2-3>{what}
+
+\againframe{causalgraph}
+
 \frame{
 	\frametitle{Post-treatment Bias}
-	\begin{itemize}
+	\begin{itemize}\itemsep1em
 	\item We usually want to know the \textbf{total effect} of a cause
 	\item If we include a mediator, $D$, of the $X \rightarrow Y$ relationship, the coefficient on $X$:
 		\begin{itemize}
@@ -673,6 +692,8 @@ SHOW BIAS HERE
 
 \againframe{causalgraph}
 
+\frame{\frametitle{Questions about specification?}}
+
 \frame{
 	\frametitle{Multivariate Regression Interpretation}
 	\begin{itemize}\itemsep1em
@@ -681,28 +702,80 @@ SHOW BIAS HERE
 	\item Generally, not good to give all coefficients a causal interpretation
 		\begin{itemize}
 		\item Think ``forward causal inference''
-		\item We're interested in the $X \rightarrow Y$
+		\item We're interested in the $X \rightarrow Y$ effect
 		\item All other coefficients are there as ``controls''
 		\end{itemize}
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{From Line to Surface I}
+	\begin{itemize}\itemsep1em
+	\item In simple regression, we estimate a \textbf{line}
+	\item In multiple regression, we estimate a \textbf{surface}
+	\item Each coefficient is the \textit{marginal effect}, all else constant (at mean)
+	\item This can be hard to picture in your mind
+	\end{itemize}
+}
 
 \frame{
-	\frametitle{OLS is BLUE}
-	
-	
-	
-	
+	\frametitle{From Line to Surface II}
+	\begin{center}
+	\begin{tikzpicture}
+	    \draw[thick,->] (0,0,0) -- (6,0,0) node[anchor=north east]{$x$};
+	    \draw[thick,->] (0,0,0) -- (0,4,0) node[anchor=north west]{$y$};
+	    \draw<1> (3,3,0) node {$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 X$};
+        \draw<2> (3,3,0) node {$\hat{y} = \hat{\beta}_0 + \hat{\beta}_2 Z$};
+	    \draw<3> (3,3,0) node {$\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 X + \hat{\beta}_2 Z$};
+	    \draw<1,3>[thick, blue] (0,2,0) -- (5,0,0);
+	    \draw<2->[thick,->] (0,0,0) -- (0,0,5) node[anchor=south]{$z$};
+	    \draw<2->[thick, blue] (0,2,0) -- (0,0,4);
+	    \filldraw<3->[draw=red,fill=red!20,opacity=0.5]
+	        (0,2,0) -- (0,0,4) -- (5,-2,4) -- (5,0,0) -- cycle;
+	\end{tikzpicture}
+	\end{center}
 }
 
 
-%OLS is BLUE due to the Gauss-Markov assumptions
-%1. Linearity in parameters
-%2. Random sampling
-%3. No collinearity
-%4. Expected value of errors is zero
-%5. Homoskedasticity
+\againframe{anygood}
+
+\frame{
+	\frametitle{OLS is BLUE}
+	\begin{itemize}\itemsep1em
+	\item BLUE: Best Linear Unbiased Estimator
+	\item Gauss Markov Assumptions:
+		\begin{enumerate}
+		\item Linearity in parameters
+		\item Random sampling
+		\item No multicollinearity
+		\item Exogeneity ($E[\epsilon|\mathbf{X}] = 0$)
+		\item Homoskedasticity ($Var(\epsilon|\mathbf{X}) = \sigma^2$)
+		\end{enumerate}
+	\item Assumptions 1--4 prove OLS is unbiased
+	\item Assumption 5 proves OLS is the \textit{best} estimator
+	\end{itemize}
+}
+
+
+
+\frame{
+	\frametitle{Squared vs. Absolute Errors}
+	\begin{itemize}\itemsep1em
+	\item Conventionally use Sum of Squared Errors
+	\item Using absolute errors is also unbiased
+	\item Sum of Squared Errors:
+		\begin{itemize}
+		\item more heavily weights outliers
+		\item has a smaller variance
+		\end{itemize} 
+	\item Thus OLS is \textbf{B}est\textbf{LUE}
+	\end{itemize}
+}
+
+
+
+
+
 
 
 \section{Goodness-of-Fit}
@@ -721,8 +794,8 @@ SHOW BIAS HERE
 \frame{
 	\frametitle{Correlation}
 	\begin{itemize}\itemsep1em
-	\item Definition: $corr(x,y) = \hat{r}_{x,y} = \frac{cov(x,y)}{(n-1)sd(x)sd(y)}$
-	\item Slope $\hat{\beta}_1$ and correlation $\hat{r}_{x,y}$ are simply different scalings of $cov(x,y)$
+	\item Definition: $Corr(x,y) = \hat{r}_{x,y} = \frac{Cov(x,y)}{(n-1) s_x s_y}$
+	\item Slope $\hat{\beta}_1$ and correlation $\hat{r}_{x,y}$ are simply different scalings of $Cov(x,y)$
 	\item Interpretation: How well the bivariate relationship is summarized by a cloud of points?
 	\item Units: none (range 0 to 1)
 	\end{itemize}
@@ -731,10 +804,10 @@ SHOW BIAS HERE
 \frame{
 	\frametitle{Coefficient of Determination ($R^2$)}
 	\begin{itemize}\itemsep1em
-	\item Definition: $R^2 = cor(x,y)^2 = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}$
+	\item Definition: $R^2 = \hat{r}_{x,y}^2 = \frac{SSE}{SST} = 1 - \frac{SSR}{SST}$
 	\item Interpretation: How much of the total variation in $y$ is explained by the model?
 	\item But, $R^2$ increases simply by adding more variables
-	\item So, $Adj.R^2 = R^2 - (1 - R^2)\frac{k}{n-k-1}$, where $k$ is number of regressors
+	\item So, Adjusted-$R^2 = R^2 - (1 - R^2)\frac{k}{n-k-1}$, where $k$ is number of regressors
 	\item Units: none (range 0 to 1)
 	\end{itemize}
 }
@@ -768,8 +841,10 @@ SHOW BIAS HERE
 	\end{itemize}
 }
 
-\begin{frame}[fragile]
+\begin{frame}[fragile,label=statareg]
 \scriptsize
+\begin{columns}
+    \column{\dimexpr\paperwidth-20pt}
 \begin{verbatim}
 . reg growth lcon
 
@@ -788,11 +863,13 @@ SHOW BIAS HERE
 ------------------------------------------------------------------------------
 
 \end{verbatim}
+    
+\end{columns}
 \end{frame}
 
 \frame{
 	\frametitle{The F-test for nested models}
-	\begin{itemize}
+	\begin{itemize}\itemsep1em
 	\item Can use an F-test to compare fit of two nested models?
 		\begin{itemize}
 		\item $\hat{y} = \hat{\beta_0} + \hat{\beta_1}x_1$
@@ -806,6 +883,8 @@ SHOW BIAS HERE
 
 \begin{frame}[fragile]
 \footnotesize
+\begin{columns}
+    \column{\dimexpr\paperwidth-20pt}
 
 \begin{verbatim}
 . nestreg: reg growth lcon (lconsq)
@@ -819,9 +898,10 @@ Block        F     df        df   Pr > F       R2    in R2
 +-------------------------------------------------------------+
 
 \end{verbatim}
+\end{columns}
 \end{frame}
 
-
+\frame{\frametitle{Questions about model fit?}}
 
 
 
@@ -832,15 +912,135 @@ Block        F     df        df   Pr > F       R2    in R2
 	\frametitle{Inference from Sample to Population}
 	\begin{itemize}\itemsep1em
 	\item We want to know population parameter $\theta$
-	\item We only observe sample estimate $\hat{theta}$
-	\item We therefore have a guess, but we are also uncertain
+	\item We only observe sample estimate $\hat{\theta}$
+	\item We have a guess but are also uncertain
 	\vspace{1em}
-	\item What range of values for $\theta$ does our $\hat{theta}$ imply?
+	\item<2-> What range of values for $\theta$ does our $\hat{\theta}$ imply?
+	\item<2-> Are values in that range large or meaningful?
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{How Uncertain Are We?}
+	\begin{itemize}\itemsep1em
+	\item Our uncertainty depends on sampling procedures
+	\item Most importantly, \textit{sample size}
+		\begin{itemize}
+		\item As $n \rightarrow \infty$, uncertainty $\rightarrow 0$
+		\end{itemize}
+	\item We typically summarize our uncertainty as the \textit{standard error}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Standard Errors (SEs)}
+	\begin{itemize}\itemsep1em
+	\item Definition: ``The standard error of a sample estimate is the average distance that a sample estimate ($\hat{\theta}$) would be from the population parameter ($\theta$) if we drew many separate random samples and applied our estimator to each.''
+	\item In bivariate regression: $Var(\hat{\beta_1}) = \frac{\frac{1}{n-2}SSR}{SST_x}$
+	\item Thus, SE is a ratio of unexplained variance in $y$ (weighted by sample size) and variance in $x$
+	\item Units: same as coefficient ($\frac{y}{x}$)
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{What affects size of SEs?}
+	\begin{itemize}\itemsep0.5em
+	\item Larger variance in $x$ means smaller SEs
+	\item More unexplained variance in $y$ means bigger SEs
+	\item More observations reduces the numerator, thus smaller SEs
+	\item Other factors:
+		\begin{itemize}
+		\item Homoskedasticity
+		\item Clustering
+		\end{itemize}
+	\item Interpretation:
+		\begin{itemize}
+		\item Large SE: Uncertain about population effect size
+		\item Small SE: Certain about population effect size
+		\end{itemize}
 	\end{itemize}
 }
 
 
 
+\frame{
+	\frametitle{Ways to Express Our Uncertainty}
+	\begin{enumerate}\itemsep1em
+	\item Standard Error
+	\item Confidence interval
+	\item $t$-statistic
+	\item p-value
+	\end{enumerate}
+}
+
+
+\againframe{statareg}
+
+
+\frame{
+	\frametitle{Confidence Interval (CI)}
+	\begin{itemize}\itemsep1em
+	\item Definition: Were we to repeat our procedure of sampling, applying our estimator, and calculating a confidence interval \textit{repeatedly} from the population, a fixed percentage of the resulting intervals would include the true population-level slope.
+	\item Interpretation: If the confidence interval overlaps zero, we are uncertain if $\beta$ differs from zero
+	\end{itemize}
+}
+
+% CI PLOT
+
+\frame{
+	\frametitle{Confidence Interval (CI)}
+	\begin{itemize}\itemsep1em
+	\item A CI is simply a range, centered on the slope
+	\item Units: Same scale as the coefficient ($\frac{y}{x}$)
+	\item We can calculate different CIs of varying \textit{confidence}
+		\begin{itemize}
+		\item Conventionally, $\alpha = 0.05$, so 95\% of the CIs will include the $\beta$
+		\end{itemize}
+	\end{itemize}
+
+}
+
+
+
+\frame{
+	\frametitle{$t$-statistic}
+	\begin{itemize}\itemsep1em
+	\item A measure of how large a coefficient is relative to our uncertainty about its size
+	\item Typically used to test a formal null hypothesis:\\
+		\begin{itemize}\itemsep1em
+		\item No effect null: $t_{\hat{\beta_1}} = \frac{\hat{\beta_1}}{SE_{\hat{\beta_1}}}$
+		\item Any other null: $\frac{\hat{\beta_1} - \alpha}{SE_{\hat{\beta_1}}}$, where $\alpha$ is our null hypothesis effect size
+		\end{itemize}
+	\item<2-> Note: The $t$-statistic from a $t$-test of mean-difference is the same as the $t$-statistic from a $t$-test on an OLS slope for a dummy covariate
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{p-value}
+	\begin{itemize}\itemsep1em
+	\item A summary measure in a hypothesis test
+	\item General definition: ``the probability of a statistic as extreme as the one we observed, if the null hypothesis was true, the statistic is distributed as we assume, and the data are as variable as observed''
+	\item Definition in a regression context: ``the probability of a slope as large as the one we observed \dots''
+	%\item Procedure: Calculate a $t$-statistic, then go back to the $t$-distribution to determine how likely a given $t$-ratio is
+	\end{itemize}
+}
+
+
+% t-distribution plot???
+
+
+
+\frame{
+	\frametitle{The p-value is not:}
+	\begin{itemize}\itemsep1em
+	\item The probability that a hypothesis is true or false
+	\item A reflection of our confidence or certainty about the result
+	\item The probability that the true slope is in any particular range of values
+	\item A statement about the importance or substantive size of the effect
+	\end{itemize}
+}
 
 
 \frame{
@@ -848,109 +1048,17 @@ Block        F     df        df   Pr > F       R2    in R2
 	\begin{enumerate}\itemsep2em
     	\item Substantive significance
     		\begin{itemize}
-        		\item<2-> Is the effect size \textit{important} in the real world?
+        		\item<2-> Is the effect size (or range of possible effect sizes) \textit{important} in the real world?
     		\end{itemize}
     	\item Statistical significance
     		\begin{itemize}
-        		\item<3-> Is the effect size larger than a predetermined threshold?
+        		\item<3-> Is the effect size (or range of possible effect sizes) larger than a predetermined threshold?
+        		\item<3-> Conventionally, $p \le 0.05$
     		\end{itemize}
 	\end{enumerate}
 }
 
-
-
-
-\begin{comment}
-
-
-
-
-% To draw inferences about the population, we need to account for uncertainty in our estimates
-% We do this by generating standard errors (SEs) for the regression estimates
-
-% SEs
-	% Definition: The standard error of a sample estimate is the average distance that a sample estimate would be from the population value if we drew lots and lots of separate random samples.
-	% If we repeated our sampling procedure an infinite number of times, the SE is the average deviation of a sample estimate from the population mean
-	% Standard errors are based on assumptions about the sampling process, not anything about our sample data per se
-	
-	
-SE Interpretation
-
-  - SE is a ratio of unexplained variance in `\(y\)` (weighted by sample size) and variance in `\(x\)`
-
-  - More variance in `\(x\)` means smaller SE
-
-  - More unexplained variance in `\(y\)` means bigger SE
-
-  - More observations yields smaller numerator in `\(s_{\hat{\beta_1}}\)`, meaning smaller SE
-
-  - The SE has the units of the coefficient (i.e., `\(y\)` per `\(x\)`))
-  
-  $var(\hat{\beta_1}) = \frac{\frac{1}{n-2}RSS}{SS_x}$
-  $s_{\hat{\beta_1}} = \sqrt{\frac{\frac{1}{n-2}RSS}{SS_x}} = \sqrt{\frac{\sigma^2}{SS_x}}$
-  % more complicated in a multivariate regression
-  
-  
-## Homoskedasticity and heteroskedasticity
-
-  - The basic SE formula (and the default calculations in Stata) assume homoskedasticity
-  
-  - When errors are heteroskedastic, we need ``robust'' SEs
-
-  - David will cover this in Lecture 4
-
-% assumption of Normality
-% $y|x \sim N(\beta_0 + \beta_1x_1 + ..., \sigma^2)$
-% There is a population of identically distributed cases of which our data are one sample
-
-% t-statistics
-% regression on population versus sample versus super-population
-% The sampling distribution for `\(\beta_1\)` that we just assumed (partially based on our data), allows us to conduct hypothesis tests
-% The kinds of hypotheses we can test are of the form:
-	% Bivariate: ``$X$ has no effect on $Y$''
-	% Multivariate: ``accounting for the other variables in the model, $X$ has no effect on the expected value of $Y$''
-
-% often use a no-effect null hypothesis, but we can do anything
-% $\frac{\hat{\beta_1} - \alpha}{SE_{\hat{\beta_1}}}$, where $\alpha$ is our null hypothesis value
-
-% - The $t$*-statistic from a $t$-test of mean-difference is the same as the $t$-statistic from a $t$-test on an OLS slope for a dummy covariate
-% $t_{\hat{\beta_1}} = \frac{\hat{\beta_1}}{SE_{\hat{\beta_1}}}$
-% we then go back to the $t$-distribution function (which tells us how likely a given $t$-ratio is)
-
-% The p-value is the probability of seeing a t-ratio/t-statistic as large or larger than the one we observed in our data
-
-Definition of p-value:
-
-the probability of a *t*-statistic as extreme as the one we observed, if the null hypothesis was true
-
-the probability of a slope as large as the one we observed, given the observed variance in the data and that the null hypothesis was true
-
-
-The p-value is not:
-
-  - The probability that a hypothesis is true or false
-
-  - A reflection of our confidence or certainty about the result
-
-  - The probability that the true slope is in any particular range of values
-
-  - A statement about the importance or substantive size of the effect
-  
-  
-A CI is simply a range, centered on the slope
-CIs and p-values convey the same information
-CIs are on the scale of the statistic of interest (and thus the scale of the original data)
-If the confidence interval overlaps zero, we would be unable to reject the null the hypothesis
-
-Definition: Were we to repeat our procedure of sampling, analyzing the sample, and calculating a confidence interval *repeatedly* from the population, a fixed percentage of the resulting intervals would include the true population-level slope.
-
-We cannot say for sure whether the estimated confidence interval *this time* actually includes that true slope
-
-
-
-\end{comment}
-
-
+\frame{\frametitle{Questions about inference?}}
 
 \appendix
 \frame{}

@@ -1,0 +1,278 @@
+\input{preamble}
+
+\title{Regression Results in Stata}
+
+\date[]{February 18, 2015}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Regression Results}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+	\frametitle{How Stata Works}
+	\begin{enumerate}\itemsep1em
+	\item Load data into memory
+	\item You tell Stata to do something
+	\item If valid, Stata:
+		\begin{itemize}
+		\item stores some results temporarily
+		\item prints some results to the console
+		\end{itemize}
+	\item New commands overwrite stored results
+	\end{enumerate}
+}
+
+\begin{frame}[fragile]
+	\frametitle{Ex.: \texttt{summ} stores values in \texttt{r()}}
+	\scriptsize
+	\begin{verbatim}
+	Scalars   
+	  r(N)           number of observations
+	  r(mean)        mean
+	  r(skewness)    skewness (detail only)
+	  r(min)         minimum
+	  r(max)         maximum
+	  r(sum_w)       sum of the weights
+	  r(p1)          1st percentile (detail only)
+	  r(p5)          5th percentile (detail only)
+	  r(p10)         10th percentile (detail only)
+	  r(p25)         25th percentile (detail only)
+	  r(p50)         50th percentile (detail only)
+	  r(p75)         75th percentile (detail only)
+	  r(p90)         90th percentile (detail only)
+	  r(p95)         95th percentile (detail only)
+	  r(p99)         99th percentile (detail only)
+	  r(Var)         variance
+	  r(kurtosis)    kurtosis (detail only)
+	  r(sum)         sum of variable
+	  r(sd)          standard deviation
+	
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{\texttt{regress} stores values in \texttt{e()}}
+	\scriptsize
+	\begin{verbatim}
+	Scalars        
+	  e(N)                number of observations
+	  e(mss)              model sum of squares
+	  e(df_m)             model degrees of freedom
+	  e(rss)              residual sum of squares
+	  e(df_r)             residual degrees of freedom
+	  e(r2)               R-squared
+	  e(r2_a)             adjusted R-squared
+	  e(F)                F statistic
+	  e(rmse)             root mean squared error
+	  e(ll)               log likelihood under additional assumption of i.i.d.
+	                        normal errors
+	  e(ll_0)             log likelihood, constant-only model
+	  e(N_clust)          number of clusters
+	  e(rank)             rank of e(V)
+	  
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{\texttt{regress} stores values in \texttt{e()}}
+	\scriptsize
+	\begin{verbatim}
+	Macros         
+	  e(cmd)              regress
+	  e(cmdline)          command as typed
+	  e(depvar)           name of dependent variable
+	  e(model)            ols or iv
+	  e(wtype)            weight type
+	  e(wexp)             weight expression
+	  e(title)            title in estimation output when vce() is not ols
+	  e(clustvar)         name of cluster variable
+	  e(vce)              vcetype specified in vce()
+	  e(vcetype)          title used to label Std. Err.
+	  e(properties)       b V
+	  e(estat_cmd)        program used to implement estat
+	  e(predict)          program used to implement predict
+	  e(marginsok)        predictions allowed by margins
+	  e(asbalanced)       factor variables fvset as asbalanced
+	  e(asobserved)       factor variables fvset as asobserved
+	  
+	\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{\texttt{regress} stores values in \texttt{e()}}
+	\scriptsize
+	\begin{verbatim}
+	Matrices       
+	  e(b)                coefficient vector
+	  e(V)                variance-covariance matrix of the estimators
+	  e(V_modelbased)     model-based variance
+	
+	Functions      
+	  e(sample)           marks estimation sample
+	  
+	\end{verbatim}
+\end{frame}
+
+\frame{
+	\frametitle{What do we do with this?}
+	\begin{alltt}
+	reg growth lcon\\
+	
+	* store fitted values as yhat\\
+    predict yhat\\
+	
+	* store residuals as resid\\
+	predict resid, r\\
+	
+	* plot residuals\\
+	graph twoway resid lcon
+	\end{alltt}
+}
+
+\frame{
+	\frametitle{What do we do with this?}
+	\begin{itemize}\itemsep1em
+	\item We often need to explore results
+	\item Default results in Stata console are:
+		\begin{itemize}
+		\item Ugly
+		\item Formatted badly for print
+		\item Includes superfluous information
+		\end{itemize}
+	\item We can store results and print them
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{What do we want to present?}
+	\begin{itemize}\itemsep1em
+	\item Coefficients
+	\item Standard Errors
+	\item Significance stars (?)
+	\item Model fit
+		\begin{itemize}
+		\item Adjusted-$R^2$
+		\item RMSE ($\hat{\sigma}$)
+		\end{itemize}
+	\item Model-specific sample size
+	\end{itemize}
+}
+
+\begin{frame}[fragile]
+	\small 
+	\frametitle{Results with \texttt{estimates} I}
+	\begin{verbatim}
+	quietly reg growth lcon
+	estimates store small
+	
+	* print results
+	estimates table
+	
+	* print results with summary stats
+	estimates table, se stats(N r2_a)
+	
+	* format printing of coefs/SEs
+	estimates table small large, ///
+	b(%9.2f) se(%9.2f) stats(N r2_a)
+	
+	\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\small 
+	\frametitle{Results with \texttt{estimates} II}
+	\begin{verbatim}
+	quietly reg growth lcon lconsq
+	estimates store large
+	
+	estimates table small large
+	estimates table small large, se stats(N r2_a)
+	
+	\end{verbatim}
+\end{frame}
+
+\frame{
+	\frametitle{Results with \texttt{estout}}
+	\begin{itemize}\itemsep1em
+	\item Stata has lots of user-defined add-on packages
+	\item These can be helpful
+	\item We'll use one called \texttt{estout}\footnote{\url{http://repec.org/bocode/e/estout/index.html}}
+	\item Install with:\\
+		\texttt{ssc install estout, replace}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Using \texttt{estout}}
+	\begin{itemize}\itemsep1em
+	\item Two functions:\\
+		\begin{itemize}
+		\item \texttt{esttab}: Simple regression tables
+		\item \texttt{estout}: Better formatted tables
+		\end{itemize}
+	\item Generally, use \texttt{esttab}
+	\item Use \texttt{eststo} to store multiple models
+	\item Lots of options (see \texttt{help esttab})
+	\end{itemize}
+}
+
+
+\begin{frame}[fragile]
+	\small 
+	\frametitle{Results with \texttt{esttab} I}
+	\begin{verbatim}
+	reg growth lcon
+	
+	* print results (but note t-statistics by default)
+	esttab
+	
+	* better formatting
+	esttab, b(%9.2f) se(%9.2f)
+	
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\small 
+	\frametitle{Results with \texttt{esttab} II}
+	\begin{verbatim}
+	quietly reg growth lcon
+	eststo
+	
+	quietly reg growth lcon lconsq
+	eststo
+	
+	estout, b(%9.2f) se(%9.2f) stats(rmse)
+	esttab, b(%9.2f) se(%9.2f) stats(rmse)
+	
+	\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+	\small 
+	\frametitle{Results with \texttt{esttab} III}
+	\begin{verbatim}
+	* output results to RTF (for MS Word)
+	esttab using example.rtf
+	
+	* Stata won't overwrite a file
+	* But you can `replace` or `append`:
+	
+	esttab using example.rtf, replace
+	
+	esttab using example.rtf, append
+	
+	\end{verbatim}
+\end{frame}
+
+
+
+\appendix
+\frame{}
+
+\end{document}
