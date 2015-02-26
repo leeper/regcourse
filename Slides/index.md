@@ -4,9 +4,18 @@ title: Slides
 ghurl: https://github.com/leeper/regcourse/tree/gh-pages
 ---
 
-# Slides #
+# 2015 Slides #
 
-Here are drafts of slides. They are not final until after each respective week.
+Here are slides from this year:
+
+* [Lecture 01](lecture01.pdf)
+* [Lecture 03](lecture03.pdf)
+* [Lecture 05](lecture05.pdf)
+
+
+# 2014 Slides #
+
+Here are slides from last year.
 
  * [Session 2.1](Session02_01.html), [Session 2.2](Session02_02.html), [Session 2.3](Session02_03.html) ,
  * [Session 3.1](Session03_01.html), [Session 3.2](Session03_02.html), [Session 3.3](Session03_03.html) ,
