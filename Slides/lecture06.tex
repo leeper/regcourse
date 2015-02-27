@@ -1,0 +1,301 @@
+\input{preamble}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\title{Research Designs for Causal Inference}
+
+\date[]{March 10, 2015}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\frame{\tableofcontents}
+
+\section{Background}
+
+\frame{
+	\frametitle{Background}
+	\begin{itemize}\itemsep1.5em
+		\item The experimental ideal!
+		\item All observational studies require an \textbf{identification strategy}
+		\item We've been focusing on conditioning (via matching and/or regression)
+		\item Today's lecture is about quasi-experimental designs
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{What is a Quasi-Experiment?}
+	\begin{itemize}\itemsep1em
+		\item<1-> A situation where a real-world event induces an exogenous change (or ``shock'') in an independent variable
+		\item<2-> Also sometimes called \textit{``natural'' experiments}
+		\item<3-> Can anyone think of examples?
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Design Trumps Analysis}
+	\begin{itemize}\itemsep2em
+		\item Observational studies are hard because we need to have a convincing causal theory and have observed all causally relevant variables
+		\item Quasi-Experiments potentially save us from needing a complete and fully observed set of causal variables
+		\item In a quasi-experiment, we can treat our data (almost) as-if they are from an experiment
+	\end{itemize}
+}
+
+\section[IV]{Instrumental Variables}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+	\frametitle{A little history}
+	\begin{itemize}\itemsep1em
+		\item Have been used for a very long time (since Wright 1928)
+		\item Very popular identification strategy in economics
+		\item Just starting to become widespread in political science
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{When would we use IV?}
+	\begin{itemize}\itemsep1em
+		\item We are interested in the effect of $X \rightarrow Y$
+		\item This relationship is confounded by unobservables
+		\item We cannot manipulate $X$ (i.e., no experiments)
+		\item How can we identify the effect $X \rightarrow Y$?
+	\end{itemize}
+}
+
+\frame{
+	\begin{center}
+		\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+		\draw[->] (0,0) node[left] (X) {X} -- (5,0) node[right] (Y) {Y};
+		\draw[->] (0,0) node[left] (X) {X} -- (Y);
+		\draw[->] (-3,4) node[above] (Z) {Z} -- (X);
+		\draw[->] (Z) -- (Y);
+		\draw[->] (5,2) node[above] (A) {A} -- (Y);
+		\draw<1>[->] (-2,0) node[left] (B) {B} -- (X);
+		\draw<2>[->,red,thick] (-2,0) node[left] (B) {\color{red}{B}} -- (X);
+		\draw[->] (X) -- (2,-2) node[right] (C) {C};
+		\end{tikzpicture}
+	\end{center}
+}
+
+\frame{
+	\frametitle{What is ``instrumental''?}
+	\begin{enumerate}\itemsep1em
+		\item \alert<2>{serving as a crucial means, agent, or tool}
+		\item of, relating to, or done with an instrument or tool
+		\item relating to, composed for, or performed on a musical instrument
+		\item of, relating to, or being a grammatical case or form expressing means or agency
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{What is ``instrumental''?}
+	\begin{itemize}\itemsep2em
+		\item $B$ must be a crucial cause of $X$'s effect on $Y$
+		\item $B$ is the quasi-experimental shock to the causal process in our graph
+	\end{itemize}	
+}
+
+\frame{
+	\frametitle{Formal Definition}
+	An \textbf{instrumental variable} is a variable that satisfies two properties:\\
+	\begin{enumerate}\itemsep1em
+		\item Exogeneity\\ % Not testable
+			\begin{itemize}
+				\item $B$ temporally precedes $X$
+				\item $Cov(B, \epsilon) = 0$
+			\end{itemize}
+		\item Relevance\\ % Is testable
+			\begin{itemize}
+				\item $B$ causes $X$
+				\item $Cov(B, X) \neq 0$
+			\end{itemize}
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{How IV Works}
+	\begin{itemize}\itemsep1em
+		\item 
+	\end{itemize}
+}
+
+
+
+
+
+\frame{
+	\frametitle{Finding Instruments}
+	\begin{itemize}\itemsep1em
+		\item Forward, not backward, causal inference
+		\item Most instruments are not things we care about
+			\begin{itemize}
+				\item Weather, disasters
+				\item Geography, climate
+				\item Lotteries
+			\end{itemize}
+		\item A good instrument is one that satisfies both of our conditions, so we need:
+			\begin{itemize}
+				\item A good story about exogeneity
+				\item Evidence that instrument is \textit{strong}
+			\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Instrumental Variables Activity}
+	\begin{itemize}\itemsep2em
+		\item Read each scenario
+		\item Assess \textbf{exogeneity} and \textbf{relevance}
+		\item Discuss with the person sitting next to you
+	\end{itemize}
+}
+
+
+% IV estimation
+% Wald
+% TSLS
+
+% LATE, SATE, and ITT
+
+
+
+
+% SEs and efficiency
+% SEs are going to be larger in 2SLS than OLS
+% We can still use heteroskedasticity-consistent SEs in second stage
+% When an instrument is weak, the SEs that we get from IV estimation are going to be very large. We therefore want strong instruments.
+
+
+% * full first stage results
+% ivregress 2sls outcome covariates (confounded = instrument), first
+% * additional first stage fit statistics
+% estat firststage
+
+%  Durbin-Wu-Hausman Test
+% Do residuals from the first stage relate to the outcome?
+% `\( Y = \beta_0 + \beta_1 X_{Confounded} + \beta_2 \nu + \epsilon\)`
+% `\( \nu \)` are the residuals from the first stage
+
+% In Stata:
+% quietly ivregress 2sls outcome covariates (confounded = instrument)
+% estat endogenous
+
+
+
+
+\section[RDD]{Regression Discontinuity Designs}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+	\frametitle{Example: Maimonides' Rule}
+	\begin{enumerate}\itemsep2em
+		\item<2-> What is Maimonides' Rule?
+		\item<3-> Why is it a valid (credible) instrument? (Or why isn't it?)
+		\item<4-> How does it differ from a randomized experiment?
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{``Sharp'' and ``Fuzzy'' discontinuities}
+	\begin{itemize}\itemsep2em
+		\item If an instrument imperfectly causes $X$, then it produces a \textbf{fuzzy} discontinuity
+		\item If an instrument perfectly causes $X$, then it produces a \textbf{sharp} discontinuity
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Problems with Discontinuities}
+	\begin{itemize}\itemsep1em
+		\item Discontinuities that appear random are exploitable
+		\item Compensatory rivalry and equalization
+		\item Campbell's Law:\\
+		\textit{The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.}
+	\end{itemize}
+}
+
+
+\section[ITS]{Interrupted Time-Series}
+\frame{\tableofcontents[currentsection]}
+
+
+
+
+
+\frame{
+	\frametitle{How ITS Works}
+	\begin{itemize}\itemsep0.5em
+		\item Identify an exogenous shock in $X$ that might affect $Y$
+		\item Look at $Y$ before ($t$) and after ($t+1$) the shock
+		\item We only observe one manifest outcome at each point in time
+		\item To make a causal inference, we need:
+			\begin{itemize}
+				\item $Y_{0,t}$ and $Y_{1,t}$, or
+				\item $Y_{0,t+1}$ and $Y_{1,t+1}$
+			\end{itemize}
+		\item Use pre-post comparisons to infer the value of unobserved potential outcomes		
+	\end{itemize}
+}
+
+% graph over-time
+
+
+
+\section[DID]{Difference-In-Differences}
+\frame{\tableofcontents[currentsection]}
+
+
+\frame{
+	\frametitle{Problem with Inference in ITS}
+	\begin{itemize}\itemsep1em
+		\item ITS compares a unit against itself at various points in time (pre- and post-treatment)
+		\item This requires a strong assumption that potential outcomes are constant over-time:
+			\begin{align*}
+			Y_{i0t} \equiv Y_{i0t+1}\\
+			Y_{i1t} \equiv Y_{i1t+1}
+			\end{align*}
+		\item If anything else changed before and after the interruption, then the shock might:
+			\begin{itemize}
+				\item not have been exogenous, or 
+				\item have concurrent with another change, or
+				\item reflect a time trend
+			\end{itemize}
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Difference-In-Differences}
+	\begin{itemize}\itemsep1em
+		\item How do we know change in $Y$ wasn't due to something else?
+			\begin{itemize}
+				\item How do we know $Y_{0,t}$ is a good stand-in for $Y_{0,t+1}$?
+			\end{itemize}
+		\item<2-> Use a comparison case (or cases)!
+		\item<3-> Instead of using the pre-post difference in $Y_i$ to estimate the causal effect, use the difference in two pre-post differences:\\
+		$(Y_{i,t+1} - Y_{i,t}) - (Y_{j,t+1} - Y_{j,t})$
+	\end{itemize}
+}
+
+
+% graph DID (Angrist and Pischke 231)
+
+
+\frame{
+	\frametitle{Causal Inference Over-Time}
+	\begin{itemize}\itemsep0.5em
+		\item In experiments, matching, cross-sectional regression, and RDD, we make causal inferences based on \textbf{between-unit} comparisons at the \textit{same} point in time
+		\item In ITS, DID, and panel analysis (next week), we make causal inferences (also) based on \textbf{within-unit} comparisons at \textit{different} points in time
+		\item This can be really helpful, but also raises new concerns
+		\item We'll discuss those next week
+	\end{itemize}
+}
+
+
+
+\appendix
+\frame{}
+
+\end{document}

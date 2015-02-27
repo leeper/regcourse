@@ -1,5 +1,6 @@
 \input{preamble}
 \usepackage{tikz}
+\usepackage{pbox}
 \usetikzlibrary{calc}
 \usetikzlibrary{shapes,arrows}
 
@@ -17,11 +18,10 @@
 \section{Data Gathering}
 \frame{\tableofcontents[currentsection]}
 
+
+
 \section{Data Transformations}
 \frame{\tableofcontents[currentsection]}
-
-
-% ``tidy data''
 
 \frame{
 	\frametitle{Tidy Data Activity}
@@ -32,11 +32,78 @@
 	\end{itemize}
 }
 
-% wide versus long
+\frame{
+	\frametitle{Data Formats}
+	\begin{itemize}\itemsep1em
+		\item A dataset is a rectangular matrix of:
+			\begin{itemize}
+				\item Observations (rows)
+				\item Variables (columns)
+			\end{itemize}
+		\item But what counts as an observation?
+			\begin{itemize}
+				\item<1-> Countries, by year
+				\item<2-> Dyads (e.g., couples, neighboring countries)
+				\item<3-> Candidates, by election
+			\end{itemize}
+	\end{itemize}
+}
 
-% scaling
+
+\frame{
+	\frametitle{Data in Wide Format}
+	\begin{center}
+		\begin{tabular}{lrrrr}
+			Country     & \pbox{20cm}{GDP\\2012} & \pbox{20cm}{GDP\\2013} & \pbox{20cm}{Life\\Expectancy\\2012} & \pbox{20cm}{L.E.\\2013} \\ \hline
+			Afghanistan &           20.5 &           20.3 &                     60 &          61 \\
+			Albania     &           12.3 &           12.9 &                     77 &          77 \\
+			Algeria     &          204.3 &          210.2 &                     71 &          71 \\
+			Angola      &          114.3 &          124.2 &                     51 &          51 \\ \hline
+		\end{tabular}
+	\end{center}
+}
+
+
+\frame{
+	\frametitle{Data in Long Format}
+	\begin{center}
+		\begin{tabular}{llrr}
+			Country     & Year & GDP (\$B) & Life Expectancy \\ \hline
+			Afghanistan & 2012 &      20.5 &              60 \\
+			Afghanistan & 2013 &      20.3 &              61 \\
+			Albania     & 2012 &      12.3 &              77 \\
+			Albania     & 2013 &      12.9 &              77 \\
+			Algeria     & 2012 &     204.3 &              71 \\
+			Algeria     & 2013 &     210.2 &              71 \\
+			Angola      & 2012 &     114.3 &              51 \\
+			Angola      & 2013 &     124.2 &              51 \\ \hline
+		\end{tabular}
+	\end{center}
+}
+
+
+
+\frame{
+	\frametitle{Wide and Long in Stata}
+	\begin{itemize}\itemsep1em
+		\item When data are cross-sectional, there is only wide
+		\item When data have other forms, they can be represented in multiple ways
+		\item Next week we'll start discussing over-time data
+		\item In most case, we need data in \textbf{long} or ``tidy'' format
+		\item In Stata, this will require the \textbf{reshape} and \textbf{xtset} commands
+	\end{itemize}
+}
 
 % data cleaning
+
+
+
+% scaling and reliability
+
+\frame{
+	\frametitle{Cronbach's $\alpha$}
+}
+
 
 
 \section{Missing Data}
