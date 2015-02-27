@@ -1,8 +1,7 @@
 \input{preamble}
 \usepackage{tikz}
+\usetikzlibrary{calc}
 \usetikzlibrary{shapes,arrows}
-\usetikzlibrary{decorations.pathreplacing}
-\usepackage{tikz-3dplot}
 
 \title{Practical Data Issues}
 
@@ -24,18 +23,530 @@
 
 % ``tidy data''
 
+\frame{
+	\frametitle{Tidy Data Activity}
+	\begin{itemize}\itemsep2em
+	\item Construct the data described on the worksheet into a rectangular dataset
+	\item You can use Stata's data editor, Excel, a Word table, etc.
+	\item You have 7 minutes
+	\end{itemize}
+}
+
 % wide versus long
+
+% scaling
+
+% data cleaning
 
 
 \section{Missing Data}
 \frame{\tableofcontents[currentsection]}
 
 
-% casewise deletion
+\frame{
+	\frametitle{Missing Data Ideal World}
+	\begin{itemize}\itemsep1em
+	\item Everything we've talked about assumes no missingness
+	\item We always assume that we have a representative sample of i.i.d. data
+	\item We analyze all of our data as is
+	\end{itemize}
+}
 
-% single imputation
+\frame{
+	\frametitle{Missing Data}
+	\begin{itemize}\itemsep1em
+	\item What is it?
+	\item<2-> Why are data missing?
+	\item<3-> How often do we encounter missing data?
+	\end{itemize}
+}
 
-% multiple imputation
+\frame{
+	\frametitle{Does Missingness Matter?}
+	\small
+	\begin{quote}
+	If the data are missing at random, then the size of the random sample available from the population is simply reduced. Although this makes the estimators less precise, it does not introduce any bias [\dots] There are ways to use the information on observations where only some variables are missing, but this is not often done in practice. The improvement in the estimators is usually slight, while the methods are somewhat complicated. In most cases, we just ignore the observations that have missing information. (Wooldridge 2013, 314)
+	\end{quote}
+
+}
+
+\frame{
+	\frametitle{Missing Data in Practice}
+	\begin{itemize}\itemsep1em
+	\item Often have missing data for a variety of reasons
+	\item We often don't realize we have missing data
+	\item Missing data can be problematic (but not always)
+	\item Stata handles missingness through \textbf{complete case} or \textbf{available case} analysis
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Complete/Available Cases}
+	\begin{itemize}\itemsep1em
+	\item \textbf{Complete case analysis} involves subsetting a dataset to retain only observations that are complete on all variables before any analysis
+	\item \textbf{Available case analysis} involves dynamically subsetting a dataset to retain only observations that are complete on all variables used in a given analysis
+		\begin{itemize}
+		\item Sometimes also called \textit{case-wise deletion} or \textit{list-wise deletion}
+		\end{itemize}
+	\item<2-> Do we use either of these techniques?
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Impacts of Missingness}
+	\begin{enumerate}\itemsep1em
+	\item Scale construction problems
+	\item Statistical efficiency
+	\item Representativeness (External validity)
+	\item Comparability of subsample analyses
+	\item Causal inference
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{Possible Impact 1: Scales}
+	\begin{itemize}\itemsep1em
+	\item It is common to analyze variables constructed as scales
+		\begin{itemize}
+		\item Simple additive scales being the most common
+		\end{itemize}
+	\item Examples?
+		\begin{itemize}
+		\item Political knowledge
+		\item Frequency of voting
+		\item Democracy
+		\item Budgets across multiple domains
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{A Simple Example}
+	\begin{center}
+    \begin{tabular}{lllll} \hline
+    Case & Item 1 & Item 2 & Item 3 & Sum \\ \hline
+    A & 1 & 2 & 1 & ? \\ \hline
+    B & 1 & . & 3 & ? \\ \hline
+    C & . & 1 & 1 & ? \\ \hline
+    D & 2 & 1 & 2 & ? \\ \hline
+    E & 1 & . & . & ? \\ \hline
+    F & . & . & . & ? \\ \hline
+    \end{tabular}
+    \end{center}
+}
+
+\frame{
+	\frametitle{Possible Impact 1: Scales}
+	\begin{itemize}\itemsep2em
+	\item When constructing multi-item scales, we need to know how to deal with missingness
+	\item Stata's default is to coerce missingness to zero
+	\item Another strategy is \textit{imputation}
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Possible Impact 2: Efficiency}
+	\begin{itemize}\itemsep1em
+	\item Recall: $Var(\hat{\beta}) = \hat{\sigma} (\mathbf{X}'\mathbf{X})^{-1}$
+	\item And $\hat{\sigma}^2 = \frac{SSR}{n-2}$, so that $\hat{\sigma} = \frac{\sqrt{SSR}}{\sqrt{n-2}}$
+	\item As sample size increases we gain precision
+	\item Missing data reduces our \textit{effective sample size} for analysis
+	\end{itemize}
+}
+
+\frame{
+	\begin{center}
+   	\begin{tikzpicture}[scale=2]
+ 	  \draw[->] (0,0) -- (5,0) node[right] {$n$};
+ 	  \draw[->] (0,0) -- (0,3) node[above] {$\hat{\sigma}$};
+ 	  \draw[domain=0.1:5,smooth,variable=\x,blue,thick] plot ({\x},{1/sqrt(\x)});
+ 	  \draw[->,thick] (1.5,2.5) node[right] {This matters most when $n$ is small} -- (0.5,1.5);
+   	\end{tikzpicture}
+   	\end{center}
+}
+
+\frame{
+	\frametitle{Possible Impact 3: Representativeness}
+	\begin{itemize}\itemsep1em
+	\item Recall: We generally try to make inferences from sample to a well-specified population
+	\item If missingness is \textit{completely} random, we simply have a smaller sample
+	\item If missingness is not \textit{completely} random, we no longer have a representative sample
+		\begin{itemize}
+		\item This means we our sample estimates are biased
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Possible Impact 4: Comparability}
+	\begin{itemize}\itemsep1em
+	\item When there is missingness, we (and Stata) default to \textit{available case analysis}
+	\item Our analyses might be based on different subsamples of our data
+	\item Thus the precision of our estimates from different analyses might vary
+	\item Can be solved through \textit{complete case analysis}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Possible Impact 5: Causal Inference}
+	\begin{itemize}\itemsep1em
+	\item Our inferences might be biased if missingness is caused by a third variable
+	\item This is especially bad if the third variable is also causally important for our outcome
+	\end{itemize}
+}
+
+
+\frame[label=causalgraph]{
+   	\begin{center}
+   	\begin{tikzpicture}[scale=0.8,>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X1) {Wealth} -- (2,0) node[right] (Y1) {Health};
+        \draw[->] (-1,2) node[above] (Z1) {Corruption} -- (Y1);
+        \draw (1,-1) node (Democracy) {Democracies};
+
+        \draw[->] (7,0) node[left] (X2) {Wealth} -- (9,0) node[right] (Y2) {Health};
+        \draw[->] (6,2) node[above] (Z2) {Corruption} -- (Y2);
+        \draw[->] (Z2) -- (9,3) node[right] (Yobs) {$Wealth_{obs}$};
+        \draw (8,-1) node (non) {Non-Democracies};
+    \end{tikzpicture}
+    \end{center}
+}
+
+\frame{
+	\frametitle{Impact of Missingness Depends on \textit{Why} Data Are Missing}
+	\begin{itemize}\itemsep2em
+	\item Missing Completely At Random (MCAR)
+	\item Missing At Random
+	\item Missing Not At Random (MNAR)
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{MCAR/Ignorable}
+    \begin{itemize}\itemsep1em
+    \item Best-case scenario
+    \item Our data constitute a representative subsample of our sample, making it a representative sample of our population
+	\item Examples?
+		\begin{itemize}
+		\item<2-> We obtain a complete sample but randomly analyze only part of it
+		\item<3-> Survey respondents randomly assigned to different questionnaires
+		\end{itemize}
+    \item<4-> How do we deal with missingness?
+    	\begin{itemize}
+    	\item<5-> We can probably ignored it
+    	\end{itemize}
+    \end{itemize}
+}
+
+\frame{
+	\frametitle{Impacts of Missingness (MCAR)}
+	\begin{enumerate}\itemsep1em
+	\item \alert{Scale construction problems}
+	\item \alert{Statistical efficiency}
+	\item \color{gray}{Representativeness (External validity)}
+	\item \color{gray}{Comparability of subsample analyses}
+	\item \color{gray}{Causal inference}
+	\end{enumerate}
+}
+
+
+
+\frame{
+	\frametitle{MAR}
+    \begin{itemize}\itemsep1em
+    \item Middle-ground scenario
+    \item Data are missing for a (non-random) reason that we understand and observe
+    \item Missingness is \textbf{\textit{conditionally} ignorable}
+    \end{itemize}
+}
+
+\frame[label=causalgraph2]{
+   	\begin{center}
+   	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X1) {Wealth} -- (2,0) node[right] (Y1) {Health};
+        \draw[->] (0,2) node[left] (Z1) {Climate} -- (Y1);
+        \draw[->] (0,-2) node[left] (W1) {Corruption} -- (Y1);
+        \draw[->] (Z1) -- (2,3) node[right] (Xobs) {$Pr(\text{Corruption}_{obs})$};
+        \draw[->] (X1) -- (Xobs);
+    \end{tikzpicture}
+    \end{center}
+}
+
+
+\frame{
+	\frametitle{Impacts of Missingness (MAR)}
+	\begin{enumerate}\itemsep1em
+	\item \alert{Scale construction problems}
+	\item \alert{Statistical efficiency}
+	\item \color{gray}{Representativeness (External validity)}
+	\item \alert{Comparability of subsample analyses}
+	\item \color{gray}{Causal inference}
+	\end{enumerate}
+}
+
+
+\frame{
+	\frametitle{Handling MAR Data}
+	\begin{itemize}\itemsep1em
+	\item Regression adjustment
+	\item Reweighting
+	\item Single imputation
+		\begin{itemize}
+		\item Several possible methods
+		\end{itemize}
+	\item Multiple imputation
+		\begin{itemize}
+		\item Several possible methods
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Regression adjustment}
+	\begin{itemize}\itemsep1em
+	\item 
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Weighting adjustments}
+	\begin{itemize}\itemsep1em
+	\item Stratify the sample based on observed characteristics, where the proportion of the \textit{population} in each stratum is also known
+	\item Reweight each observation so sample matches population distributions
+	\item Essentially, over-weight observed cases from strata where there are missing values
+	\item Several variants of this:
+		\begin{itemize}
+		\item Weighting classes
+		\item Post-stratification
+		\item Raking
+		\end{itemize}
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Single imputation}
+	\begin{itemize}\itemsep1em
+	\item Fill in missing values with an \textit{imputed} value
+	\item Several different methods, including:
+		\begin{itemize}
+		\item Zero
+		\item Mean value
+		\item Random value
+		\item Inferred value
+		\item Hot-Deck imputation
+		\item Regression imputation
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Single Imputation I}
+	\begin{itemize}\itemsep1em
+	\item<1-> Zero: Will bias results, unless $\bar{X} = 0$
+	\item<2-> Mean: Unbiased\dots why?
+	\item<3-> Random: Unbiased\dots why?
+	\item<4-> Inferred
+		\begin{itemize}
+		\item Uses observed data to guess at missing value
+		\item Could be historical records, logic, etc.
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Single Imputation I}
+	\begin{itemize}\itemsep1em
+		\item Hot-Deck Imputation
+			\begin{enumerate}
+			\item<1-> Sort dataset by all complete variables
+			\item<2-> For every missing value, carry forward last observed value
+			\item<3-> Imputations depend on sort order
+			\end{enumerate}
+		\item Regression Imputation
+			\begin{itemize}
+			\item<4-> Regress partially observed variable on all complete variables
+			\item<5-> Replace missing value with fitted value $\hat{y}$ from regression
+			\item<6-> Imputations depend on model
+			\item<7-> Can dramatically overstate certainty unless a stochastic component is added
+			\end{itemize}
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{Multiple Imputation}
+	\begin{itemize}\itemsep1em
+	\item Apply a stochastic single imputation technique multiple times and merge the results of the analysis performed on each imputed dataset
+		\begin{itemize}
+		\item Usually some form of regression imputation
+		\end{itemize}
+	\item Attempts to account for uncertainty due to imputation
+		\begin{itemize}
+		\item Single imputation overstates our certainty
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{MI Procedure}
+	\begin{enumerate}\itemsep1em
+	\item Impute missing values and estimate $\hat{\beta}_m$
+	\item Repeat for all $M$ datasets
+	\item Aggregate results: $\hat{\beta} = \frac{1}{M}\sum_{m=1}^{M} \hat{\beta}_m$
+	\item Account for missingness when estimating variance:
+		\begin{itemize}\itemsep0.5em
+		\item $\text{Within} = \frac{1}{m}\sum_1^M Var(\hat{\beta}_m)$
+		\item $\text{Between} = \frac{1}{m-1} \sum_1^M (\hat{\beta}_m - \hat{\beta})^2$
+		\item $Var(\hat{\beta}) = \text{Within} + (1 + \frac{1}{m}) \text{Between}$
+		\end{itemize}
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{An Example I}
+	\begin{itemize}\itemsep1em
+	\item What is the effect of university education on an individuals' political tolerance?
+	\item Missingness in various covariates
+	\item Multiply impute missing values
+	\item On each imputed dataset, we estimate:\\
+		$\text{Tolerance} = \beta_0 + \beta_1 \text{Education} + \beta_{2...k} \text{Controls}$
+	\item Our test statistic is $\hat{\beta}_{\text{Education}}$
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{An Example II}
+	\begin{center}
+	\begin{tabular}{llll}\hline
+	Dataset & $\hat{\beta}_{\text{Education}}$ & $SE_{\hat{\beta}}$ & $Var(\hat{\beta})$ \\ \hline
+	1 & 4.32 & 0.95 & 0.9025 \\
+	2 & 4.15 & 1.16 & 1.3456 \\
+	3 & 4.86 & 0.83 & 0.6889 \\
+	4 & 3.98 & 1.04 & 1.0816 \\
+	5 & 4.50 & 0.91 & 0.8281 \\ \hline
+	\end{tabular}
+	
+	\vspace{2em}
+	\onslide<2->{$\hat{\beta}_{Overall} = \frac{4.32 + 4.15 + 4.86 + 3.98 + 4.50}{5} = 4.362$}
+	\end{center}
+}
+
+
+\frame{
+	\frametitle{An Example III}
+	\small
+	\begin{align*}
+	\onslide<1->{Var_{\text{W}} & = \frac{1}{5} (0.9025 + 1.3456 + 0.6889 + 1.0816 + 0.8281)}\\
+		\onslide<2->{& = \frac{4.8467}{5} = 0.96934}\\[1em]
+	\onslide<3->{Var_{\text{B}} & = \frac{1}{m-1}(-0.042^2 + 0.212^2 + 0.498^2 + -0.382^2 + 0.138^2)}\\
+		\onslide<4->{& = \frac{0.45968}{4} = 0.11492}\\[1em]
+	\onslide<5->{Var(\hat{\beta}) & = W + (1 + \frac{1}{m}) B = 1.107244}\\[1em]
+	\onslide<7->{SE(\hat{\beta}) & = \sqrt{1.107244} = 1.052257}
+	\end{align*}
+}
+
+\frame{
+	\frametitle{MAR: Conclusion}
+	\begin{itemize}\itemsep1em
+	\item<1-> If we assume MAR, lots of available strategies
+	\item<2-> Added value of imputation depends on scale of missingness and assumptions
+	\item<3-> Can overstate our certainty about model estimates
+	\item<4-> Can introduce measurement error if we misunderstand the pattern of missingness, which then leads to bias
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{MNAR}
+    \begin{itemize}\itemsep1em
+    \item Worst-case scenario
+    \item Missingness is \textbf{non-ignorable}
+    \item Data are missing due to factors that are in our model
+    \item Examples?
+    	\begin{itemize}
+    	\item<2-> Survey participation based on topic
+    	\item<3-> Income reporting based on income
+    	\end{itemize}
+    \end{itemize}
+}
+
+\frame[label=mnar]{
+	\frametitle{MNAR: Special Cases}
+    \begin{enumerate}\itemsep2em
+    \item Sample selection bias
+    \item Censoring
+    \end{enumerate}
+}
+
+\frame[label=causalgraph3]{
+   	\begin{center}
+   	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X1) {Wealth} -- (2,0) node[right] (Y1) {Health};
+        \draw[->] (0,2) node[left] (Z1) {Climate} -- (Y1);
+        \draw[->] (Y1) -- (2,-2) node[below] (Yobs) {$Pr(\text{Health}_{obs})$};
+        \draw<2->[->] (-2,-2) node[left] (W1) {Corruption} -- (Yobs);
+    \end{tikzpicture}
+    \end{center}
+}
+
+\frame{
+	\frametitle{Sample Selection Bias}
+	\begin{itemize}\itemsep1em
+	\item Whether we observe a unit depends on factors related to $X$
+	\item Common analytic strategy: Heckman Models
+		\begin{itemize}
+		\item OLS with an additional covariate
+		\end{itemize}
+	\item Regress missingness on variable(s) \textit{not} in our main model
+	\item Include predicted probability of observing case as a covariate in main model
+	\end{itemize}
+}
+
+\againframe{mnar}
+
+\frame[label=causalgraph4]{
+   	\begin{center}
+   	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X1) {Wealth} -- (2,0) node[right] (Y1) {Health};
+        \draw[->] (0,2) node[left] (Z1) {Climate} -- (Y1);
+        \draw[->] (Y1) -- (2,-2) node[below] (Xobs) {$\text{Health}_{obs}$};
+    \end{tikzpicture}
+    \end{center}
+}
+
+\frame{
+	\frametitle{Censoring/Truncation}
+	\begin{itemize}\itemsep1em
+	\item Values of $Y$ above (or below) a threshold are scored at the threshold value
+	\item Sometimes ``top-coding'' or ``bottom-coding''
+	\item Basically systematic measurement error
+	\item Examples:
+		\begin{itemize}
+		\item Income self-reports on surveys
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Impacts of Missingness (MNAR)}
+	\begin{enumerate}\itemsep1em
+	\item \alert{Scale construction problems}
+	\item \alert{Statistical efficiency}
+	\item \alert{Representativeness (External validity)}
+	\item \alert{Comparability of subsample analyses}
+	\item \alert{Causal inference}
+	\end{enumerate}
+}
+
+\frame{
+	\frametitle{The Big Problem}
+	\begin{itemize}\itemsep2em
+	\item Choosing among MCAR vs. MAR vs. MNAR is an untestable assumption
+	\item We usually never \textit{completely} know why data are missing
+	\end{itemize}
+}
+
 
 
 \section{Visualization}
