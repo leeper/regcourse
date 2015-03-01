@@ -231,16 +231,83 @@
 	\frametitle{Scale Constructions}
 	\begin{itemize}\itemsep1em
 	\item Scale construction is the act of aggregating multiple variables into a smaller number of variables
-	\item Examples?
-	\vspace{1em}
-	\item<2-> 
+	\item Two advantages:
+		\begin{itemize}
+		\item Reducing measurement error
+		\item Avoiding collinearity
+		\end{itemize}
+	\item Examples
+		\begin{itemize}
+		\item<2-> 
+		\item<3-> Others
+		\end{itemize}
 	\end{itemize}
 }
 
 
 \frame{
 	\frametitle{Cronbach's $\alpha$}
+	\begin{itemize}\itemsep1em
+	\item Scaling only makes sense if variables ``go together''
+		\begin{itemize}
+		\item We can assess them \textit{pairwise} by looking at correlations between variables
+		\item But it's helpful to have a way to assess the scale as a whole
+		\end{itemize}
+	\item Definition:
+		$\alpha = \dfrac{ N \bar{c} }{ \bar{v} + (N-1) \bar{c} }$
+		\begin{itemize}
+		\item N: number of items
+		\item $\bar{c}$: average covariance of items
+		\item $\bar{v}$: average variance of items
+		\end{itemize}
+	\end{itemize}
 }
+
+
+\begin{frame}[fragile]
+\frametitle{Cronbach's $\alpha$ in Stata I}
+\footnotesize
+\begin{verbatim}
+. corr price headroom trunk weight length, cov
+(obs=45)
+
+             |    price headroom    trunk   weight   length
+-------------+---------------------------------------------
+       price |  7.7e+06
+    headroom |  511.298  .718434
+       trunk |  3793.78  2.78662  20.4343
+      weight |  1.2e+06  395.896  2544.42   658519
+      length |  28383.1  12.5265  79.5833  18332.8  561.391
+
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Cronbach's $\alpha$ in Stata II}
+\scriptsize
+\begin{columns}
+\column{\dimexpr\paperwidth-25pt}
+\begin{verbatim}
+. alpha price headroom trunk weight length, item
+
+Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         |  Obs  Sign   correlation   correlation     covariance      alpha
+-------------+-----------------------------------------------------------------
+price        |   70    +       0.9360        0.2201        3120.148      0.0854
+headroom     |   66    +       0.2471        0.2453        182861.2      0.2626
+trunk        |   69    +       0.3928        0.3752        186996.9      0.2649
+weight       |   64    +       0.5665        0.3710        5565.038      0.0106
+length       |   69    +       0.5604        0.5414        180695.7      0.2578
+-------------+-----------------------------------------------------------------
+Test scale   |                                             111565.7      0.2483
+-------------------------------------------------------------------------------
+\end{verbatim}
+\end{columns}
+\end{frame}
+
 
 \frame{
 	\frametitle{Other forms of scaling}
@@ -706,7 +773,7 @@
 \frame[label=mnar]{
 	\frametitle{MNAR: Special Cases}
     \begin{enumerate}\itemsep2em
-    \item Sample selection bias
+    \item Truncation (Sample selection bias)
     \item Censoring
     \end{enumerate}
 }
@@ -714,24 +781,63 @@
 \frame[label=causalgraph3]{
    	\begin{center}
    	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
-        \draw[->] (0,0) node[left] (X1) {Wealth} -- (2,0) node[right] (Y1) {Health};
-        \draw[->] (0,2) node[left] (Z1) {Climate} -- (Y1);
-        \draw[->] (Y1) -- (2,-2) node[below] (Yobs) {$Pr(\text{Health}_{obs})$};
-        \draw<2->[->] (-2,-2) node[left] (W1) {Corruption} -- (Yobs);
+        \draw[->] (0,0) node[left] (X1) {Education} -- (2,0) node[right] (Y1) {Income};
+        \draw[->] (-1,3) node[above] (Z1) {\color{gray}{Intelligence}} -- (Y1);
+        %\draw[->] (Z1) -- (X1);
+        \draw<2->[->] (Z1) -- (2,3) node[right] (Yobs) {Response};
     \end{tikzpicture}
     \end{center}
 }
 
+% not a problem if Z not associated with Y
+% can also have omitted variable bias if Z causes X
+
+\frame{
+	\begin{center}
+   	\begin{tikzpicture}
+ 	  \draw[->] (0,0) -- (6,0) node[below] {Education};
+ 	  \draw[->] (0,0) -- (0,5) node[above] {Income};
+	  \foreach \Point in
+	    {(0.4,0.50), (0.6,1.25), (0.4,2.00), (0.6,2.75),
+	     (1.4,1.00), (1.6,1.75), (1.4,2.50), (1.6,3.25),
+	     (2.4,1.50), (2.6,2.25), (2.4,3.00), (2.6,3.75),
+	     (3.4,2.00), (3.6,2.75), (3.4,3.50), (3.6,4.25),
+	     (4.4,2.50), (4.6,3.25), (4.4,4.00), (4.6,4.75),
+	     (5.4,3.00), (5.6,3.75), (5.4,4.50), (5.6,5.25)}{
+	      \node at \Point {\textbullet};
+	  };
+	  \draw[blue,line width=2pt] (0.00,1.5) -- (6.00,4.50);
+	  \draw<2->[dashed] (0.00,2.60) -- (6.00,2.60);
+	  \foreach \Point in
+        {(0.4,0.50), (0.6,1.25), (0.4,2.00), (1.4,1.00), (1.4,2.50), 
+         (1.6,1.75), (2.4,1.50), (2.6,2.25), (3.4,2.00), (4.4,2.50)}{
+         \node<2->[lightgray] at \Point {\textbullet};
+	  	  };
+	  \draw<3>[line width=2pt] (0.6,1.80) -- (0.6,2.75);
+	  \draw<3>[line width=2pt] (1.6,2.30) -- (1.6,3.25);
+	  \draw<3>[line width=2pt] (2.4,2.70) -- (2.4,3.00);
+	  \draw<3>[line width=2pt] (2.6,2.80) -- (2.6,3.75);
+	  \draw<4->[red, line width=2pt] (0.00,2.675) -- (6.00,4.25);
+   	\end{tikzpicture}
+   	\end{center}
+}
+
+
 \frame{
 	\frametitle{Sample Selection Bias}
 	\begin{itemize}\itemsep1em
-	\item Whether we observe a unit depends on factors related to $X$
+	\item Whether we observe a unit depends on factors related to $X$ and $Y$
 	\item Common analytic strategy: Heckman Models
 		\begin{itemize}
 		\item OLS with an additional covariate
+		\item Regress missingness on variable(s) \textit{not} in our main model
+		\item Include predicted probability of observing case as a covariate in main model
 		\end{itemize}
-	\item Regress missingness on variable(s) \textit{not} in our main model
-	\item Include predicted probability of observing case as a covariate in main model
+	\item<2-> Examples?
+		\begin{itemize}
+		\item<3-> Effect of grades on job performance
+		\item<4-> Systematic survey nonresponse
+		\end{itemize}
 	\end{itemize}
 }
 
@@ -748,17 +854,30 @@
 }
 
 \frame{
-	\frametitle{Censoring/Truncation}
+	\frametitle{Censoring}
 	\begin{itemize}\itemsep1em
 	\item Values of $Y$ above (or below) a threshold are scored at the threshold value
 	\item Sometimes ``top-coding'' or ``bottom-coding''
 	\item Basically systematic measurement error
-	\item Examples:
+	\item Examples?
 		\begin{itemize}
-		\item Income self-reports on surveys
+		\item<2-> Income self-reports on surveys
+		\item<3-> Measurement tool insensitive below threshold
 		\end{itemize}
 	\end{itemize}
 }
+
+\frame{
+	\frametitle{Dealing with censoring}
+	\begin{itemize}\itemsep1em
+	\item Estimate a modified regression model
+	\item OLS cannot accommodate this
+	\item Common approach is the \textbf{Tobit model}
+	\item We'll talk about this later
+	\end{itemize}
+}
+
+
 
 \frame{
 	\frametitle{Impacts of Missingness (MNAR)}
@@ -778,6 +897,8 @@
 	\item We usually never \textit{completely} know why data are missing
 	\end{itemize}
 }
+
+\frame{\frametitle{Questions about missing data?}}
 
 
 \appendix
