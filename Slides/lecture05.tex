@@ -2,7 +2,11 @@
 \usepackage{tikz}
 \usepackage{pbox}
 \usetikzlibrary{calc}
-\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{matrix}
+\usetikzlibrary{positioning}
 
 \title{Practical Data Issues}
 
@@ -14,14 +18,6 @@
 
 \frame{\tableofcontents}
 
-
-\section{Data Gathering}
-\frame{\tableofcontents[currentsection]}
-
-\frame{
-	\frametitle{}
-
-}
 
 \section{Data Transformations}
 \frame{\tableofcontents[currentsection]}
@@ -84,8 +80,6 @@
 	\end{center}
 }
 
-
-
 \frame{
 	\frametitle{Wide and Long in Stata}
 	\begin{itemize}\itemsep1em
@@ -101,12 +95,146 @@
 
 
 % data merging
+\frame{
+	\frametitle{Merging Multiple Datasets}
+	\begin{itemize}\itemsep1em
+	\item We can only analyze one dataset at a time
+	\item All data about our observations needs to be in one file
+	\item Often we need data from multiple files together
+	\item To use them, we need to merge
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Four Ways of Merging Data}
+	\begin{enumerate}\itemsep2em
+	\item 1:1
+	\item 1:many 
+	\item many:1
+	\item many:many
+	\end{enumerate}
+}
+
+% graphs of different join relationships
+
+\begin{frame}[fragile]
+	\frametitle{1:1 Merging}
+	\small
+	\begin{tikzpicture}[scale=0.8,every node/.style={inner sep=0,outer sep=2pt}]
+	\matrix (A) [matrix of nodes,row sep = 0cm, nodes={draw = white, minimum size=.65cm, text width=2.5cm,align=center}] at (0,1) {
+	\textbf{Country} & \textbf{GDP/cap} &[1.75cm] \textbf{Country} & \textbf{Region} \\
+	Afghanistan & 665 & Afghanistan & Asia \\
+	Denmark & 59,832 & Denmark & Europe\\
+	USA & 53,042 & USA & Americas\\
+	};
+	
+	\draw[->,red,line width = 1.5] (A-2-3.west) -- (A-2-2.east);
+	\draw[->,red,line width = 1.5] (A-3-3.west) -- (A-3-2.east);
+    \draw[->,red,line width = 1.5] (A-4-3.west) -- (A-4-2.east);
+	\node (C) [below=of A, xshift=-3cm]{Dataset A};
+	\node (D) [below=of A, xshift=3cm]{Dataset B};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{1:many Merging}
+	\small
+	\begin{tikzpicture}[scale=0.8,every node/.style={inner sep=0,outer sep=2pt}]
+	\matrix (A) [matrix of nodes,row sep = 0cm, nodes={draw = white, minimum size=.65cm, text width=2.5cm,align=center}] at (0,1) {
+	\textbf{Person} & \textbf{Country} &[1.75cm] \textbf{Country} & \textbf{Region} \\
+	11 & Afghanistan & Afghanistan & Asia \\
+	12 & Denmark & Denmark & Europe\\
+	13 & Denmark & USA & Americas\\
+    14 & USA & \\
+    14 & USA & \\
+	};
+	
+	\draw[->,red,line width = 1.5] (A-2-3.west) -- (A-2-2.east);
+	\draw[->,red,line width = 1.5] (A-3-3.west) -- (A-3-2.east);
+    \draw[->,red,line width = 1.5] (A-3-3.west) -- (A-4-2.east);
+    \draw[->,red,line width = 1.5] (A-4-3.west) -- (A-5-2.east);
+	\draw[->,red,line width = 1.5] (A-4-3.west) -- (A-6-2.east);
+	\node (C) [below=of A, xshift=-3cm]{Dataset A};
+	\node (D) [below=of A, xshift=3cm]{Dataset B};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{many:1 Merging}
+	\small
+	\begin{tikzpicture}[scale=0.8,every node/.style={inner sep=0,outer sep=2pt}]
+	\matrix (A) [matrix of nodes,row sep = 0cm, nodes={draw = white, minimum size=.65cm, text width=2.5cm,align=center}] at (0,1) {
+	\textbf{Country} & \textbf{Region} &[1.75cm] \textbf{Person} & \textbf{Country} \\
+	Afghanistan & Asia & 11 & Afghanistan \\
+	Denmark & Europe & 12 & Denmark \\
+	USA & Americas & 13 & Denmark \\
+    & & 14 & USA & \\
+    & & 14 & USA & \\
+	};
+	
+	\draw[->,red,line width = 1.5] (A-2-3.west) -- (A-2-2.east);
+	\draw[->,red,line width = 1.5] (A-3-3.west) -- (A-3-2.east);
+    \draw[->,red,line width = 1.5] (A-4-3.west) -- (A-3-2.east);
+    \draw[->,red,line width = 1.5] (A-5-3.west) -- (A-4-2.east);
+	\draw[->,red,line width = 1.5] (A-6-3.west) -- (A-4-2.east);
+	\node (C) [below=of A, xshift=-3cm]{Dataset A};
+	\node (D) [below=of A, xshift=3cm]{Dataset B};
+	\end{tikzpicture}
+\end{frame}
+
+% Stata's `merge` command
+
+\frame{
+	\frametitle{Questions about merging?}
+}
+
+\frame{
+	\frametitle{Aggregating Observations}
+	\begin{itemize}\itemsep1em
+	\item Our data are not always available on the unit of analysis we need
+	\item For example, we might have multiple observations (rows) for a given unit and we need to create a dataset that just has one observation (row) for each unit
+	\item Examples?
+	\item<2-> How do we do this?
+	\end{itemize}
+}
+
+\begin{frame}[fragile]
+	\frametitle{Aggregating Observations}
+	\small
+	\begin{tikzpicture}[scale=0.8,every node/.style={inner sep=0,outer sep=2pt}]
+	\matrix (A) [matrix of nodes,row sep = 0cm, nodes={draw = white, minimum size=.65cm, text width=2cm,align=center}] at (0,1) {
+	\textbf{Person} & \textbf{Country} & \textbf{Age} &[1cm] \textbf{Country} & \textbf{Mean Age} \\
+	11 & Afghanistan & 45 & Afghanistan & 45\\
+	12 & Denmark & 42 & Denmark & 49\\
+	13 & Denmark & 56 \\
+    14 & USA & 31 & USA & 53 \\
+    14 & USA & 75 \\
+	};
+	
+	\draw[->,red,line width = 1.5] (A-2-3.east) -- (A-2-4.west);
+	\draw[->,red,line width = 1.5] (A-3-3.east) -- (A-3-4.west);
+    \draw[->,red,line width = 1.5] (A-4-3.east) -- (A-3-4.west);
+    \draw[->,red,line width = 1.5] (A-5-3.east) -- (A-5-4.west);
+	\draw[->,red,line width = 1.5] (A-6-3.east) -- (A-5-4.west);
+	\node (C) [below=of A, xshift=-3cm]{Dataset A};
+	\node (D) [below=of A, xshift=3cm]{Dataset B};
+	\end{tikzpicture}
+\end{frame}
+
+% Stata's `collapse` command
 
 
 % scaling and reliability
 
+
 \frame{
 	\frametitle{Scale Constructions}
+	\begin{itemize}\itemsep1em
+	\item Scale construction is the act of aggregating multiple variables into a smaller number of variables
+	\item Examples?
+	\vspace{1em}
+	\item<2-> 
+	\end{itemize}
 }
 
 
@@ -114,6 +242,26 @@
 	\frametitle{Cronbach's $\alpha$}
 }
 
+\frame{
+	\frametitle{Other forms of scaling}
+	\begin{itemize}
+	\item<2-> IRT Models
+	\item<3-> Factor Analysis
+	\item<4-> Principal Components Analysis
+	\vspace{1em}
+	\item<5-> We are not discussing these here
+	\item<5-> You can achieve them in Stata's SEM module
+	\end{itemize}
+}
+
+
+
+\section{Data Gathering}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+	\frametitle{}
+}
 
 
 \section{Missing Data}
@@ -298,6 +446,9 @@
 	\end{itemize}
 }
 
+\section{MCAR}
+\frame{\tableofcontents[currentsection]}
+
 \frame{
 	\frametitle{MCAR/Ignorable}
     \begin{itemize}\itemsep1em
@@ -327,6 +478,8 @@
 }
 
 
+\section{MAR}
+\frame{\tableofcontents[currentsection]}
 
 \frame{
 	\frametitle{MAR}
@@ -533,6 +686,8 @@
 	\end{itemize}
 }
 
+\section{MNAR}
+\frame{\tableofcontents[currentsection]}
 
 \frame{
 	\frametitle{MNAR}
