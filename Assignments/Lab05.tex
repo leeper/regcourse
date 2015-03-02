@@ -20,9 +20,60 @@
 
 \item Read and complete activities from S{\o}nderskov, Chapter 7 and Appendix F.
 
+\section*{Dataset Aggregation}
+
+\item Once again, open the \textbf{Election05Ch6} dataset. Your task here is to aggregate the data from this file by county (\textit{amt}). Recall that the Danish local governments were reformed in 2007 from 270 \textit{kommuner} in 13 \textit{amter} (pre-reform) to 98 municipalities in five regions (post-reform). These survey data record respondents' location by amt (\textbf{v8}). Use the following to create a new variable called \textbf{county}: \texttt{decode v8, gen(county)}
+% decode v8, gen(county)
+
+\item Now, we want to know the expected election results by county, so we'll focus on the variables \textbf{partytd1}, \textbf{partytd2}, etc. Reduce the dataset to just \textbf{county} and these variables. Note the number of variables and the number of observations in the dataset.
+% keep county v351 partytd*
+
+\item We want to create a dataset that consists of the proportion of votes for each party in each county. In essence, this is a dataset of the summary statistics of the \textbf{partytd*} variables, by \textbf{county}. Run a \texttt{summ} command by \textbf{county} to see our intended result. We'll use this to judge whether the \texttt{collapse} command, which we'll use next, was successful.
+% by county, sort: summ partytd*
+
+\item Now, it's time to aggregate using the \texttt{collapse} command. The \texttt{collapse} has many options, but in simple terms it looks like this: \texttt{collapse (statistic) varlist, by(groupvar)}, where \texttt{statistic} is the statistic we want to aggregate or summarize, \texttt{varlist} is a list of variables to aggregate (anything not in this list will be dropped from the dataset), and \texttt{groupvar} is a variable that will be aggregated by. The resulting dataset should have a number of observations equivalent to the number of unique values of \texttt{groupvar}. Aggregate the proportion of the sample in each county that voted for each party: \texttt{collapse (mean) partytd*, by(county)}. Because these variables are 0/1 indicators, the mean is equal to the proportion of 1's in the dataset.
+
+\item Note the number of variables and number of observations. And use summary statistics (e.g., \texttt{tab}, \texttt{summ}, etc.) to compare the values in the aggregated dataset to the summary statistics from the original data. Were we successful in aggregating the data? Save the aggregated dataset as \textbf{SurveyAggregated.dta}. 
+
 \section*{Merging Datasets}
 
-\item You can also read and complete activities from S{\o}nderskov, Appendix B.
+% collapse survey data to county-level
+% collapse municipality map to post-reform municipality level (with a variable for county)
+% merge election results data with municipality map
+% collapse merged file to county-level
+% merge collapsed survey and collapsed election results together
+% scatterplot results by county
+
+
+\item Now try merging two datasets to see a useful application of the \texttt{collapse} command when combined with the \texttt{merge} command. Open the \textbf{Election2005Results.dta} dataset (available on Blackboard). This dataset contains the official election results for the 2005 elections (numbers of votes), by post-reform municipality and by party for seven major parties.\footnote{These data be retrieved from: \url{http://www.statbank.dk/statbank55/SelectVarVal/Define.asp?Maintable=VALGK3&PLanguage=1}}
+
+\item Examine the number of observations in the dataset. What do you notice? If we want to merge these data with the survey data to compare the survey results with the official results, what do we have to do?
+
+\item We need to collapse these results to the pre-reform county level. To do this, we need to know what county each current municipality used to be in. On Blackboard, you'll find the \textbf{Municipalities.dta} dataset, which maps the 270 former municipalities to the pre-reform counties and the 90 current municipalities. With a few exceptions, each current municipality is made up of former municipalities that were exclusive to one county.\footnote{The post-reform Egedal Kommune, for example, is made up pre-reform municipalities from both K{\o}benhavns Amt and Frederiksborg Amt.} We'll ignore this and assume each post-reform municipality comes from only one county. Use the following code to map each post-reform municipality to one county:
+
+\begin{verbatim}
+* tag one post-reform municipality at random
+egen tmp = tag(municipality)
+* drop all untagged municipalities
+drop if tmp == 0
+drop tmp prereform
+\end{verbatim}
+
+The result should be a dataset of two variables: 98 post-reform municipalities and pre-reform county.
+
+\item Using these data, perform a 1:1 merge of the \textbf{Election2005Results.dta} into this dataset:\\
+\texttt{merge 1:1 municipality using Election2005Results.dta}
+
+\item Was the merge successful? If it was, use \texttt{collapse} to aggregate this dataset by county. Remember to specify \texttt{sum} as the statistic to aggregate (rather than \texttt{mean}, as we used above). Was the collapse successful? How many observations are there? At this point, you may want to create a \textbf{total} variable that sums the party vote totals and then convert the party vote counts into percentages.
+
+% collapse (sum) party*, by(county)
+% gen total = party1 + party2 + party3 + party5 + party8 + party9 + party10
+% gen party01p = party01/total
+
+\item Now, use the \texttt{merge} command to merge \textbf{SurveyAggregated.dta} into this dataset, by county. Was the merge successful?
+% merge 1:1 county using SurveyAggregated.dta
+
+\item This exercise was hopefully relatively easy, though perhaps tedious. It would be much more challenging, however, if variables in each dataset had different names or if the values for variables with the same names (e.g., \textbf{county}) had different values (e.g., due to spelling errors, etc.). You always need to thoroughly understand your data before you can successfully perform these operations. If you want further practice, you may want to read and complete activities from S{\o}nderskov, Appendix B. See also examples from \texttt{help merge}.
 
 \section*{Dataset Reshaping}
 
@@ -100,9 +151,9 @@ tab diff year
 
 \section*{Missing Data Handling}
 
-For this part of the lab, we will use data from the General Social Survey, a nationally representative survey of the United States population. These data, in Stata (.dta) format, are available to you on Blackboard in the \texttt{XXXX} folder. These data are used in an article we'll revisit later in the course.\footnote{Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Public Employees and Charitable Gifts of Time, Blood, and Money.'' {\em Journal of Public Administration Research and Theory} 16: 67--86. doi:10.1093/jopart/mui028.}
+For this part of the lab, we will use data from the General Social Survey, a nationally representative survey of the United States population. These data, in Stata (.dta) format, are available to you on Blackboard. These data are used in an article we'll revisit later in the course.\footnote{Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Public Employees and Charitable Gifts of Time, Blood, and Money.'' {\em Journal of Public Administration Research and Theory} 16: 67--86. doi:10.1093/jopart/mui028.}
 
-\item Open the GSS dataset. Let's start by recoding our key independent and outcome variables, which have to do with voluntary activities and one's type of employment (public vs. private sector):
+\item Open the \textbf{GSS2002.dta} dataset from Blackboard. Let's start by recoding our key independent and outcome variables, which have to do with voluntary activities and one's type of employment (public vs. private sector):
 \begin{verbatim}
 * outcomes
 recode volchrty 1=1 2=0.8 3=0.6 4=0.4 5=0.2 6=0, gen(vol)

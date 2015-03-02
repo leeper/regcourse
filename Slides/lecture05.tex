@@ -1,12 +1,12 @@
 \input{preamble}
 \usepackage{tikz}
-\usepackage{pbox}
 \usetikzlibrary{calc}
 \usetikzlibrary{shapes}
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{matrix}
 \usetikzlibrary{positioning}
+\usepackage{pbox}
 
 \title{Practical Data Issues}
 
@@ -27,13 +27,13 @@
 	\begin{itemize}\itemsep2em
 	\item Construct the data described on the worksheet into a rectangular dataset
 	\item You can use Stata's data editor, Excel, a Word table, etc.
-	\item You have 7 minutes
+	\item You have 10 minutes
 	\end{itemize}
 }
 
 \frame{
 	\frametitle{Data Formats}
-	\begin{itemize}\itemsep1em
+	\begin{itemize}\itemsep2em
 		\item A dataset is a rectangular matrix of:
 			\begin{itemize}
 				\item Observations (rows)
@@ -53,7 +53,7 @@
 	\frametitle{Data in Wide Format}
 	\begin{center}
 		\begin{tabular}{lrrrr}
-			Country     & \pbox{20cm}{GDP\\2012} & \pbox{20cm}{GDP\\2013} & \pbox{20cm}{Life\\Expectancy\\2012} & \pbox{20cm}{L.E.\\2013} \\ \hline
+			Country     & \pbox{20cm}{GDP\\2012} & \pbox{20cm}{GDP\\2013} & \pbox{20cm}{Life Exp.\\2012} & \pbox{20cm}{Life Exp.\\2013} \\ \hline
 			Afghanistan &           20.5 &           20.3 &                     60 &          61 \\
 			Albania     &           12.3 &           12.9 &                     77 &          77 \\
 			Algeria     &          204.3 &          210.2 &                     71 &          71 \\
@@ -91,10 +91,6 @@
 	\end{itemize}
 }
 
-% data cleaning
-
-
-% data merging
 \frame{
 	\frametitle{Merging Multiple Datasets}
 	\begin{itemize}\itemsep1em
@@ -102,6 +98,7 @@
 	\item All data about our observations needs to be in one file
 	\item Often we need data from multiple files together
 	\item To use them, we need to merge
+	\item In Stata, we use the \textbf{merge} command
 	\end{itemize}
 }
 
@@ -114,8 +111,6 @@
 	\item many:many
 	\end{enumerate}
 }
-
-% graphs of different join relationships
 
 \begin{frame}[fragile]
 	\frametitle{1:1 Merging}
@@ -185,16 +180,12 @@
 % Stata's `merge` command
 
 \frame{
-	\frametitle{Questions about merging?}
-}
-
-\frame{
 	\frametitle{Aggregating Observations}
 	\begin{itemize}\itemsep1em
 	\item Our data are not always available on the unit of analysis we need
 	\item For example, we might have multiple observations (rows) for a given unit and we need to create a dataset that just has one observation (row) for each unit
+	\item In Stata, we use the \textbf{collapse} command
 	\item Examples?
-	\item<2-> How do we do this?
 	\end{itemize}
 }
 
@@ -223,6 +214,12 @@
 
 % Stata's `collapse` command
 
+\frame{
+	\frametitle{Questions about merging or aggregation?}
+}
+
+
+
 
 % scaling and reliability
 
@@ -243,7 +240,9 @@
 		\end{itemize}
 	\end{itemize}
 }
-
+% random measurement error in Y: loss of precision
+% random measurement error in X: attenuation (maybe); direction unknown in multiple regression
+% if systematic across all items; then this doesn't help us
 
 \frame{
 	\frametitle{Cronbach's $\alpha$}
@@ -311,7 +310,7 @@ Test scale   |                                             111565.7      0.2483
 
 \frame{
 	\frametitle{Other forms of scaling}
-	\begin{itemize}
+	\begin{itemize}\itemsep1em
 	\item<2-> IRT Models
 	\item<3-> Factor Analysis
 	\item<4-> Principal Components Analysis
@@ -322,18 +321,35 @@ Test scale   |                                             111565.7      0.2483
 }
 
 
+\frame{\frametitle{Questions about scaling?}}
 
-\section{Data Gathering}
-\frame{\tableofcontents[currentsection]}
 
 \frame{
-	\frametitle{}
+	\frametitle{Summary: Data Preparation}
+	\begin{itemize}\itemsep1em
+	\item This course is about statistics and data analysis
+	\item Data preparation is often the most time consuming part of research
+	\item Data are rarely, if ever, in the form you need to analyze them properly
+	\end{itemize}
 }
 
 
 \section{Missing Data}
 \frame{\tableofcontents[currentsection]}
 
+\frame{
+	\frametitle{Data ``Cleaning''}
+	\begin{itemize}\itemsep2em
+	\item Once data are structured the way we need them, we're still not done
+	\item Data ``cleaning'' is the final step before analysis:
+		\begin{itemize}
+		\item Recoding variables
+		\item Typo and coding corrections
+		\item Scale construction
+		\item Handling missing data
+		\end{itemize}
+	\end{itemize}
+}
 
 \frame{
 	\frametitle{Missing Data Ideal World}
@@ -415,8 +431,8 @@ Test scale   |                                             111565.7      0.2483
 \frame{
 	\frametitle{A Simple Example}
 	\begin{center}
-    \begin{tabular}{lllll} \hline
-    Case & Item 1 & Item 2 & Item 3 & Sum \\ \hline
+    \begin{tabular}{lllll}
+    \textbf{Case} & \textbf{Item 1} & \textbf{Item 2} & \textbf{Item 3} & \textbf{Sum} \\ \hline
     A & 1 & 2 & 1 & ? \\ \hline
     B & 1 & . & 3 & ? \\ \hline
     C & . & 1 & 1 & ? \\ \hline
@@ -462,10 +478,10 @@ Test scale   |                                             111565.7      0.2483
 	\frametitle{Possible Impact 3: Representativeness}
 	\begin{itemize}\itemsep1em
 	\item Recall: We generally try to make inferences from sample to a well-specified population
-	\item If missingness is \textit{completely} random, we simply have a smaller sample
-	\item If missingness is not \textit{completely} random, we no longer have a representative sample
+	\item If missingness is \textit{ignorable}, we simply have a smaller sample
+	\item If missingness is not \textit{ignorable}, we no longer have a representative sample
 		\begin{itemize}
-		\item This means we our sample estimates are biased
+		\item This leads to bias in our estimates
 		\end{itemize}
 	\end{itemize}
 }
@@ -498,7 +514,7 @@ Test scale   |                                             111565.7      0.2483
 
         \draw[->] (7,0) node[left] (X2) {Wealth} -- (9,0) node[right] (Y2) {Health};
         \draw[->] (6,2) node[above] (Z2) {Corruption} -- (Y2);
-        \draw[->] (Z2) -- (9,3) node[right] (Yobs) {$Wealth_{obs}$};
+        \draw[->] (Z2) -- (8,4) node[right] (Yobs) {Missingness};
         \draw (8,-1) node (non) {Non-Democracies};
     \end{tikzpicture}
     \end{center}
@@ -599,9 +615,16 @@ Test scale   |                                             111565.7      0.2483
 }
 
 \frame{
-	\frametitle{Regression adjustment}
+	\frametitle{Regression Adjustment}
 	\begin{itemize}\itemsep1em
-	\item 
+	\item If missingness only depends on right-hand side variables in our model, then regression alone with adjust for missingness and yield \textit{unbiased} coefficient estimates
+	\item We still lose efficiency because of the missing observations
+	\item<2-> Caution: A sometimes-common practice
+		\begin{itemize}
+		\item Include an indicator variable for missingness in $X$
+		\item Regress $Y$ on $X$ and the $X_obs$ indicator
+		\item Tends to produce biased estimates
+		\end{itemize}
 	\end{itemize}
 }
 
@@ -610,7 +633,9 @@ Test scale   |                                             111565.7      0.2483
 	\begin{itemize}\itemsep1em
 	\item Stratify the sample based on observed characteristics, where the proportion of the \textit{population} in each stratum is also known
 	\item Reweight each observation so sample matches population distributions
-	\item Essentially, over-weight observed cases from strata where there are missing values
+		\begin{itemize}
+		\item Essentially, over-weight observed cases from strata where there are missing values
+		\end{itemize}
 	\item Several variants of this:
 		\begin{itemize}
 		\item Weighting classes
@@ -752,6 +777,8 @@ Test scale   |                                             111565.7      0.2483
 	\item<4-> Can introduce measurement error if we misunderstand the pattern of missingness, which then leads to bias
 	\end{itemize}
 }
+
+\frame{\frametitle{Questions about MAR?}}
 
 \section{MNAR}
 \frame{\tableofcontents[currentsection]}
