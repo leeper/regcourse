@@ -10,7 +10,7 @@
 	
 \maketitle
 
-\vspace{-2em}
+\vspace{-3em}
 	
 \noindent The purpose of today's lab is to gain experience with practical issues of data handling. Toward that end, you will practice constructing and evaluating scales, reshaping datasets, imputing missing values, 
 
@@ -45,11 +45,11 @@
 % scatterplot results by county
 
 
-\item Now try merging two datasets to see a useful application of the \texttt{collapse} command when combined with the \texttt{merge} command. Open the \textbf{Election2005Results.dta} dataset (available on Blackboard). This dataset contains the official election results for the 2005 elections (numbers of votes), by post-reform municipality and by party for seven major parties.\footnote{These data be retrieved from: \url{http://www.statbank.dk/statbank55/SelectVarVal/Define.asp?Maintable=VALGK3&PLanguage=1}}
+\item Now try merging two datasets to see a useful application of the \texttt{collapse} command when combined with the \texttt{merge} command. Open the \textbf{Election2005Results.dta} dataset (available on Blackboard). This dataset contains the official 2005 election results (numbers of votes) for seven major parties, by post-reform municipality.\footnote{These data be retrieved from: \url{http://www.statbank.dk/statbank55/SelectVarVal/Define.asp?Maintable=VALGK3&PLanguage=1}}
 
 \item Examine the number of observations in the dataset. What do you notice? If we want to merge these data with the survey data to compare the survey results with the official results, what do we have to do?
 
-\item We need to collapse these results to the pre-reform county level. To do this, we need to know what county each current municipality used to be in. On Blackboard, you'll find the \textbf{Municipalities.dta} dataset, which maps the 270 former municipalities to the pre-reform counties and the 90 current municipalities. With a few exceptions, each current municipality is made up of former municipalities that were exclusive to one county.\footnote{The post-reform Egedal Kommune, for example, is made up pre-reform municipalities from both K{\o}benhavns Amt and Frederiksborg Amt.} We'll ignore this and assume each post-reform municipality comes from only one county. Use the following code to map each post-reform municipality to one county:
+\item We need to collapse these results to the pre-reform county level. To do this, we need to know what county each current municipality used to be in. On Blackboard, you'll find the \textbf{Municipalities.dta} dataset, which maps the 270 former municipalities to the pre-reform counties and the 98 current municipalities.\footnote{With a few exceptions, each current municipality is made up of former municipalities that were exclusive to one county. The post-reform Egedal Kommune, for example, is made up pre-reform municipalities from both K{\o}benhavns Amt and Frederiksborg Amt. We'll ignore this and assume each post-reform municipality comes from only one county. } Use the following code to map each post-reform municipality to one county:
 
 \begin{verbatim}
 * tag one post-reform municipality at random
@@ -59,7 +59,7 @@ drop if tmp == 0
 drop tmp prereform
 \end{verbatim}
 
-The result should be a dataset of two variables: 98 post-reform municipalities and pre-reform county.
+The data should be two variables: post-reform municipality and pre-reform county.
 
 \item Using these data, perform a 1:1 merge of the \textbf{Election2005Results.dta} into this dataset:\\
 \texttt{merge 1:1 municipality using Election2005Results.dta}
@@ -73,13 +73,13 @@ The result should be a dataset of two variables: 98 post-reform municipalities a
 \item Now, use the \texttt{merge} command to merge \textbf{SurveyAggregated.dta} into this dataset, by county. Was the merge successful?
 % merge 1:1 county using SurveyAggregated.dta
 
-\item This exercise was hopefully relatively easy, though perhaps tedious. It would be much more challenging, however, if variables in each dataset had different names or if the values for variables with the same names (e.g., \textbf{county}) had different values (e.g., due to spelling errors, etc.). You always need to thoroughly understand your data before you can successfully perform these operations. If you want further practice, you may want to read and complete activities from S{\o}nderskov, Appendix B. See also examples from \texttt{help merge}.
+\item This exercise was hopefully relatively easy, though perhaps tedious. It would be much more challenging, however, if variables in each dataset had different names or if the values for variables with the same names (e.g., \textbf{county}) had different values (e.g., due to spelling errors, etc.). You could rename the variables and try this again. If you want further practice, you may want to read and complete activities from S{\o}nderskov, Appendix B. See also examples from \texttt{help merge}.
 
 \section*{Dataset Reshaping}
 
-To get a handle on dataset reshaping, we will use the Quality of Government data that we used for the first assignment. Specifically, we'll use the QoG Basic Time-Series dataset. You can find it here: \url{http://www.qogdata.pol.gu.se/data/qog_bas_ts_jan15.dta}.
+To practice reshaping, we will use the Quality of Government Time-Series dataset available at: \url{http://www.qogdata.pol.gu.se/data/qog_bas_ts_jan15.dta}.
 
-\item Open the dataset in Stata. Note the size of the dataset. How many variables are there and how many observations are there. Use \texttt{tab cname} to see how many countries are included in the dataset and how many observations there are for each country. Is the data in \textbf{wide} or \textbf{long} format?
+\item Open the dataset in Stata. Note the size of the dataset. How many variables are there and how many observations are there? Use \texttt{tab cname} to see how many countries are included in the dataset and how many observations there are for each country. Is the data in \textbf{wide} or \textbf{long} format?
 
 \item Given that we're going to be doing a lot to the dataset, it's useful to learn the \texttt{snapshot save} and \texttt{snapshot restore} commands. These keep a record of your dataset and allow you to return to the restore point later on. Run each of the following one at a time to get a sense of how this works:
 
@@ -93,7 +93,7 @@ snapshot restore 1
 
 \noindent You can create multiple snapshots (and restore them by their number), making this very useful for going back and forth between versions of a dataset.
 
-\item Back to reshaping. To reshape data, we use the \texttt{reshape} command. To go from wide to long, the command starts with \texttt{reshape long} and the reverse is \texttt{reshape wide}. If you try typing \texttt{reshape wide}, though, you'll get an error. You need to specify what variables to reshape and how. Let's start by reducing our dataset to just one substantive variable and then reshape:
+\item Back to reshaping. To reshape data, we use the \texttt{reshape} command. To go from wide to long, the command starts with \texttt{reshape long} and the reverse is \texttt{reshape wide}. If you just try typing \texttt{reshape wide}, though, you'll get an error. You need to specify what variables to reshape and how. Let's start by reducing our dataset to just one substantive variable and then reshape:
 
 \begin{verbatim}
 keep ccodealp cname year p_polity
@@ -112,7 +112,7 @@ reshape wide al_*, i(cname) j(year)
 
 \item Again, describe the data. What's the data structure look like? How many observations are there and what do they represent? How many variables are there and what do they represent? Are these data in wide or long format?
 
-\item At this point, Stata now recognizes the structure of the data, so you can toggle back and forth between wide and long format simply by calling \texttt{reshape long} and \texttt{reshape wide}. Try this for yourself and then restore to our original data. (Note: now if you try \texttt{reshape wide}, Stata will produce an error.)
+\item At this point, Stata now recognizes the structure of the data, so you can toggle back and forth between wide and long format simply by calling \texttt{reshape long} and \texttt{reshape wide}. Try this for yourself and then restore to our original data.
 
 \item Try to reshape from long to wide, again, this time specifying additional variables in addition to \texttt{al\_*}. This can be a sequence of full variable names or patterns (like \texttt{bdm\_*}). You can also preserve additional ``constant'' variables in the \texttt{i()} option, for example: \texttt{i(cname ccode ccodealp)}. These variables will be preserved in wide format.
 
@@ -212,7 +212,7 @@ reg vol pubempmcar
 
 The sample size in the second model (with MCAR missingness) is smaller, the standard errors are larger, and the estimated effects are comparable. We can rely on almost any imputation technique to increase our sample size and thus reduce variance in our estimates.
 
-\item If data are MAR (missing at random/ignorable), however, we should rely on multiple imputation, which will both produce a more complete dataset and should eliminate any nonresponse bias due to observed variables. We cannot test whether data are MCAR but we can test whether missingness is plausibly MAR/ignorable by regressing an indicator variable for missingness in a variable on other observed (ideally fully observed) variables. To do this, generate a new variable to represent missingness and run a logistic regression of the new variable on other variables in the dataset. You can repeat this process for any variable that has missingness. If any of the variables are related to the missingness indicator, the data are --- at least partially --- ignorable.
+\item If data are MAR (missing at random/conditionally ignorable), however, we should rely on multiple imputation, which will both produce a more complete dataset and should eliminate any nonresponse bias due to observed variables. We cannot test whether data are MCAR but we can test whether missingness is plausibly MAR/ignorable by regressing an indicator variable for missingness in a variable on other observed (ideally fully observed) variables. To do this, generate a new variable to represent missingness and run a regression of the new variable on other variables in the dataset.\footnote{Generally, you would use a logistic regression to do this, which accommodates 0/1 dependent variables, but we haven't covered those in this course yet.} You can repeat this process for any variable that has missingness. If any of the variables are related to the missingness indicator, the data are --- at least partially --- ignorable.
 
 You can try this first on the MCAR missingness we just introduced into \texttt{pubempmcar}:
 
@@ -226,13 +226,13 @@ In this example, we know that the data are MCAR so any significant effects here 
 
 \subsection*{Descriptive Statistics}
 
-\item Before we actually do any imputation, we need some understanding of where the missing data are in our dataset. This section walks through some simple diagnostics.
+Before we actually do any imputation, we need some understanding of where the missing data are in our dataset. This section walks through some simple diagnostics.
 
 \item The simplest way to assess missingness in a variable is simply to tabulate it using the \texttt{tab} command and the option \texttt{, miss}. Of course, you can only tabulate one variable at a time, but it will give you the basic information you need.
 
 \item Another option that allows you to quickly count missing values in variables is available in an add-on package called \texttt{nmissing}. You can install this using \texttt{ssc install nmissing}. Then, you can just type \texttt{nmissing} to see counts of missing values in all variables in the dataset. By specifying a list of variables you can limit the results to just the specified variables. Try this out.
 
-\item The \texttt{nmissing} command only shows us raw counts of missingness, but that doesn't help us to understand {\em where} the missing values are in the data. For example, it's possible that a given observation has many missing values while other observations have few or no missing values. This can emerge for example, if a survey respondent terminates a survey interviewing before the end of the survey, or if a country stops reporting a particular measure (e.g., inflation) during years of dictatorship. To see how missingness is distributed across variables for a particular observation, we want to see {\em patterns} of missingness. We'll need another add-on package to do this. It is called \texttt{mvpatterns} and you can install it by using \texttt{findit mvpatterns}.
+\item The \texttt{nmissing} command only shows us raw counts of missingness, but that doesn't help us to understand {\em where} the missing values are in the data. For example, it's possible that a given observation has many missing values while other observations have few or no missing values. This can emerge for example, if a survey respondent terminates a survey interview before the end of the survey, or if a country stops reporting a particular measure (e.g., inflation) during years of dictatorship. To see how missingness is distributed across variables for a particular observation, we want to see {\em patterns} of missingness. We'll need another add-on package to do this. It is called \texttt{mvpatterns} and you can install it by using \texttt{findit mvpatterns}.
 
 
 \item To use \texttt{mvpatterns}, simply call \texttt{mvpatterns varlist}, where \texttt{varlist} includes the name of one or more variables. The output will include two tables. The first provides counts of missing values in variables (a la \texttt{nmissing}). The second part of the output provides quite a bit of additional information. Here's an example:
@@ -252,7 +252,7 @@ Patterns of missing values
   +------------------------+
 \end{verbatim}
 
-The first column shows {\em patterns} of missingness, with a \texttt{+} indicating a present value and \texttt{.} indicating a missing value. So, if four variables are included in the varlist (as in the above example), the first row with pattern \texttt{++..} indicates that there are 2075 observations with missing values in the third and fourth variables. The second row indicates that there are 659 observations with no missing values. In the second-to-last row of the table you see there is also one observation with one missing value in a different pattern of missingness compared to row 3, which also shows observations with one missing value. This output thus lets us know not only how much missingness there is, but how it is distributed across observations and variables.
+The first column shows {\em patterns} of missingness, with a \texttt{+} indicating a present value and \texttt{.} indicating a missing value. So, if four variables are included in the varlist (as in the above example), the first row with pattern \texttt{++..} indicates that there are 2075 observations with missing values in the third and fourth variables. The second row indicates that there are 659 observations with no missing values. In the second-to-last row of the table you see there is also one observation with one missing value in a different pattern of missingness compared to row 3, which also shows observations with one missing value. This output thus lets us know not only how much missingness there is, but how it is distributed across observations and variables. Try it for yourself.
 
 \item We can apply this to an example of missingness we've already encountered: when we want to construct a scale where individual items contain missingness. The GSS data contain seven questions about empathy. Items 2, 4, and 5 are ``reverse coded,'' so let's start by flipping them and then seeing what kind of scale we can build from them.
 \begin{verbatim}
@@ -267,6 +267,8 @@ Try using \texttt{mvpatterns empathy* empscale} to see how missing values are ha
 egen empmiss = rowmiss(empathy*)
 replace empscale=. if empmiss>3
 \end{verbatim}
+
+You can make a decision for yourself about how best to scale these variables, given the missing values.
 
 
 \subsection*{Single Imputation}
@@ -333,7 +335,7 @@ In many applications of regression imputation we would also add an additional am
 
 \subsection*{Multiple Imputation}
 
-\item Single imputation using regression is a logical segue to multiple imputation, which uses the same basic logic of building an imputation model but instead of imputing values once, we construct multiple imputed datasets, estimate our desired test statistic(s), and then average across the results from each imputed dataset. We'll focus on the Giving Blood outcome in the GSS data. 
+\item Single imputation using regression is a logical segue to multiple imputation, which uses the same basic logic of building an imputation model but instead of imputing values once, we construct multiple imputed datasets, estimate our desired test statistic(s), and then average across the results from each imputed dataset. We'll focus on the Giving Blood (\textbf{blood}) outcome in the GSS data. 
 
 \item In Stata, before we can run any imputation we need to do two steps. One involves calling \texttt{mi set wide}, which tells Stata that we're going to multiply impute data in wide format. (Note: You can also set other formats instead of \texttt{wide}; see \texttt{help mi set}.) Then we need to \texttt{mi register} the variables that we're going to use in the imputation. Stata expects us to register three types of variables:
 	\begin{itemize}
@@ -390,7 +392,7 @@ reg blood i.pubemp sex race tmpi tmpe tmpa
 mi xeq 1: reg blood i.pubemp sex race mincome meduc mage
 \end{verbatim}
 
-\item One of the big downsides of Stata's current MI implementation is that it doesn't play well with \texttt{margins}. As a result, we gain the benefit of addressing missing data but we lose the ability to do easy interpretation of the results for models with interaction terms.
+%\item One of the big downsides of Stata's current MI implementation is that it doesn't play well with \texttt{margins}. As a result, we gain the benefit of addressing missing data but we lose the ability to do easy interpretation of the results for models with interaction terms.
 
 
 \end{enumerate}
