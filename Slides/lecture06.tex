@@ -130,10 +130,10 @@
 \frame{
 	\frametitle{How IV Works I}
 	\begin{itemize}\itemsep1em
-		\item Start with simple case where $B$ is a 0,1 indicator
-		\item To identify the effect of $X \rightarrow Y$, all we need is $B$
+		\item Start with case where $B$ is a 0,1 indicator
+		\item To identify the effect $X \rightarrow Y$, all we need is $B$
 		\item We don't need to worry about other omitted variables, because the as-if-random instrument is doing all the heavy lifting for us
-
+		\item But we don't learn anything about the rest of the causal graph
 	\end{itemize}
 }
 
@@ -208,12 +208,15 @@
 % LATE, SATE, and ITT
 
 
+\frame{
+	\frametitle{Standard Errors in IV}
+	\begin{itemize}\itemsep2em
+	\item SEs are larger in IV than OLS
+	\item Second-stage can use ``robust'' SEs to account for heteroskedasticity
+	\item The weaker the instrument, the larger the SEs
+	\end{itemize}
+}
 
-
-% SEs and efficiency
-% SEs are going to be larger in 2SLS than OLS
-% We can still use heteroskedasticity-consistent SEs in second stage
-% When an instrument is weak, the SEs that we get from IV estimation are going to be very large. We therefore want strong instruments.
 
 
 % * full first stage results
@@ -229,7 +232,6 @@
 % In Stata:
 % quietly ivregress 2sls outcome covariates (confounded = instrument)
 % estat endogenous
-
 
 
 % multiple instruments (overidentifying assumptions)
@@ -276,28 +278,37 @@
 	\item In RDD, $X$ is not randomly assigned and there is no \textit{covariate overlap}
 		\begin{itemize}
 		\item $B$ causally determines $X$, so units with different values of $X$ also differ in their value of $B$
-		\item compare units that are as similar as possible
+		\item compare units that are as similar as possible (bandwidths)
 		\end{itemize}
 	\end{enumerate}
 }
-
-% RDD figure
-
 
 \frame{
 	\frametitle{``Sharp'' and ``Fuzzy'' discontinuities}
 	\begin{itemize}\itemsep2em
 		\item If a threshold perfectly causes $X$, then it produces a \textbf{sharp} discontinuity
 			\begin{itemize}
-			\item 
+			\item Potentially analyze as an experiment
 			\end{itemize}
 		\item If a threshold imperfectly (probabilistically) causes $X$, then it produces a \textbf{fuzzy} discontinuity
 			\begin{itemize}
 			\item Analyze using Instrumental Variables
 			\end{itemize}
-
 	\end{itemize}
 }
+
+
+% RDD figure
+
+\frame{
+	\frametitle{Sharp RDD}
+}
+
+\frame{
+	\frametitle{Fuzzy RDD}
+}
+
+
 
 
 \frame{
@@ -333,6 +344,35 @@
 
 
 % graph over-time
+
+\frame{
+	\begin{center}
+	\begin{tikzpicture}[scale=0.6]
+    \draw[->] (0,0) -- (12,0) node[right] (xaxis) {};
+    \draw[->] (0,0) -- (0,12) node[left] (yaxis) {};
+    % x ticks
+    \foreach \x in {1,2,...,11}
+       	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+    % y ticks
+    \foreach \y in {0,...,11}
+         \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+    % intervention
+    \draw (6.5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+    \draw (6.5,0) -- (6.5,12);
+
+	\draw<2-> (2,4) -- (3,2);
+	\draw<2-> (3,2) -- (4,5);
+	\draw<2-> (4,5) -- (5,3);
+	\draw<2-> (5,3) -- (6,10);
+	\draw[dashed] (6,10) -- (7,7);
+	\draw<2-> (7,7) -- (8,6);
+	\draw<2-> (8,6) -- (9,6);
+	\draw<2-> (9,6) -- (10,4)
+	\draw<2-> (10,4) -- (11,3);
+	\end{tikzpicture}
+	\end{center}
+}
+
 
 
 
@@ -375,7 +415,6 @@
 }
 
 
-% graph DID (Angrist and Pischke 231)
 \frame{
 	\begin{center}
 	\begin{tikzpicture}[>=latex', scale=0.8]
@@ -412,7 +451,7 @@
         \draw<5->[red, dashed] (0,8) -- (8,4);
         \draw<5->[red, dashed] (0,4) -- (8,0);
         \draw<6>[right,decorate,decoration={brace}] 
-            (6,3) -- (6,1) node[right, pos=0.5] (idiff2) {\small $-2.0$};
+            (6,3) -- (6,1) node[right, pos=0.5] (idiff2) {\small $2.0$};
         \draw<7>[right,decorate,decoration={brace}] 
             (6,3.5) -- (6,1) node[right, pos=0.5] (idiff2) {\small $DID = +2.5$};
                         
