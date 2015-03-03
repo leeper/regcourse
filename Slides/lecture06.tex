@@ -138,7 +138,7 @@
 }
 
 \frame{
-	\frametitle{How IV Works II}
+	\frametitle{How IV Works II (Wald)}
 	\begin{itemize}\itemsep1em
 		\item Imagine two effects:
 		\begin{align}
@@ -148,29 +148,133 @@
 		\item IV estimates the LATE: $\dfrac{ITT_y}{ITT_x}$
 		\item In a regression, this is:\\
 			$E[y_i|b_i] = \beta_0 + \text{LATE} \times E[x_i|b_i]$
-		\item We can generalize this beyond an indicator IV
+	\end{itemize}
+}
+
+\begin{frame}[fragile]
+	\frametitle{How IV Works III (2SLS)}
+	\begin{itemize}\itemsep1em
+		\item Regress $x$ on $b$:\\
+			$\hat{x}_i = \hat{\gamma}_0 + \hat{\gamma}_1 b_i + g_i$
+		\item Regression $y$ on $\hat{x}$:\\
+			$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 \hat{x}_i + e_i$
+		\item Both $x$ and $b$ can be continuous
+		\item We can also have multiple $b$'s and multiple $x$'s
+		\item In Stata:\\
+			\small
+			\begin{verbatim}
+			ivregress 2sls Y covariates (X = B), first
+			\end{verbatim}
+	\end{itemize}
+\end{frame}
+
+\frame{
+	\frametitle{Standard Errors in IV}
+	\begin{itemize}\itemsep2em
+	\item SEs are larger in IV than OLS
+	\item Second-stage can use ``robust'' SEs to account for heteroskedasticity
+	\item The weaker the instrument, the larger the SEs
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{How IV Works III}
-	\begin{itemize}
-		\item 
-	\end{itemize}
-}
-
-
-\frame{
-	\frametitle{}
-	\begin{itemize}
-	\item But, this is effect is \textit{local} to the variation in $X$ that is due to variation $B$
+	\frametitle{IV Diagnostics}
+	\begin{itemize}\itemsep2em
+	\item Assess relevance of instrument
 		\begin{itemize}
-		\item Thus, IV estimation does not yield the SATE, but the LATE
+		\item Examine first-stage equation
+		\item \texttt{estat firststage}
 		\end{itemize}
-	\item 
+	\item<2-> Durbin-Wu-Hausman Test (exclusion restriction)\\
+		\begin{itemize}
+		\item Do residuals from the first stage relate to $y$?
+		\item $y = \beta_0 + \beta_1 x_{\text{Confounded}} + \beta_2 \hat{\eta} + e$
+		\item $\eta$ are the residuals from the first stage
+		\item In Stata: \texttt{estat endogenous}
+		\end{itemize}
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{IV Diagnostics}
+	\begin{itemize}\itemsep1em
+	\item Depending on number of confounded variables and number of instruments, model is:
+		\begin{itemize}
+		\item Exactly identified
+		\item Overidentified
+		\item Underidentified
+		\end{itemize}
+	\item Test of overidentified models:
+		\begin{itemize}
+		\item Evaluate null hyp. that all instruments are relevant
+		\item Rejection means at least one instrument irrelevant
+		\item In Stata: \texttt{estat overid}
+		\end{itemize}
+	\item Not applicable in most real-world situations
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{SATE vs. LATE}
+	\begin{itemize}\itemsep1em
+	\item IV estimate \textit{local} to the variation in $X$ that is due to variation $B$ (i.e., the LATE)
+	\item This matters if effects are \textit{heterogeneous}
+	\item LATE is effect for those who \textit{comply} with instrument
+	\item Four subpopulations:
+		\begin{itemize}
+		\item Compliers: $X = 1$ only if $B = 1$
+		\item Always-takers: $X = 1$ regardless of $B$
+		\item Never-takers: $X = 0$ regardless of $B$
+		\item Defiers: $X = 1$ only if $B = 0$
+		\end{itemize}
+	\end{itemize}
+}
+% - Compliers: military service if drafted
+% - Always-takers: military service regardless of draft
+% - Never-takers: no military service regardless of draft (maybe medically ineligible)
+% - Defiers: military service only if not drafted
+
+% ITT_y
+% 1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
+% 2. We assume no defiers.
+% 3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
+
+\frame{
+	\frametitle{SATE vs. LATE}
+	\begin{align*}
+    SATE = & \pi_{Compliers} * ITT_{Compliers}\\
+	     & + \only<1-2>{\pi_{Always-Takers} * ITT_{Always-Takers}}\only<3->{0}\\
+	     & + \only<1-2>{\pi_{Never-Takers} * ITT_{Never-Takers}}\only<3->{0}\\
+	     & + \only<1-4>{\pi_{Defiers} * ITT_{Defiers}}\only<5->{0}
+	\end{align*}
+	\begin{itemize}
+	\item We don't know which subpopulation each unit is from
+	\item<2-> Effect for always- and never-takers is zero
+	\item<4-> Assume no defiers (monotonicity)
+	\end{itemize}
+}
+
+
+\frame{
+	\frametitle{SATE vs. LATE}
+	\begin{align*}
+	LATE & = \dfrac{SATE}{\pi_{Complier}} \onslide<2->{= \dfrac{E[Y|B=1] - E[Y|B=0]}{\pi_{Complier}}}\\[1em]
+	\only<3>{\pi_{Complier} & = Pr(X=1|B=1) - Pr(X=1|B=0)\\}
+	\onslide<4->{& = \dfrac{ITT_y}{ITT_x}}
+	\end{align*}
+	\begin{itemize} %\itemsep1em
+	\item<5-> Sometimes also called CATE or CACE
+	\item<6-> Is this what we want to know?
+	\end{itemize}
+}
+%  1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
+% 2. We assume no defiers.
+% 3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
+
+% $\pi_{Compliers}$
+% Left-hand is Pr(Always-takers) + Pr(Compliers). There are no Never-takers by definition.
+% Right-hand is Pr(Never-takers) + Pr(Compliers). There are no Always-takers by definition.
 
 
 \frame{
@@ -200,42 +304,7 @@
 	\end{itemize}
 }
 
-
-% IV estimation
-% Wald
-% TSLS
-
-% LATE, SATE, and ITT
-
-
-\frame{
-	\frametitle{Standard Errors in IV}
-	\begin{itemize}\itemsep2em
-	\item SEs are larger in IV than OLS
-	\item Second-stage can use ``robust'' SEs to account for heteroskedasticity
-	\item The weaker the instrument, the larger the SEs
-	\end{itemize}
-}
-
-
-
-% * full first stage results
-% ivregress 2sls outcome covariates (confounded = instrument), first
-% * additional first stage fit statistics
-% estat firststage
-
-%  Durbin-Wu-Hausman Test
-% Do residuals from the first stage relate to the outcome?
-% `\( Y = \beta_0 + \beta_1 X_{Confounded} + \beta_2 \nu + \epsilon\)`
-% `\( \nu \)` are the residuals from the first stage
-
-% In Stata:
-% quietly ivregress 2sls outcome covariates (confounded = instrument)
-% estat endogenous
-
-
-% multiple instruments (overidentifying assumptions)
-
+\frame{\frametitle{Questions about IV?}}
 
 
 \section[RDD]{Regression Discontinuity Designs}
@@ -284,6 +353,21 @@
 }
 
 \frame{
+	\frametitle{Changes in Slope and Level}
+	\begin{itemize}\itemsep1em
+	\item Discontinuities might produce changes in:\\
+		\begin{itemize}
+		\item Slope, \textit{and/or}
+		\item Level/Intercept
+		\end{itemize}
+	\item 
+	\end{itemize}
+}
+
+% graphs showing changes in slope versus changes in level
+
+
+\frame{
 	\frametitle{``Sharp'' and ``Fuzzy'' discontinuities}
 	\begin{itemize}\itemsep2em
 		\item If a threshold perfectly causes $X$, then it produces a \textbf{sharp} discontinuity
@@ -298,7 +382,7 @@
 }
 
 
-% RDD figure
+% RDD figures
 
 \frame{
 	\frametitle{Sharp RDD}
@@ -309,15 +393,20 @@
 }
 
 
+% modelling ITS
+
+
+
+% curvilinear relationship that might appear to be RD
 
 
 \frame{
 	\frametitle{Problems with Discontinuities}
 	\begin{itemize}\itemsep1em
-		\item Discontinuities that appear random are exploitable
-		\item Compensatory rivalry and equalization
+		\item Discontinuities are exploitable
 		\item Campbell's Law:\\
 		\textit{The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.}
+		\item Compensatory rivalry and equalization
 	\end{itemize}
 }
 
@@ -326,52 +415,116 @@
 \frame{\tableofcontents[currentsection]}
 
 
-\frame{
+\frame<1>[label=itshow]{
 	\frametitle{How ITS Works}
 	\begin{itemize}\itemsep0.5em
 		\item Identify an exogenous shock in $X$ that might affect $Y$
 		\item Look at $Y$ before ($t$) and after ($t+1$) the shock
 		\item We only observe one manifest outcome at each point in time
-		\item To make a causal inference, we need:
+		\item<2-> To make a causal inference, we need:
 			\begin{itemize}
 				\item $Y_{0,t}$ and $Y_{1,t}$, or
 				\item $Y_{0,t+1}$ and $Y_{1,t+1}$
 			\end{itemize}
-		\item Use pre-post comparisons to infer the value of unobserved potential outcomes		
+		\item<2-> Use pre-post comparisons to infer the value of unobserved potential outcomes		
+	\end{itemize}
+}
+
+\frame<1-2>[label=its]{
+	\begin{center}
+	\begin{tikzpicture}[scale=0.7]
+    \draw[->] (0,0) -- (11,0) node[right] (xaxis) {\small time};
+    \draw[->] (0,0) -- (0,11) node[left] (yaxis) {};
+    % x ticks
+    \foreach \x in {1,2,...,10}
+       	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+    % y ticks
+    \foreach \y in {0,...,10}
+         \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+    % intervention
+    \draw (5.5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+    \draw (5.5,0) -- (5.5,11);
+
+	\draw<1>[thick,blue] (5,10) -- (6,7);
+	\draw<2->[dashed,thick,blue] (5,10) -- (6,7);
+	\draw<2->[thick,blue] (1,4) -- (2,2) -- (3,5) -- (4,3) -- (5,10);
+	\draw<2->[thick,blue] (6,7) -- (7,6) -- (8,6) -- (9,4) -- (10,3);
+	
+	\draw<3->[thick,red] (1,8) -- (2,8.5) -- (3,7.5) -- (4,8.5) -- (5,8) -- (6,7.5) -- (7,8.5) -- (8,8) -- (9,8.5) -- (10,7.5);
+	\end{tikzpicture}
+	\end{center}
+}
+
+\againframe<1-2>{itshow}
+
+
+\frame{
+	\begin{center}
+	\begin{tikzpicture}[scale=1]
+    \draw[->] (0,0) -- (5,0) node[right] (xaxis) {\small time};
+    \draw[->] (0,0) -- (0,7) node[left] (yaxis) {};
+    % x ticks
+    \foreach \x in {0,...,4}
+       	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+    % y ticks
+    \foreach \y in {0,...,6}
+         \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+    % intervention
+    \draw (2.5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+    \draw (2.5,0) -- (2.5,7);
+
+	\draw[thick,blue] (2,5) -- (3,2);
+	\node<2-> [red] at (2,5) {\small \textbullet};
+	\node<2-> [red] at (3,2) {\small \textbullet};
+	
+	\draw<3-5>[red] (0,5) -- (5,5);
+	\draw<3-5>[red] (0,2) -- (5,2);
+	\draw<4-5>[right,decorate,decoration={brace, amplitude=15pt}] (5,5) -- (5,2) node[right, xshift=15pt, pos=0.5] (diff) {\small Effect?};
+	        
+	\draw<5->[thick,blue] (1,0) -- (2,5) -- (3,2) -- (4,1);
+	\draw<6->[red] (1,0) -- (2.5,7.5);
+	\draw<6->[red] (2.5,2.5) -- (5,0);
+	\draw<7->[right,decorate,decoration={brace, amplitude=15pt}] (2.5,7.5) -- (2.5,2.5) node[right, xshift=15pt, pos=0.5] (diff) {\small Effect?};
+	
+	\end{tikzpicture}
+	\end{center}
+}
+
+
+\frame<1>[label=itsissues]{
+	\frametitle{ITS Considerations}
+	\begin{itemize}\itemsep1em
+	\item Changes in \textit{level} and/or \textit{slope}
+	\item Effects can be delayed
+	\item<2-> Improving the design:\\
+		\begin{itemize}\itemsep1em
+		\item Multiple outcome measures
+		\item Longer series
+		\item Non-equivalent outcome(s) series
+		\item Control case(s)
+		\end{itemize}
 	\end{itemize}
 }
 
 
+\againframe<2>{itshow}
 
-% graph over-time
+\againframe<1-2>{itsissues}
+
+\againframe<2-3>{its}
+
+
+% year as an interaction term
 
 \frame{
-	\begin{center}
-	\begin{tikzpicture}[scale=0.6]
-    \draw[->] (0,0) -- (12,0) node[right] (xaxis) {};
-    \draw[->] (0,0) -- (0,12) node[left] (yaxis) {};
-    % x ticks
-    \foreach \x in {1,2,...,11}
-       	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
-    % y ticks
-    \foreach \y in {0,...,11}
-         \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
-    % intervention
-    \draw (6.5,-0.25) node[below, scale=0.5] (IV) {Intervention};
-    \draw (6.5,0) -- (6.5,12);
-
-	\draw<2-> (2,4) -- (3,2);
-	\draw<2-> (3,2) -- (4,5);
-	\draw<2-> (4,5) -- (5,3);
-	\draw<2-> (5,3) -- (6,10);
-	\draw[dashed] (6,10) -- (7,7);
-	\draw<2-> (7,7) -- (8,6);
-	\draw<2-> (8,6) -- (9,6);
-	\draw<2-> (9,6) -- (10,4)
-	\draw<2-> (10,4) -- (11,3);
-	\end{tikzpicture}
-	\end{center}
+	\frametitle{Modelling an ITS}
+	\begin{itemize}\itemsep1em
+	\item ITS can be expressed as a regression model where \textbf{time} is our key $X$ variable
+	\item Intervention $Z$ is a pre-post indicator
+	\item We are interested in the $X*Z$ interaction
+	\end{itemize}
 }
+
 
 
 
@@ -463,11 +616,10 @@
 
 \frame{
 	\frametitle{Causal Inference Over-Time}
-	\begin{itemize}\itemsep0.5em
-		\item In experiments, matching, cross-sectional regression, and RDD, we make causal inferences based on \textbf{between-unit} comparisons at the \textit{same} point in time
-		\item In ITS, DID, and panel analysis (next week), we make causal inferences (also) based on \textbf{within-unit} comparisons at \textit{different} points in time
+	\begin{itemize}\itemsep1em
+		\item In experiments, matching, cross-sectional regression, and RDD, we make causal inferences based on \textbf{between-unit} comparisons at the \textit{same} time
+		\item In ITS, DID, and panel analysis (next week), we make causal inferences (also) based on \textbf{within-unit} comparisons at \textit{different} times
 		\item This can be really helpful, but also raises new concerns
-		\item We'll discuss those next week
 	\end{itemize}
 }
 
