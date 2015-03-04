@@ -1,7 +1,8 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
 
-\title{Essay 2\\Data Transformation and Interpretation}
+\title{Essay 2: Data Transformation and Interpretation}
 \author{}
 \date{}
 
@@ -13,21 +14,29 @@
 
 \noindent {\bfseries Due: 20. March at 12:00 to Thomas via Blackboard}
 
+\vspace{1em}
 
-\vspace{2em}
+\noindent The purpose of this assignment is to evaluate your ability to use complex data structures, identify research questions, and interpret regression. You will need to use both the country-level Quality of Government dataset and the individual-level, multi-country European Social Survey (ESS) Round 6 data to test a hypothesis involving heterogeneous effects (i.e., interaction).
+
+\vspace{1em}
 
 \noindent {\em Your task}:
-\begin{enumerate}
-\item 
-% aggregate/transform data (use ESS)
-% merge with country-level data
-% OLS with interaction terms
-% margins
-% plotting
+\begin{enumerate}\itemsep1em
+\item We would like you to analyze individual-level data from the ESS as a whole (i.e., ignoring the fact that individuals come from different countries). Looking at the available variables in the ESS and QoG datasets, select an outcome variable, ask a causal research question about that outcome, and state an empirically testable hypothesis about a potential cause of that outcome. This hypothesis should include an expectation about heterogeneous effects (i.e., an interaction term between two independent variables).
+\item Identify variables that may confound the relationship between these variables, considering both individual-level and country-level variables, and arrive at a causal model you would like to understand using linear regression analysis.
+\item Select the relevant country-level variables from the QoG dataset and merge these country-level variables into the individual-level ESS dataset. You may also want to consider aggregating individual-level variables from the ESS into country-level variables (thus using \texttt{collapse} and multiple \texttt{merge} operations).
+\item Using the merged country-level and individual-level data, estimate the coefficients for your regression model.
+\item Using the coefficients, the \texttt{margins} command, and any other relevant tools, properly interpret the statistical significance and substantive size of the coefficients.
+\item Using \texttt{marginsplot} or any other plotting commands, display one or more relevant relationships and interpret them appropriately.
+\item Reestimate your model(s) now including country-level fixed effects (i.e., including a factor variable for country in your regressions). Reinterpret the results.
 \end{enumerate}
 
-\noindent {\em Data}:\\
-Visit the website for The Quality of Government Institute at the University of Gothenburg. There you will find the ``Quality of Government Standard Cross-Section Data.''\footnote{A direct link is: {\texttt http://www.qog.pol.gu.se/data/datadownloads/qogstandarddata/}.} You can download the Stata version of the data (.dta file extension) and a codebook describing the data.
+\vspace{1em}
 
+\noindent {\em Data}:
+\begin{itemize}
+\item QoG data: \url{http://www.qog.pol.gu.se/data/datadownloads/qogstandarddata/}
+\item ESS6 data: \url{http://www.europeansocialsurvey.org/data/download.html?r=6}
+\end{itemize}
 
 \end{document}
