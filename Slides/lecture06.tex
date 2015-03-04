@@ -307,6 +307,8 @@
 \frame{\frametitle{Questions about IV?}}
 
 
+
+
 \section[RDD]{Regression Discontinuity Designs}
 \frame{\tableofcontents[currentsection]}
 
@@ -347,57 +349,206 @@
 	\item In RDD, $X$ is not randomly assigned and there is no \textit{covariate overlap}
 		\begin{itemize}
 		\item $B$ causally determines $X$, so units with different values of $X$ also differ in their value of $B$
-		\item compare units that are as similar as possible (bandwidths)
+		\item compare units that are as similar as possible
 		\end{itemize}
 	\end{enumerate}
 }
 
-\frame{
-	\frametitle{Changes in Slope and Level}
-	\begin{itemize}\itemsep1em
-	\item Discontinuities might produce changes in:\\
-		\begin{itemize}
-		\item Slope, \textit{and/or}
-		\item Level/Intercept
-		\end{itemize}
-	\item 
-	\end{itemize}
-}
-
 % graphs showing changes in slope versus changes in level
 
+\frame{
+	\frametitle{Regression Discontinuity}
+	\begin{center}
+	\begin{tikzpicture}[scale=0.75]
+ 	\draw[->] (0,0) -- (10,0) node[right] (xaxis) {$X$};
+	\draw[->] (0,0) -- (0,8) node[left] (yaxis) {$Y$};
+	% x ticks
+	\foreach \x in {1,2,...,9}
+      	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+	% y ticks
+	\foreach \y in {0,...,7}
+       \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+	
+	\foreach \Point in
+      {(0.4,0.50), (0.6,1.25), (0.4,2.00), (0.6,2.75),
+       (1.4,1.00), (1.6,1.75), (1.4,2.50), (1.6,3.25),
+       (2.4,1.50), (2.6,2.25), (2.4,3.00), (2.6,3.75),
+       (3.4,2.00), (3.6,2.75), (3.4,3.50), (3.6,4.25),
+       (4.4,2.50), (4.6,3.25), (4.4,4.00), (4.6,4.75)}{
+        \node<2->[gray] at \Point {\textbullet};
+     };
+	\foreach \Point in
+       {(5.4,3.00), (5.6,3.75), (5.4,4.50), (5.6,5.25),
+       (6.4,3.50), (6.6,4.25), (6.4,5.00), (6.6,5.75),
+       (7.4,4.00), (7.6,4.75), (7.4,5.50), (7.6,6.25),
+       (8.4,4.50), (8.6,5.25), (8.4,6.00), (8.6,6.75),
+       (9.4,5.00), (9.6,5.75), (9.4,6.50), (9.6,7.25)}{
+        \node<2-4>[gray] at \Point {\textbullet};
+     };
+	\draw<3-4>[blue,line width=2pt] (0.00,1.5) -- (10.00,6.50);
+
+	\foreach \Point in
+       {(5.4,1.00), (5.6,1.75), (5.4,2.50), (5.6,3.25),
+       (6.4,1.50), (6.6,2.25), (6.4,3.00), (6.6,3.75),
+       (7.4,2.00), (7.6,2.75), (7.4,3.50), (7.6,4.25),
+       (8.4,2.50), (8.6,3.25), (8.4,4.00), (8.6,4.75),
+       (9.4,3.00), (9.6,3.75), (9.4,4.50), (9.6,5.25)}{
+        \node<5-6>[gray] at \Point {\textbullet};
+     };
+	\draw<6>[blue,line width=2pt] (0.00,1.5) -- (5.00,4.00);
+	\draw<6>[blue,line width=2pt] (5.00,2.00) -- (10.00,4.50);
+			  
+	\foreach \Point in
+       {(5.4,3.00), (5.6,3.75), (5.4,4.50), (5.6,5.25),
+       (6.4,3.00), (6.6,3.75), (6.4,4.50), (6.6,5.25),
+       (7.4,3.00), (7.6,3.75), (7.4,4.50), (7.6,5.25),
+       (8.4,3.00), (8.6,3.75), (8.4,4.50), (8.6,5.25),
+       (9.4,3.00), (9.6,3.75), (9.4,4.50), (9.6,5.25)}{
+        \node<7-8>[gray] at \Point {\textbullet};
+     };
+	\draw<8>[blue,line width=2pt] (0.00,1.5) -- (5.00,4.00);
+	\draw<8>[blue,line width=2pt] (5.00,4.00) -- (10.00,4.00);
+			  
+	\foreach \Point in
+       {(5.4,5.00), (5.6,5.75), (5.4,6.50), (5.6,7.25),
+       (6.4,4.50), (6.6,5.25), (6.4,6.00), (6.6,6.75),
+       (7.4,4.00), (7.6,4.75), (7.4,5.50), (7.6,6.25),
+       (8.4,3.50), (8.6,4.25), (8.4,5.00), (8.6,5.75),
+       (9.4,3.00), (9.6,3.75), (9.4,4.50), (9.6,5.25)}{
+        \node<9-10>[gray] at \Point {\textbullet};
+     };
+	\draw<10>[blue,line width=2pt] (0.00,1.5) -- (5.00,4.00);
+	\draw<10>[blue,line width=2pt] (5.00,6.25) -- (10.00,4.00);
+			  
+	% intervention
+	\draw<4-> (5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+	\draw<4-> (5,0) -- (5,8);	
+	
+	\end{tikzpicture}
+	\end{center}
+}
 
 \frame{
-	\frametitle{``Sharp'' and ``Fuzzy'' discontinuities}
-	\begin{itemize}\itemsep2em
+	\frametitle{Is There A Discontinuity?}
+	\begin{center}
+	\begin{tikzpicture}[scale=0.75]
+ 	\draw[->] (0,0) -- (10,0) node[right] (xaxis) {$X$};
+	\draw[->] (0,0) -- (0,8) node[left] (yaxis) {$Y$};
+	% x ticks
+	\foreach \x in {1,2,...,9}
+      	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+	% y ticks
+	\foreach \y in {0,...,7}
+       \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+	
+	\foreach \Point in
+      {(0.4,0.50), (0.6,1.25), (0.4,2.00), (0.6,3.25),
+       (1.4,1.00), (1.6,1.75), (1.4,2.50), (1.6,3.25),
+       (2.4,1.50), (2.6,2.25), (2.4,3.00), (2.6,3.25),
+       (3.4,2.00), (3.6,2.50), (3.4,3.50), (3.6,4.0),
+       (4.4,2.25), (4.6,3.00), (4.4,4.00), (4.6,4.00)}{
+        \node<2->[gray] at \Point {\textbullet};
+     };
+	\foreach \Point in
+       {(5.4,2.00), (5.6,4.25), (5.4,4.00), (5.6,4.5),
+       (6.4,3.25), (6.6,5.50), (6.4,5.75), (6.6,5.50),
+       (7.4,4.00), (7.6,6.25), (7.4,7.00), (7.6,7.50),
+       (8.4,4.50), (8.6,7.0), (8.4,8.25), (8.6,7.25),
+       (9.4,6.00), (9.6,7.75), (9.4,9.00), (9.6,8.00)}{
+        \node<2->[gray] at \Point {\textbullet};
+     };
+
+	% intervention
+	\draw<3-> (5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+	\draw<3-> (5,0) -- (5,8);	
+	\draw<4->[blue,line width=2pt] (0.00,1.5) -- (5.00,3.25) -- (10.00,8.50);
+	\draw<5->[red,line width=2pt] plot [smooth] coordinates {(0,2) (5,3) (8,6) (9,9.5)};
+	\draw<6>[green,line width=2pt] plot [smooth] coordinates {(0,2.5) (6.5,4) (8,7) (10.5,8)};
+	
+	\end{tikzpicture}
+	\end{center}
+}
+
+
+
+\frame{
+	\frametitle{``Sharp'' and ``Fuzzy'' RDD}
+	\begin{itemize}\itemsep1em
 		\item If a threshold perfectly causes $X$, then it produces a \textbf{sharp} discontinuity
 			\begin{itemize}
 			\item Potentially analyze as an experiment
 			\end{itemize}
-		\item If a threshold imperfectly (probabilistically) causes $X$, then it produces a \textbf{fuzzy} discontinuity
+		\item<2-> If a threshold imperfectly (probabilistically) causes $X$, then it produces a \textbf{fuzzy} discontinuity
 			\begin{itemize}
-			\item Analyze using Instrumental Variables
+			\item<3-> Analyze using Instrumental Variables
+			\begin{equation*}
+			  B=\begin{cases}
+			    1, & \text{if $x > \text{threshold}$}\\
+			    0, & \text{if $x < \text{threshold}$}
+			  \end{cases}
+			\end{equation*}
+			\item<3-> Need to choose bandwidths
 			\end{itemize}
 	\end{itemize}
 }
 
 
-% RDD figures
-
 \frame{
-	\frametitle{Sharp RDD}
+	\frametitle{Sharp vs. Fuzzy RDD}
+	\begin{center}
+	\begin{tikzpicture}[scale=0.75]
+ 	\draw[->] (0,0) -- (10,0) node[right] (xaxis) {$X$};
+	\draw[->] (0,0) -- (0,8) node[left] (yaxis) {$Y$};
+	% x ticks
+	\foreach \x in {1,2,...,9}
+      	\draw (\x,1pt) -- (\x,-3pt) node[anchor=north] {};
+	% y ticks
+	\foreach \y in {0,...,7}
+       \draw (1pt,\y) -- (-3pt,\y) node[anchor=east] {};
+	% intervention
+	\draw (5,-0.25) node[below, scale=0.5] (IV) {Intervention};
+	\draw (5,0) -- (5,8);	
+	
+	\foreach \Point in
+      {(0.4,0.50), (0.6,1.25), (0.4,2.00), (0.6,2.75),
+       (1.4,0.50), (1.6,1.25), (1.4,2.00), (1.6,2.75),
+       (2.4,0.50), (2.6,1.25), (2.4,2.00), (2.6,2.75),
+       (3.4,0.50), (3.6,1.25), (3.4,2.00), (3.6,2.75),
+       (4.4,0.50), (4.6,1.25), (4.4,2.00), (4.6,2.75)}{
+        \node [gray] at \Point {\textbullet};
+     };
+	\foreach \Point in
+      {(5.4,4.50), (5.6,5.25), (5.4,6.00), (5.6,6.75),
+       (6.4,4.50), (6.6,5.25), (6.4,6.00), (6.6,6.75),
+       (7.4,4.50), (7.6,5.25), (7.4,6.00), (7.6,6.75),
+       (8.4,4.50), (8.6,5.25), (8.4,6.00), (8.6,6.75),
+       (9.4,4.50), (9.6,5.25), (9.4,6.00), (9.6,6.75)}{
+        \node [gray] at \Point {\textbullet};
+     };
+	\draw [blue,line width=2pt] (0.00,1.75) -- (5.00,1.75);
+	\draw [blue,line width=2pt] (5.00,5.75) -- (10.00,5.75);
+	\foreach \Point in
+	   {(5.4,0.50), (6.4,1.25), (5.6,2.00), (5.4,2.75),
+	    (4.4,4.50), (3.6,5.25), (4.4,6.00), (4.6,6.75)}{
+    	 \node<2-> [gray] at \Point {\textbullet};
+	  };
+	\foreach \Point in
+	   {(5.4,4.50), (5.4,6.00), (4.4,0.50), (4.4,2.00)}{
+    	 \node<2-> [white] at \Point {\large \textbullet};
+	  };
+	\end{tikzpicture}
+	\end{center}
 }
 
+
+
+% modelling RDD
+
 \frame{
-	\frametitle{Fuzzy RDD}
+	\frametitle{Modelling Fuzzy RDD}
 }
 
 
-% modelling ITS
-
-
-
-% curvilinear relationship that might appear to be RD
 
 
 \frame{
@@ -409,6 +560,9 @@
 		\item Compensatory rivalry and equalization
 	\end{itemize}
 }
+
+\frame{\frametitle{Questions about RDD?}}
+
 
 
 \section[ITS]{Interrupted Time-Series}
@@ -525,7 +679,16 @@
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{Campbell and Ross}
+	\begin{enumerate}\itemsep2em
+	\item What is their research question?
+	\item How do they analyze the data?
+	\item What do they find and conclude?
+	\end{enumerate}
+}
 
+\frame{\frametitle{Questions about ITS?}}
 
 
 
@@ -611,6 +774,15 @@
         
     \end{tikzpicture}
     \end{center}
+}
+
+\frame{
+	\frametitle{Lassen and Serritzlew}
+	\begin{enumerate}\itemsep2em
+	\item What is their research question?
+	\item How do they analyze the data?
+	\item What do they find and conclude?
+	\end{enumerate}
 }
 
 

@@ -1,8 +1,9 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
 
-\title{Instrumental Variables Lab}
+\title{Quasi-Experiments sLab}
 \author{}
 \date{}
 
@@ -14,11 +15,12 @@
 
 \begin{enumerate}\itemsep0.5em
 
-\subsection*{Getting started}
+\section*{Instrumental Variables}
 
 \item Load the \texttt{Smoking.dta} data file. This is a very small dataset containing information about cigarette consumption, prices, and taxes for 48 U.S. states.
 
 \item Start by summarizing the variables using tables or graphs.
+
 \item Create logged transformations of some key variables:\\
 \texttt{gen logpacks = log(packs)\\
 gen logrprice = log(rprice)\\
@@ -31,15 +33,21 @@ You should use the logged forms of these variables in the following analyses.
 \subsection*{Finding instruments}
 
 \item State-level cigarette prices and smoking rates may be influenced by many things. Draw a causal graph of this causal relationship along with any confounding variables. Where would you put an instrumental variable to help identify an effect?
+
 \item Some authors have suggested state-level cigarette tax rates (\texttt{tax}) could be a valid instrument. Does this seem like a {\em credibly exogenous} instrument for this problem?
+
 \item Others have suggested that a better instrument is the amount of VAT (general sales tax on all purchased goods; \texttt{tdiff}) is a better instrument. Does this seem like a {\em credibly exogenous} instrument? Is it more or less so than cigarette-specific taxes?
+
 \item Test whether cigarette-specific and general tax rates are {\em relevant} instruments.
 
 \subsection*{Two-stage least squares estimation}
 
 \item Let's assume that \texttt{tdiff} is a credible instrument. Manually generate a two-stage least squares estimate by regressing logged cigarette prices on \texttt{tdiff}. Based on this first stage equation, do general sales taxes seem to be a strong instrument?
+
 \item Save the fitted values from this regression as a new variable \texttt{pricefit}.
+
 \item Manually estimate the second stage equation using \texttt{pricefit} to predict \texttt{logpacks}. How does the estimate compare to your OLS estimate from above?
+
 \item Remember that the SEs calculated in this method are incorrect. To obtain correct SEs, we need to use the \texttt{ivregress} command. It has the following syntax:\\
 \texttt{ivregress 2sls outcome [exogenousvarlist] (endogenousvarlist = ivlist)}
 
@@ -48,18 +56,22 @@ How do coefficient estimates and SEs from \texttt{ivregress} compare to the esti
 \subsection*{First-stage diagnostics}
 
 \item To include additional details in the output, we can specify some options when we call \texttt{ivregress}. Add the \texttt{, first} option and compare the output to the output from your manual estimation of the first stage.
+
 \item You can also use \texttt{estat firststage} to instead just report summary statistics for the first stage without the coefficient estimates. Note how much of the output from \texttt{estat firststage} is the same as the summary statistics we obtain from any regression. The key statistic here is the F-statistic. Recall that in a regression with one regressor, the F-statistic is simply the square of the t-statistic for the coefficient. A rule-of-thumb is that an F-statistic greater than 10 is required for the instrument to be considered strong.
+
 \item The bottom half of the \texttt{estat firststage} output is something new. It lists critical values (in F-statistic terms) above which we can reject a null hypothesis of having a weak instrument(s). Does the F-statistic exceed these critical values?
 
 \subsection*{Tests of endogeneity}
 
 \item While we cannot test the exclusion restriction (that the instrument has no direct effect on the outcome), we can test whether the seemingly endogenous regressor is in fact endogenous. We do this by comparing the OLS estimates of the regressor's effects to those estimated by 2SLS. Or, to put it another way, we see whether the portion of $X$ not explained by the instrument has any independent effect on $Y$. Stata provides this test --- called the Durbin-Wu-Hausman Test --- using \texttt{estat endogenous}. We are interested in the last line of output, which provides an F-statistic and associated p-value for a test of the null hypothesis that the included covariates in the second stage are exogenous. Rejecting the null would indicate that the include variable(s) are endogenous and should be instrument. We have one included variable (\texttt{logrprice}). Does it seem to be exogenous?
+
 \item To get a feel for what's happening in the DWH test, let's calculate it manually. First, rerun the first-stage regression. Then save the residuals from the firststage as a new variable \texttt{resid}. Now regress \texttt{logpacks} on \texttt{logrprice} and \texttt{resid}. If you run \texttt{test resid}, the F-statistic and p-value should match those of from the output of \texttt{estat endogenous}.
 
 
 \subsection*{Covariates in IV estimation}
 
 \item We don't simply need to estimate a model with one endogenous regressor and one instrument. We can also include additional covariates in our model. Perhaps there were other variables that we think confound the relationship between \texttt{logrprice} and \texttt{logpacks} and that we were able to observe directly. We can include these in our model. For example, maybe we think that state income \texttt{logincome} has an effect on smoking. Estimate a two-stage least squares model that includes this as an additional covariate. Does it seem to be influential?
+
 \item To get a handle on what happens when we include additional covariates in our model, run the following:\\
 \texttt{quietly reg logrprice tdiff logincome\\
 predict pricefit2\\
@@ -70,15 +82,45 @@ Here we manually calculate the two-stage least squares estimates, as we did abov
 \subsection*{Multiple instruments}
 
 \item What if we happen to be in the rare situation where we have multiple instruments? Well, they allow us to additional conduct tests of ``overidentifying restrictions.'' (You should see Wooldridge for statistical details here.) This is a test of the null hypothesis that all instruments are valid. Rejecting it suggests that at least one of the instruments is invalid. Try running a 2SLS estimation using \texttt{population} as an additional instrument. Then use the \texttt{estat overid} to test the validity of the combined instruments. 
+
 \item In practice, we will rarely have one instrument let alone two or more. As such, we are restricted to a world where there is only one included variable that is affected by unobserved confounding. Having two instruments would mean we could estimate a model with two endogenous regressors if both instruments are credibly exogenous for both of these variables. Feel free to estimate such a model.
 
 \subsection*{Model fit and specification}
 
 \item Remember that 2SLS is just like OLS, it is a linear function of covariates. For this reason, all the usual rules about goodness-of-fit, model specification, and linearity of the CEF apply. Using tools we learned for OLS, test whether the outcome is a linear function of the covariates.
+
 \item As in OLS, we can also estimate heteroskedasticity-consistent standard errors using the \texttt{, vce(robust)} (or its shortcut, \texttt{, r}) option. See whether this is appropriate using a Breusch-Pagan test (but note that this is not implemented as a postestimation command after \texttt{ivregress}; instead estimate the model manually and then use the usual \texttt{hettest} command).
+
 \item This dataset is relatively sparse in terms of variables, but at this point you could also test empirically whether there are other currently excluded variables that perhaps should be in the model.
 
-\subsection*{Fuzzy regression discontinuity}
+\item If you would like further practice, you can also work through the examples in Cameron and Trivedi (Ch.6).
+
+\section*{Replication Acemoglu, Johnson, and Robinson}
+
+% http://economics.mit.edu/faculty/acemoglu/data/ajr2001
+
+\item Now that you have an understanding of how to do instrumental variables analysis, use the \textbf{AcemogluJohnsonRobinson.dta} dataset (available on Blackboard) to replicate the results from the ``Colonial Origins of Comparative Development'' article.
+
+\item Reproduce the OLS results in Table 2 and Figure 2.
+
+\item Reproduce the ``first stage'' results in Table 3 and Figure 3.
+
+\item Reproduce the full IV results in Tables 4 and 5.
+
+\item Reproduce the overidentification tests in Table 8.
+
+\item You can check your results against the official replication files available from: \url{http://economics.mit.edu/faculty/acemoglu/data/ajr2001}.
+
+\section*{Splines and Scatterplot Smoothing}
+
+% creating and graphing splines (\texttt{cut}, \texttt{mksplines})
+
+% using the \texttt{lowess} command
+
+
+
+
+\section*{Fuzzy regression discontinuity}
 
 \item Load the \texttt{AngristPischke621.dta} dataset. This contains the data reported in Angrist and Pischke Table 6.2.1 (p.266).
 \item One of the most compelling applications of IV estimation is in the presence of regression discontinuities. A discontinuity is (a potentially striking) change in the value of a treatment variable across levels of an instrument. A nice example of this that we've encountered is Maimonides' Rule and its effect on class sizes in Israel. Because class sizes are reduced dramatically when total school enrollment approaches any multiple of 40 students, class sizes at schools just above and just below those thresholds are as-if randomly assigned. That is to say, Maimonides' Rule creates an experiment in schools of around 40, 80, 120, 160, etc. students.
