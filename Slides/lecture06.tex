@@ -36,7 +36,7 @@
 
 \frame{
 	\frametitle{Design Trumps Analysis}
-	\begin{itemize}\itemsep2em
+	\begin{itemize}\itemsep1.5em
 		\item Observational studies are hard because we need to have a convincing causal theory and have observed all causally relevant variables
 		\item Quasi-Experiments potentially save us from needing a complete and fully observed set of causal variables
 		\item In a quasi-experiment, we can treat our data (almost) as-if they are from an experiment
@@ -47,21 +47,25 @@
 \frame{\tableofcontents[currentsection]}
 
 \frame{
-	\frametitle{A little history}
+	\frametitle{A Little History of IV}
 	\begin{itemize}\itemsep1em
 		\item Have been used for a very long time (since Wright 1928)
 		\item Very popular identification strategy in economics
 		\item Just starting to become widespread in political science
+			\begin{itemize}
+			\item Field experiments with noncompliance
+			\item Mediation analysis
+			\end{itemize}
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{When would we use IV?}
-	\begin{itemize}\itemsep1em
+	\frametitle{When Would We Use IV?}
+	\begin{itemize}\itemsep1.5em
 		\item We are interested in the effect of $X \rightarrow Y$
-		\item This relationship is confounded by unobservables
-		\item We cannot manipulate $X$ (i.e., no experiments)
 		\item How can we identify the effect $X \rightarrow Y$?
+		\item<2-> Relationship is confounded by unobservables
+		\item<2-> We cannot manipulate $X$ (i.e., no experiments)
 	\end{itemize}
 }
 
@@ -73,7 +77,7 @@
 		\draw[->] (Z) -- (Y);
 		\draw[->] (5,2) node[above] (A) {A} -- (Y);
 		\draw<1>[->] (-2,0) node[left] (B) {B} -- (X);
-		\draw<2>[->,red,thick] (-2,0) node[left] (B) {\color{red}{B}} -- (X);
+		\draw<2>[->,red,thick] (-2,0) node[left] (W) {\color{red}{W}} -- (X);
 		\draw[->] (X) -- (2,-2) node[right] (C) {C};
 		\end{tikzpicture}
 	\end{center}
@@ -92,8 +96,12 @@
 \frame{
 	\frametitle{What is ``instrumental''?}
 	\begin{itemize}\itemsep2em
-		\item $B$ must be a crucial cause of $X$'s effect on $Y$
-		\item $B$ is the quasi-experimental shock to the causal process in our graph
+		\item $W$ must be a crucial cause of $X$'s effect on $Y$
+		\item $W$ is the quasi-experimental shock to the causal process in our graph
+			\begin{itemize}
+			\item It is not caused by $X$ or $Y$
+			\item It does not cause $Y$ except through $X$
+			\end{itemize}
 	\end{itemize}	
 }
 
@@ -103,13 +111,13 @@
 	\begin{enumerate}\itemsep1em
 		\item Exogeneity\\ % Not testable
 			\begin{itemize}
-				\item $B$ temporally precedes $X$
+				\item $W$ temporally precedes $X$
 				\item $Cov(B, \epsilon) = 0$
 			\end{itemize}
 		\item Relevance\\ % Is testable
 			\begin{itemize}
-				\item $B$ causes $X$
-				\item $Cov(B, X) \neq 0$
+				\item $W$ causes $X$
+				\item $Cov(W, X) \neq 0$
 			\end{itemize}
 	\end{enumerate}
 }
@@ -130,8 +138,8 @@
 \frame{
 	\frametitle{How IV Works I}
 	\begin{itemize}\itemsep1em
-		\item Start with case where $B$ is a 0,1 indicator
-		\item To identify the effect $X \rightarrow Y$, all we need is $B$
+		\item Start with case where $W$ is a 0,1 indicator
+		\item To identify the effect $X \rightarrow Y$, all we need is $W$
 		\item We don't need to worry about other omitted variables, because the as-if-random instrument is doing all the heavy lifting for us
 		\item But we don't learn anything about the rest of the causal graph
 	\end{itemize}
@@ -142,28 +150,28 @@
 	\begin{itemize}\itemsep1em
 		\item Imagine two effects:
 		\begin{align}
-		ITT_y & = E[y_i | b_i = 1] - E[y_i | b_i = 0]\\
-		ITT_x & = E[x_i | b_i = 1] - E[x_i | b_i = 0]
+		ITT_y & = E[y_i | w_i = 1] - E[y_i | w_i = 0]\\
+		ITT_x & = E[x_i | w_i = 1] - E[x_i | w_i = 0]
 		\end{align}
 		\item IV estimates the LATE: $\dfrac{ITT_y}{ITT_x}$
 		\item In a regression, this is:\\
-			$E[y_i|b_i] = \beta_0 + \text{LATE} \times E[x_i|b_i]$
+			$E[y_i|w_i] = \beta_0 + \text{LATE} \times E[x_i|w_i]$
 	\end{itemize}
 }
 
 \begin{frame}[fragile]
 	\frametitle{How IV Works III (2SLS)}
 	\begin{itemize}\itemsep1em
-		\item Regress $x$ on $b$:\\
-			$\hat{x}_i = \hat{\gamma}_0 + \hat{\gamma}_1 b_i + g_i$
+		\item Regress $x$ on $w$:\\
+			$\hat{x}_i = \hat{\gamma}_0 + \hat{\gamma}_1 w_i + g_i$
 		\item Regression $y$ on $\hat{x}$:\\
 			$\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 \hat{x}_i + e_i$
-		\item Both $x$ and $b$ can be continuous
-		\item We can also have multiple $b$'s and multiple $x$'s
+		\item Both $x$ and $w$ can be continuous
+		\item We can also have multiple $w$'s and multiple $x$'s
 		\item In Stata:\\
 			\small
 			\begin{verbatim}
-			ivregress 2sls Y covariates (X = B), first
+			ivregress 2sls Y covariates (X = W), first
 			\end{verbatim}
 	\end{itemize}
 \end{frame}
@@ -217,17 +225,17 @@
 
 
 \frame{
-	\frametitle{SATE vs. LATE}
+	\frametitle{Local Average Treatment Effect}
 	\begin{itemize}\itemsep1em
-	\item IV estimate \textit{local} to the variation in $X$ that is due to variation $B$ (i.e., the LATE)
+	\item IV estimate \textit{local} to the variation in $X$ that is due to variation $W$ (i.e., the LATE)
 	\item This matters if effects are \textit{heterogeneous}
 	\item LATE is effect for those who \textit{comply} with instrument
 	\item Four subpopulations:
 		\begin{itemize}
-		\item Compliers: $X = 1$ only if $B = 1$
-		\item Always-takers: $X = 1$ regardless of $B$
-		\item Never-takers: $X = 0$ regardless of $B$
-		\item Defiers: $X = 1$ only if $B = 0$
+		\item Compliers: $X = 1$ only if $W = 1$
+		\item Always-takers: $X = 1$ regardless of $W$
+		\item Never-takers: $X = 0$ regardless of $W$
+		\item Defiers: $X = 1$ only if $W = 0$
 		\end{itemize}
 	\end{itemize}
 }
@@ -236,21 +244,23 @@
 % - Never-takers: no military service regardless of draft (maybe medically ineligible)
 % - Defiers: military service only if not drafted
 
+% How do we know what type of unit a given unit is? We don't! These are not recognizable subpopulations.
+
 % ITT_y
 % 1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
 % 2. We assume no defiers.
 % 3. What is left is the ITT for compliers (the effect of the instrument on Y) times Pr(Complier). But we want to know the effect of X on Y for these individuals. To do that we need to know how many compliers there are in order to divide out to get just the ATE for compliers.
 
 \frame{
-	\frametitle{SATE vs. LATE}
+	\frametitle{Local Average Treatment Effect}
 	\begin{align*}
-    SATE = & \pi_{Compliers} * ITT_{Compliers}\\
+    ITT_y = & \pi_{Compliers} * ITT_{Compliers}\\
 	     & + \only<1-2>{\pi_{Always-Takers} * ITT_{Always-Takers}}\only<3->{0}\\
 	     & + \only<1-2>{\pi_{Never-Takers} * ITT_{Never-Takers}}\only<3->{0}\\
 	     & + \only<1-4>{\pi_{Defiers} * ITT_{Defiers}}\only<5->{0}
 	\end{align*}
 	\begin{itemize}
-	\item We don't know which subpopulation each unit is from
+	\item All $\pi$ sum to 1
 	\item<2-> Effect for always- and never-takers is zero
 	\item<4-> Assume no defiers (monotonicity)
 	\end{itemize}
@@ -258,10 +268,10 @@
 
 
 \frame{
-	\frametitle{SATE vs. LATE}
+	\frametitle{Local Average Treatment Effect}
 	\begin{align*}
-	LATE & = \dfrac{SATE}{\pi_{Complier}} \onslide<2->{= \dfrac{E[Y|B=1] - E[Y|B=0]}{\pi_{Complier}}}\\[1em]
-	\only<3>{\pi_{Complier} & = Pr(X=1|B=1) - Pr(X=1|B=0)\\}
+	LATE & = \dfrac{ITT_y}{\pi_{Complier}} \onslide<2->{= \dfrac{E[Y|W=1] - E[Y|W=0]}{\pi_{Complier}}}\\[1em]
+	\only<3>{\pi_{Complier} & = Pr(X=1|W=1) - Pr(X=1|W=0)\\}
 	\onslide<4->{& = \dfrac{ITT_y}{ITT_x}}
 	\end{align*}
 	\begin{itemize} %\itemsep1em
@@ -286,7 +296,7 @@
 		\item Most instruments are not things we care about
 			\begin{itemize}
 				\item Weather, disasters
-				\item Geography, climate
+				\item Geography, borders, climate
 				\item Lotteries
 			\end{itemize}
 		\item A good instrument is one that satisfies both of our conditions, so we need:
@@ -350,7 +360,7 @@
 		\end{itemize}
 	\item In RDD, $X$ is not randomly assigned and there is no \textit{covariate overlap}
 		\begin{itemize}
-		\item $B$ causally determines $X$, so units with different values of $X$ also differ in their value of $B$
+		\item $W$ causally determines $X$, so units with different values of $X$ also differ in their value of $W$
 		\item compare units that are as similar as possible
 		\end{itemize}
 	\end{enumerate}
@@ -483,19 +493,19 @@
 		\item<2-> If a threshold imperfectly (probabilistically) causes $X$, then it produces a \textbf{fuzzy} discontinuity
 			\begin{itemize}
 			\item<3-> Analyze using Instrumental Variables
+			\end{itemize}
 			\begin{equation*}
-			  B=\begin{cases}
-			    1, & \text{if $x > \text{threshold}$}\\
-			    0, & \text{if $x < \text{threshold}$}
+			  W=\begin{cases}
+			    1, & \text{if $X > \text{threshold}$}\\
+			    0, & \text{if $X < \text{threshold}$}
 			  \end{cases}
 			\end{equation*}
-			\item<3-> Need to choose bandwidths
-			\end{itemize}
+		\item<3-> Examples?
 	\end{itemize}
 }
 
 
-\frame{
+\frame<1-2>[label=fuzzy]{
 	\frametitle{Sharp vs. Fuzzy RDD}
 	\begin{center}
 	\begin{tikzpicture}[scale=0.75]
@@ -530,14 +540,21 @@
 	\draw [blue,line width=2pt] (0.00,1.75) -- (5.00,1.75);
 	\draw [blue,line width=2pt] (5.00,5.75) -- (10.00,5.75);
 	\foreach \Point in
-	   {(5.4,0.50), (6.4,1.25), (5.6,2.00), (5.4,2.75),
-	    (4.4,4.50), (3.6,5.25), (4.4,6.00), (4.6,6.75)}{
+	   {(5.4,0.50), (6.4,1.25), (5.6,2.00), (5.4,4.00),
+	    (4.4,5.00), (3.6,5.25), (4.4,4.50), (4.6,6.75)}{
     	 \node<2-> [gray] at \Point {\textbullet};
 	  };
 	\foreach \Point in
 	   {(5.4,4.50), (5.4,6.00), (4.4,0.50), (4.4,2.00)}{
     	 \node<2-> [white] at \Point {\large \textbullet};
 	  };
+	  
+	\fill<3>[white] (0.05,0.05) rectangle (3,8);
+	\fill<3>[white] (7,0.01) rectangle (10,8);
+	
+	\fill<4>[white] (0.05,0.05) rectangle (4,8);
+	\fill<4>[white] (6,0.01) rectangle (10,8);
+
 	\end{tikzpicture}
 	\end{center}
 }
@@ -548,17 +565,28 @@
 
 \frame{
 	\frametitle{Modelling Fuzzy RDD}
+	\begin{itemize}\itemsep1em
+	\item Treat the threshold as an instrument
+		\begin{itemize}
+		\item Not all cases above threshold are treated
+		\item Not all cases below threshold are untreated
+		\end{itemize}
+	\item Effect is estimated at point of discontinuity, which may not reflect effect $X \rightarrow Y$ over the entire domain of $X$
+	\item Need to choose bandwidths
+	\end{itemize}
 }
 
-
-
+\againframe<2-4>{fuzzy}
 
 \frame{
 	\frametitle{Problems with Discontinuities}
-	\begin{itemize}\itemsep1em
+	\begin{itemize}
 		\item Discontinuities are exploitable
-		\item Campbell's Law:\\
-		\textit{The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.}
+	\end{itemize}
+	\begin{quote}
+	\textbf{Campbell's Law}: The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.
+	\end{quote}
+	\begin{itemize}
 		\item Compensatory rivalry and equalization
 	\end{itemize}
 }
@@ -646,38 +674,58 @@
 	\end{center}
 }
 
+\frame{
+	\frametitle{Threats to Inference}
+	\begin{itemize}\itemsep1em
+	\item Campbell and Ross talk about six ``threats to validity'' (i.e., threats to causal inference) related to time-series analysis
+	\item What are those threats?
+	\end{itemize}
+}
+% history: stimultaneous alterntive cause
+% maturation: time trends
+% testing: measurement changes behavior
+% instrumentation: operationalization changes over time
+% instability: measurement error
+% regression (to the mean):
+% - statistically: extreme cases will be less extreme on second measurement
+% - in policy terms: interventions are most likely when problems are extreme
+
+% one more not mentioned by Campbell and Ross: If the series is an aggregation, it's also possibly due to attrition or changing composition of the sample from which the data is aggregated
+
 
 \frame<1>[label=itsissues]{
 	\frametitle{ITS Considerations}
 	\begin{itemize}\itemsep1em
 	\item Changes in \textit{level} and/or \textit{slope}
 	\item Effects can be delayed
-	\item<2-> Improving the design:\\
-		\begin{itemize}\itemsep1em
-		\item Multiple outcome measures
-		\item Longer series
-		\item Non-equivalent outcome(s) series
-		\item Control case(s)
+	\item<2-> Improving the design (easiest to hardest):\\
+		\begin{itemize}\itemsep0.5em
+		\item<3-> Multiple outcome measures
+		\item<4-> Non-equivalent outcome(s) series
+		\item<5-> Longer series
+		\item<6-> Control case(s)
 		\end{itemize}
 	\end{itemize}
 }
 
 
-\againframe<2>{itshow}
+\againframe<2>{its}
 
-\againframe<1-2>{itsissues}
+\againframe<1->{itsissues}
 
 \againframe<2-3>{its}
 
-
-% year as an interaction term
 
 \frame{
 	\frametitle{Modelling an ITS}
 	\begin{itemize}\itemsep1em
 	\item ITS can be expressed as a regression model where \textbf{time} is our key $X$ variable
-	\item Intervention $Z$ is a pre-post indicator
-	\item We are interested in the $X*Z$ interaction
+	\item Intervention $W$ is a pre-post indicator
+	\item We are interested in the coefficients in the marginal effect of time on $Y$ before and after intervention
+		\begin{itemize}
+		\item Is there a slope change?
+		\item Is there an intercept change?
+		\end{itemize}
 	\end{itemize}
 }
 
@@ -707,12 +755,7 @@
 			Y_{i0t} \equiv Y_{i0t+1}\\
 			Y_{i1t} \equiv Y_{i1t+1}
 			\end{align*}
-		\item If anything else changed before and after the interruption, then the shock might:
-			\begin{itemize}
-				\item not have been exogenous, or 
-				\item have been concurrent with another change, or
-				\item reflect a time trend
-			\end{itemize}
+		\item Campbell and Ross's threats to validity are hugely problematic
 	\end{itemize}
 }
 
