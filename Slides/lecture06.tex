@@ -188,6 +188,7 @@
 	\item<2-> Durbin-Wu-Hausman Test (exclusion restriction)\\
 		\begin{itemize}
 		\item Do residuals from the first stage relate to $y$?
+		\item If $X$ is exogenous, IV and OLS results should be similar
 		\item $y = \beta_0 + \beta_1 x_{\text{Confounded}} + \beta_2 \hat{\eta} + e$
 		\item $\eta$ are the residuals from the first stage
 		\item In Stata: \texttt{estat endogenous}
@@ -266,6 +267,7 @@
 	\begin{itemize} %\itemsep1em
 	\item<5-> Sometimes also called CATE or CACE
 	\item<6-> Is this what we want to know?
+	\item<7-> Is it externally valid?
 	\end{itemize}
 }
 %  1. For Always-takers and Never-takers, the effect is zero because we see the same potential outcomes for them regardless of the value of Z. Z does not affect X for these individuals, so their ITT is 0.
