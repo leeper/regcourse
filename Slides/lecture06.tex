@@ -30,8 +30,13 @@
 	\begin{itemize}\itemsep1em
 		\item<1-> A situation where a real-world event induces an exogenous change (or ``shock'') in an independent variable
 		\item<2-> Also sometimes called \textit{``natural'' experiments}
-		\item<3-> Can anyone think of examples?
+		\item<3-> Cases on either side of the shock are similar except for the effect of the shock
+		\item<4-> Can anyone think of examples?
 	\end{itemize}
+}
+
+\frame{
+	\includegraphics[width=\textwidth]{images/tornado}
 }
 
 \frame{
@@ -560,13 +565,11 @@
 }
 
 
-
-% modelling RDD
-
 \frame{
-	\frametitle{Modelling Fuzzy RDD}
+	\frametitle{Modelling RDD}
 	\begin{itemize}\itemsep1em
-	\item Treat the threshold as an instrument
+	\item Sharp: Treat threshold as an experiment
+	\item Fuzzy: Treat the threshold as an instrument
 		\begin{itemize}
 		\item Not all cases above threshold are treated
 		\item Not all cases below threshold are untreated
@@ -578,16 +581,25 @@
 
 \againframe<2-4>{fuzzy}
 
+
+\frame{
+	\frametitle{Modelling RDD}
+	\begin{itemize}\itemsep2em
+	\item Use bandwidths to subset the data
+	\item Regress $Y$ on $X$, interacted with $W$
+	\item Often use polynomial terms:
+	\end{itemize}
+	$Y = \beta_0 + \beta_1 X + \beta_2 X^2 + ... + \beta_3 Z + \beta_4 X Z + \beta_5 X^2 Z + ...$
+}
+
 \frame{
 	\frametitle{Problems with Discontinuities}
-	\begin{itemize}
-		\item Discontinuities are exploitable
-	\end{itemize}
 	\begin{quote}
 	\textbf{Campbell's Law}: The more any quantitative social indicator (or even some qualitative indicator) is used for social decision-making, the more subject it will be to corruption pressures and the more apt it will be to distort and corrupt the social processes it is intended to monitor.
 	\end{quote}
 	\begin{itemize}
-		\item Compensatory rivalry and equalization
+		\item<2-> Discontinuities are exploitable
+		\item<3-> Compensatory rivalry and equalization
 	\end{itemize}
 }
 
