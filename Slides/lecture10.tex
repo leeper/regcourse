@@ -1,0 +1,139 @@
+\input{preamble}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{decorations.pathreplacing}
+
+\title{Interpretation of GLMs}
+
+\date[]{April 21, 2015}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\frame{\tableofcontents}
+
+\section{Essay 2}
+
+
+% causal graphs vs. linear path models vs. ``heuristic'' theoretical drawings
+
+
+
+
+% graphing and interpretation activity
+
+% we are estimating coefficients for an equation
+
+% using estimates, we can create predicted or fitted values based on input values
+
+% graph these predicted values
+
+
+
+
+
+\section{Review GLMs and MLE}
+
+
+% ways of thinking about this
+
+% transforming outcome to a continuous scale so that we can estimate effects
+
+% latent utility
+
+% latent variable
+
+
+
+\frame{
+
+\frametitle{The Likelihood Function}
+ 
+ - Takes possible population parameters as inputs
+   - i.e., guess at `\(\boldsymbol{\beta}\)`
+   
+ - Give a *likelihood* of seeing our sample data given that input
+   - i.e., the probability of observing the data given the parameter guesses
+ 
+ - We pick best guess
+   - i.e., the guesses at `\(\boldsymbol{\beta}\)` that yield the *maximum* likelihood
+
+}
+
+
+\frame{
+
+\frametitle{Maximizing the likelihood}
+
+How do we find the maximum likelihood (and thus our estimated `\(\beta\)`'s)?
+
+We guess! Repeatedly!
+  
+  - Start with some kind of guess and calculate the likelihood
+  
+  - Make better and better guesses, until the likelihood doesn't get marginally higher
+
+}
+
+
+
+
+% assumptions
+
+
+
+
+\section{Interpreting GLMs}
+
+% activity discussing one of the assigned articles (Hobolt maybe?)
+
+
+
+
+% coefficients in logit and probit
+
+% average marginal effects
+% marginal effects at the mean
+% marginal effects at representative values
+
+% latent scale versus probability scale
+
+\frame{
+
+What is the probability that $y_i=1|\boldsymbol{x}_i$ ?
+
+}
+
+
+% marginal effects (slope of the response curve)
+% discrete changes
+%% there is no difference in linear additive (i.e., many OLS) models because the effect of X is constant across levels of X
+
+
+
+% graphing predicted probabilities
+% graphing marginal effects
+
+
+
+% interaction terms
+
+
+\section{Model Specification}
+
+% logit versus probit
+
+% binary, categorical, ordered outcomes
+
+% robust SEs - don't necessarily make sense in a GLM context
+
+
+% elaborating beyond binary outcomes (ordered, categorical, count)
+
+
+
+\appendix
+\frame{}
+
+\end{document}
