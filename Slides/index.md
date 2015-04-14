@@ -11,7 +11,8 @@ Here are slides from this year:
 * [Lecture 01](lecture01.pdf)
 * [Lecture 03](lecture03.pdf)
 * [Lecture 05](lecture05.pdf)
-
+* [Lecture 06](lecture06.pdf)
+* [Lecture 10](lecture10.pdf)
 
 # 2014 Slides #
 
