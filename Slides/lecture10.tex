@@ -21,14 +21,14 @@
 
 
 
-% graphing and interpretation activity
-
 % we are estimating coefficients for an equation
 
 % using estimates, we can create predicted or fitted values based on input values
 
 % graph these predicted values
 
+
+% start graphing and interpretation activity (OLS only)
 
 
 
@@ -44,6 +44,7 @@
 
 % latent variable
 
+% 
 
 
 \frame{
@@ -116,6 +117,8 @@ What is the probability that $y_i=1|\boldsymbol{x}_i$ ?
 % graphing marginal effects
 
 
+% rest of graphing activity
+
 
 % interaction terms
 
@@ -124,12 +127,18 @@ What is the probability that $y_i=1|\boldsymbol{x}_i$ ?
 
 % logit versus probit
 
-% binary, categorical, ordered outcomes
+% decision is based on expected distribution of the error term
+% recall in OLS, we don't make any assumptions about the error term to obtain coefficient estimates, but we do make those assumptions to estimate the standard errors
+% in MLE, we need to make an assumption about the distribution of the error term in order to estimate coefficients.
+% for a continuous DV, we typically assume Normally distributed errors; for binary outcomes, it is conventional to assume a logistic distribution (logit) or a Normal distribution (probit)
+% logit and probit both introduce a symmetrical relationship between covariates and the probability that y = 1
+% other models do not assume that symmetry (log-log; complementary log-log; etc.)
+
+% elaborating beyond binary outcomes (ordered, categorical, count)
 
 % robust SEs - don't necessarily make sense in a GLM context
 
 
-% elaborating beyond binary outcomes (ordered, categorical, count)
 
 
 

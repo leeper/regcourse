@@ -17,15 +17,21 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 
 \begin{enumerate}\itemsep1em
 \item Load the data file into Stata.
+
 \item Start a new do-file to contain the following analyses.
+
 \item Create dummy variables for each of the three outcomes:
+
 	\begin{itemize}
 	\item Recode \texttt{volchrty} as a binary variable called \texttt{volbin} 
 	\item Recode \texttt{givblood} as a binary variable called \texttt{bloodbin}
 	\item Recode \texttt{givchrty} as a binary variable called \texttt{charbin}
 	\end{itemize}
+
 \item Generate a new variable that recodes the key causal variable \texttt{wrkgovt} to be 1 for public sector employees and 0 for private sector employees. Call this new variable \texttt{pubemp}.
+
 \item Recode or generate covariates as necessary based on th discussion on p.74 of Houston (2005). You will need versions of the following variables:
+
 	\begin{itemize}
 	\item Female: \texttt{sex}
 	\item White: \texttt{race}
@@ -38,27 +44,52 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 	\item Community size (logged): \texttt{size}
 	\item Church attendance: \texttt{attend}
 	\end{itemize}
+
 \item Replicate the analyses in Tables 3, 4, and 5 of Houston (2005). Focus on Model \# 1 in each table, using the \texttt{logit} command to perform logistic regression. It is used in the same way as \texttt{reg}.
-\item Re-estimate the same models using \texttt{probit} instead of \texttt{logit} to retrieve probit regression results.
+
+\item Re-estimate the same models using \texttt{probit} instead of \texttt{logit} to retrieve probit regression results. How do they compare (both statistically and substantively)?
+
+\item Divide the estimated coefficient on each variable from the probit model by the corresponding coefficient estimate from the logit model? How do these values compare?
+
 \item Use \texttt{eststo} and \texttt{esttab} to display the results of both models side-by-side.
-%\item Install the \texttt{prvalue} program by typing \texttt{findit spostado} into Stata and following the on-screen instructions to install \texttt{install spost9\_ado}.
-% Goodness of fit statistics \texttt{fitstat}
+
 \item Use \texttt{tab pubemp volbin, row} to see the proportions of public and private sector employees who volunteered time in the sample. Repeat this for the other outcomes \texttt{bloodbin} and \texttt{charbin}.
+
 \item Estimate the predicted probability of each outcome for public and private sector employees using \texttt{margins, at(pubemp=(0 1))}. {\em Remember to call \texttt{margins} immediately after \texttt{logit}.}
+
 \item You can simplify the \texttt{margins} call by treating \texttt{pubemp} as a factor when you call \texttt{logit}. You can then just type \texttt{margins pubemp}. Try it. Manually calculate the average marginal effect by calculating the difference between the two predicted probabilities.
+
 \item Estimate the predicted probability of the outcome for public and private sector employees across levels of education using: \texttt{quietly margins pubemp, at(educ=(0 (1) 20))}.
-%Compare the empirical probabilities (i.e., the sample proportions) reported in Table 1 to predicted probabilities from the logit model. What is the predicted probability of government and non-governmental employees engaging in each of the three types of voluntary behavior?
+
+\item Compare the empirical probabilities (i.e., the sample proportions) reported in Table 1 to predicted probabilities from the logit model. What is the predicted probability of government and non-governmental employees engaging in each of the three types of voluntary behavior?
+
+\item A common measure of model fit (albeit a problematic one) is the ``percent correctly classified,'' which compares the proportion of observations observed as 1 to the proportion of observations predicted to be 1 (i.e., where $Pr(Y=1) > 0.5$). Calculate this statistic for the various models.
+
 \item Plot the previous result using \texttt{marginsplot}. Because predicted probabilities range from 0 to 1, it is best to specify the scale of the y-axis. Try it again using \texttt{marginsplot, ylabel(0 (0.1) 1)}.
+
 \item Estimate the average marginal effect of being a public employee using \texttt{margins, dydx(pubemp)}. How does this compare to the manually calculated change in predicted probability you calculated earlier?
+
 \item Compare the average marginal effect to the marginal effect at the means of the other covariates using: \texttt{margins, dydx(pubemp) atmeans}. How do they differ? Why?
+
 \item Estimate the predicted probabilities of the outcome across different age levels and plot the results. You can use \texttt{quietly} to suppress the printing of the \texttt{margins} command before you plot. Try the following code:\\
 \texttt{margins pubemp, at(age=(20 (5) 80))\\
 marginsplot}\\
 How large does the marginal effect appear to be at each age level?
+
 \item Now let Stata figure out the size of the marginal effects for you and plot the result. Try the following code:\\
 \texttt{margins, dydx(pubemp) at(age=(20 (5) 80))\\
 marginsplot}\\
 How do the last two graphs compare?
+
+\item Introduce an interaction between \texttt{pubemp} and \texttt{educ} into the regression model. Now re-estimate the predicted probabilities and the marginal effect of \texttt{pubemp} across levels of education. Plot the results. What interpretations do you take away?
+
+
+%\item Install the \texttt{prvalue} program by typing \texttt{findit spostado} into Stata and following the on-screen instructions to install \texttt{install spost9\_ado}.
+% Goodness of fit statistics \texttt{fitstat}
+
+% other types of models???
+
+
 \end{enumerate}
 
 \end{document}
