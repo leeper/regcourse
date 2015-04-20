@@ -26,11 +26,64 @@
     \end{itemize}
 }
 
+\begin{frame}[fragile]
+    \frametitle{A ``Heuristic'' Graph}
+	\begin{center}
+	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X) {X} -- (5,0) node[right] (Y) {Y};
+        \draw[-] (X) -- (2.5,0) node[right] (D) {};
+        \draw[->] (3.1,0) -- (5,0) (Y);
+        \draw[->] (-2,2) node[left] (Z) {Z} -- (Y);
+        \draw[->] (Z) -- (X);
+        \draw[->] (2.5,-1) node[below] (M) {M} -- (D);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+% causal graphs vs. linear path models vs. ``heuristic'' theoretical drawings
+
+\begin{frame}<0>[fragile]
+    \frametitle{Better: Two Causal Graphs}
+	\begin{center}
+	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X1) {X} -- (2,0) node[right] (Y1) {Y};
+        \draw[->] (-1,2) node[left] (Z1) {Z} -- (Y1);
+        \draw[->] (Z1) -- (X1);
+        \draw[->] (0,-2) node[left] (M1) {M} -- (Y1);
+
+        \draw[->] (5,0) node[left] (X2) {X} -- (7,0) node[right] (Y2) {Y};
+        \draw[->] (4,2) node[left] (Z2) {Z} -- (Y2);
+        \draw[->] (Z2) -- (X2);
+        \draw<1>[->] (5,-2) node[left] (M2) {M} -- (Y2);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+    \frametitle{Representing Theory as Graph}
+	\begin{center}
+	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
+        \draw[->] (0,0) node[left] (X) {X} -- (4,0) node[right] (Y) {Y};
+        \draw[-] (X) -- (2.5,0) node[right] (D) {};
+        \draw[->] (3.1,0) -- (Y);
+        \draw[->] (-1,2) node[left] (Z) {Z} -- (Y);
+        \draw[->] (Z) -- (X);
+        \draw<2->[->] (0,-2) node[left] (M) {M} -- (Y);
+        \draw<3->[->] (-3,-1) node[left] (W) {W} -- (M);
+        \draw<3->[->] (W) -- (X);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
 
 \frame{
     \frametitle{Interpretation}
-    \begin{itemize}
-    \item 
+    \begin{itemize}\itemsep1em
+    \item<1-> How do we interpret a coefficient estimate in a regression model with no interaction terms?
+    \item<2-> How do we interpret a coefficient estimate in a regression model with one or more interaction terms?
+    \item<3-> How do we calculate predicted or fitted values from our estimates?
+    \item<4-> How can we visually display the results of a regression estimation?
     \end{itemize}
 }
 
@@ -41,11 +94,9 @@
 % graph these predicted values
 
 
-% start graphing and interpretation activity (OLS only)
-
 \frame{
     \frametitle{Graphing Activity}
-    \begin{itemize}\itemsep2em
+    \begin{itemize}\itemsep1em
     \item It can be difficult to see regression without results without graphing them
     \item But, using Stata it can be unclear how the estimated regression equation conforms to particular graphical output
     \item So, you will practice graphing \textit{by hand}
@@ -54,38 +105,6 @@
 }
 
 
-
-
-\begin{frame}[fragile]
-    \frametitle{Representing Theory as Graph}
-	\begin{center}
-	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
-        \draw[->] (0,0) node[left] (X) {X} -- (5,0) node[right] (Y) {Y};
-        \draw[->] (0,0) node[left] (X) {X} -- (2.5,0) node[right] (D) {D};
-        \draw[->] (3.1,0) -- (5,0) node[right] (Y) {Y};
-        \draw[->] (-3,4) node[above] (Z) {Z} -- (X);
-        \draw[->] (Z) -- (Y);
-        \draw[->] (5,2) node[above] (A) {A} -- (Y);
-        \draw[->] (-2,0) node[left] (B) {B} -- (X);
-        \draw[->] (X) -- (2,-2) node[right] (C) {C};
-    \end{tikzpicture}
-    \end{center}
-\end{frame}
-
-\begin{frame}[fragile]
-    \frametitle{A ``Heuristic'' Graph}
-	\begin{center}
-	\begin{tikzpicture}[>=latex',circ/.style={draw, shape=circle, node distance=5cm, line width=1.5pt}]
-        \draw[->] (0,0) node[left] (X) {X} -- (5,0) node[right] (Y) {Y};
-        \draw[->] (0,0) node[left] (X) {X} -- (2.5,0) node[right] (D) {D};
-        \draw[->] (3.1,0) -- (5,0) node[right] (Y) {Y};
-        \draw[->] (-3,4) node[above] (Z) {Z} -- (X);
-        \draw[->] (Z) -- (Y);
-        \draw[->] (2.5,-1) node[below] (M) {M} -- (D);
-    \end{tikzpicture}
-    \end{center}
-\end{frame}
-% causal graphs vs. linear path models vs. ``heuristic'' theoretical drawings
 
 
 
@@ -110,46 +129,104 @@
     \begin{itemize}\itemsep1em
     \item Consider a binary outcome $y$ (e.g., voting)
     \item OLS provides a nonsensical fit to the outcome
-    \item Think about the problem as a ``latent'' outcome ($y\star$) that manifests in two observed categories
+    \item Think about the problem as a ``latent'' outcome ($y\ast$) that manifests in two observed categories
         \begin{itemize}
-        \item As $y\star$ increases, $Pr(Y=1) \rightarrow 1$
-        \item As $y\star$ decreases, $Pr(Y=1) \rightarrow 0$
+        \item As $y\ast$ increases, $Pr(Y=1) \rightarrow 1$
+        \item As $y\ast$ decreases, $Pr(Y=1) \rightarrow 0$
         \end{itemize}
-    \item We do not observe $y\star$, only $y$
+    \item We do not observe $y\ast$, only $y$
     \end{itemize}
 }
 
 \frame{
     \frametitle{Estimation in GLM}
     \begin{itemize}\itemsep1em
-    \item In OLS, we estimate:\\
-        $\hat{y} = \beta_0 + \beta_1 x + e$
-    \item This is a prediction of the conditional mean of $y$
-    \item In a GLM, we estimate:\\
-        $\hat{y}\star = \beta_0 + \beta_1 x + e$\\
-    where $y\star$ is a transformation of $y$
+    \item In OLS, we estimate: $\hat{y} = \beta_0 + \beta_1 x + e$
+    \item This represents the conditional mean of $y$
+    \item In a GLM, we estimate: $\hat{y}\ast = \beta_0 + \beta_1 x + e$\\
+    where $y\ast$ is a transformation of $y$
     \item This is also a prediction of the conditional mean of $y$
-    \item<2-> How do we perform the transformation of $y$ to $y\star$?
+    \item<2-> How do we transform $y$ to $y\ast$?
     \end{itemize}
+}
+
+\frame{
+    \frametitle{Model Specification}
+    \begin{enumerate}\itemsep1em
+    \item<1-> Complete set of conditioning variables
+    \item<2-> Correctly specified model
+    \item<3-> Choice of error distribution
+    \item<4-> Link function
+    \end{enumerate}
+}
+
+\frame{
+	\frametitle{Error Distribution}
+	\begin{itemize}\itemsep1em
+	\item 
+	\end{itemize}
 }
 
 
 \frame{
     \frametitle{Link Function}
-    \begin{enumerate}\itemsep2em
-    \item \textbf{Link function}: $g()$
+    \begin{itemize}\itemsep2em
+    \item $y\ast = X\beta = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots$
+    \item \textbf{Link function}: $g(\mu) = X\beta$
         \begin{itemize}
-        \item Transforms $y$ to $y\star$
+        \item Transforms $y$ to $y\ast$
         \end{itemize}
-    \item \textbf{Inverse link function}: $g^{-1}()$
+    \item \textbf{Inverse link function}: $\mu = g^{-1}(X\beta)$
         \begin{itemize}
-        \item Transforms $y\star$ back to $y$
+        \item Transforms $y\ast$ back to $y$
         \end{itemize}
-    \item<2->
-    \end{enumerate}
+    \end{itemize}
 }
 
+\frame{
+	\frametitle{Choosing a Link Function}
+	\begin{itemize}\itemsep1em
+	\item Based on expected distribution of the error term of $y\ast$
+	\item Choice heavily influenced by convention rather than empirics
+	\item Choice of link adds \textit{model dependence}!
+		\begin{itemize}
+		\item Expected influence of $x$ on $y$ now depends on choice of link
+		\item Different link function can yield different substantive and statistical results
+		\end{itemize}
+	\end{itemize}
+}
 
+\frame{
+    \frametitle{Common Link Functions}
+    \begin{itemize}\itemsep1em
+    \item Identity
+    \item Logit
+    \item Probit
+    \item Poisson
+    \end{itemize}
+}
+
+% plot of Normal and logit distribution
+
+
+\frame{
+	\frametitle{Logit vs. Probit}
+	\begin{itemize}\itemsep1em
+	\item<1-> Both constrain a continuous $y\ast$ to (0,1)
+	\item<2-> Probabilities are symmetric
+	\item<3-> Logit allows us to estimate odds-ratios
+	\item<4-> Logit is maybe slightly more common in political science for what are probably just historical reasons
+	\end{itemize}
+}
+
+% logit and probit both introduce a symmetrical relationship between covariates and the probability that y = 1
+% other models do not assume that symmetry (log-log; complementary log-log; etc.)
+
+
+
+
+
+% elaborating beyond binary outcomes (ordered, categorical, count)
 
 
 
@@ -180,9 +257,6 @@
 
 \section{Interpreting GLMs}
 
-% activity discussing one of the assigned articles (Hobolt maybe?)
-
-
 \frame{
     \frametitle{Interpretation}
     \begin{itemize}\itemsep1em
@@ -199,23 +273,28 @@
 \frame{
     \frametitle{Coefficients}
     \begin{itemize}\itemsep1em
-    \item Coefficients express effect of $x$ on $y\star$
+    \item Coefficients express effect of $x$ on $y\ast$
     \item In logistic regression, this is a statement about the odds-ratio:
-        $\hat{\beta} = \dfrac{\frac{p_1}1-p_1}}{\frac{p_0}{1-p_0}}$
+        $\hat{\beta} = \dfrac{\frac{p_1}{1-p_1}}{\frac{p_0}{1-p_0}}$
     \item Coefficients are hard to interpret \textit{substantively}
-    \item Statistical significance works more or less as in OLS
+    \item Statistical significance is similar to OLS
     \end{itemize}
 }
 
 \frame{
     \frametitle{Predicted Outcomes}
-
+	\begin{itemize}\itemsep1em
+	\item In OLS, fitted values from the estimated regression equation are values of $y$
+	\item In most GLMs, fitted values are expressed for $y\ast$
+	\item To interpret logit or probit, we transform to predicted probabilities
+	\item \textbf{Predicted probability}: What is the probability that $y_i=1|\boldsymbol{x}_i$?
+	\end{itemize}
 }
 
 \frame{
     \frametitle{Predicted Probabilities}
     \begin{itemize}
-    \item What is the probability that $y_i=1|\boldsymbol{x}_i$?
+    \item 
     \end{itemize}
 }
 
@@ -303,37 +382,6 @@
     \item Do graphing activity \# 6
     \end{itemize}
 }
-
-
-
-\section{Model Specification}
-
-\frame{
-    \frametitle{Model Specification}
-    \begin{enumerate}\itemsep1em
-    \item<1-> Complete set of conditioning variables
-    \item<2-> Correctly specified model
-    \item<3-> Choice of error distribution
-    \item<4-> Link function
-    \end{enumerate}
-}
-
-\frame{
-    \frametitle{Common Link Functions}
-}
-
-% logit versus probit
-
-% decision is based on expected distribution of the error term
-% recall in OLS, we don't make any assumptions about the error term to obtain coefficient estimates, but we do make those assumptions to estimate the standard errors
-% in MLE, we need to make an assumption about the distribution of the error term in order to estimate coefficients.
-% for a continuous DV, we typically assume Normally distributed errors; for binary outcomes, it is conventional to assume a logistic distribution (logit) or a Normal distribution (probit)
-% logit and probit both introduce a symmetrical relationship between covariates and the probability that y = 1
-% other models do not assume that symmetry (log-log; complementary log-log; etc.)
-
-% elaborating beyond binary outcomes (ordered, categorical, count)
-
-% robust SEs - don't necessarily make sense in a GLM context
 
 
 
