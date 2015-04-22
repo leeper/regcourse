@@ -13,9 +13,10 @@
 Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Public Employees and Charitable Gifts of Time, Blood, and Money.'' {\em Journal of Public Administration Research and Theory} 16: 67--86. doi:10.1093/jopart/mui028
 \end{quote}
 
-\noindent The data for this article come from the General Social Survey, a nationally representative survey of the United States population. These data, in Stata (.dta) format, are available to you on Blackboard in the \texttt{Content > GSS} folder, along with the output of Stata's \texttt{codebook} command in a separate .txt file.
+\noindent The data for this article come from the General Social Survey, a nationally representative survey of the United States population. These data, in Stata format, are available to you on Blackboard at  \texttt{Materials from 	teachers > Additional Materials > Data > GSS2002.dta}.
 
 \begin{enumerate}\itemsep1em
+
 \item Load the data file into Stata.
 
 \item Start a new do-file to contain the following analyses.
@@ -30,7 +31,7 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 
 \item Generate a new variable that recodes the key causal variable \texttt{wrkgovt} to be 1 for public sector employees and 0 for private sector employees. Call this new variable \texttt{pubemp}.
 
-\item Recode or generate covariates as necessary based on th discussion on p.74 of Houston (2005). You will need versions of the following variables:
+\item Recode or generate covariates as necessary based on the discussion on p.74 of Houston (2005). You will need versions of the following variables:
 
 	\begin{itemize}
 	\item Female: \texttt{sex}
@@ -47,11 +48,13 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 
 \item Replicate the analyses in Tables 3, 4, and 5 of Houston (2005). Focus on Model \# 1 in each table, using the \texttt{logit} command to perform logistic regression. It is used in the same way as \texttt{reg}.
 
-\item Re-estimate the same models using \texttt{probit} instead of \texttt{logit} to retrieve probit regression results. How do they compare (both statistically and substantively)?
+\item Re-estimate the same models using \texttt{probit} instead of \texttt{logit} to retrieve probit regression results. How do they compare (both statistically and substantively)? Repeat all of the analyses below for logit and probit.
 
-\item Divide the estimated coefficient on each variable from the probit model by the corresponding coefficient estimate from the logit model? How do these values compare?
+\item Divide the estimated coefficient on each variable from the probit model by the corresponding coefficient estimate from the logit model. How do these values compare?
 
 \item Use \texttt{eststo} and \texttt{esttab} to display the results of both models side-by-side.
+
+\item Repeat the process of displaying the logit and probit results, but this time create an output table that displays the average marginal effects of each variable rather than coefficient estimates. To do this, estimate the logit model, call \texttt{margins, dydx(*) post} where \texttt{dydx(*)} requests marginal effects and \texttt{post} request that those results overwrite the stored coefficients, then call \texttt{eststo}, repeat for the probit specification, and finally call \texttt{esttab}. How do the results compare?
 
 \item Use \texttt{tab pubemp volbin, row} to see the proportions of public and private sector employees who volunteered time in the sample. Repeat this for the other outcomes \texttt{bloodbin} and \texttt{charbin}.
 
@@ -61,7 +64,9 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 
 \item Estimate the predicted probability of the outcome for public and private sector employees across levels of education using: \texttt{quietly margins pubemp, at(educ=(0 (1) 20))}.
 
-\item Compare the empirical probabilities (i.e., the sample proportions) reported in Table 1 to predicted probabilities from the logit model. What is the predicted probability of government and non-governmental employees engaging in each of the three types of voluntary behavior?
+\item If you don't like the look of the resulting \texttt{marginsplot} figure, play around with the display options. You may want to use something like \texttt{marginsplot, recast(line) recastci(rarea)} to obtain a more attractive result.
+
+\item Compare the empirical probabilities (i.e., the sample proportions) reported in Table 1 to predicted probabilities from the logit and probit specifications. What is the predicted probability of government and non-governmental employees engaging in each of the three types of voluntary behavior?
 
 \item A common measure of model fit (albeit a problematic one) is the ``percent correctly classified,'' which compares the proportion of observations observed as 1 to the proportion of observations predicted to be 1 (i.e., where $Pr(Y=1) > 0.5$). Calculate this statistic for the various models.
 
@@ -69,25 +74,27 @@ Houston, David J. 2005. ```Walking the Walk' of Public Service Motivation: Publi
 
 \item Estimate the average marginal effect of being a public employee using \texttt{margins, dydx(pubemp)}. How does this compare to the manually calculated change in predicted probability you calculated earlier?
 
-\item Compare the average marginal effect to the marginal effect at the means of the other covariates using: \texttt{margins, dydx(pubemp) atmeans}. How do they differ? Why?
+\item Compare the average marginal effect to the marginal effect at the means of the other covariates: \texttt{margins, dydx(pubemp) atmeans}. How do they differ? Why?
 
 \item Estimate the predicted probabilities of the outcome across different age levels and plot the results. You can use \texttt{quietly} to suppress the printing of the \texttt{margins} command before you plot. Try the following code:\\
-\texttt{margins pubemp, at(age=(20 (5) 80))\\
+\texttt{quietly margins pubemp, at(age=(20 (5) 80))\\
 marginsplot}\\
-How large does the marginal effect appear to be at each age level?
+How large does the marginal effect appear to be at each age level? If you add the \texttt{, yline(0)} option to \texttt{marginsplot}, you will see a horizontal line where the marginal effect is zero.
 
 \item Now let Stata figure out the size of the marginal effects for you and plot the result. Try the following code:\\
 \texttt{margins, dydx(pubemp) at(age=(20 (5) 80))\\
 marginsplot}\\
-How do the last two graphs compare?
+How do the last two graphs compare? Do you understand the distinction between the syntax used in the last two \texttt{margins} commands?
 
 \item Introduce an interaction between \texttt{pubemp} and \texttt{educ} into the regression model. Now re-estimate the predicted probabilities and the marginal effect of \texttt{pubemp} across levels of education. Plot the results. What interpretations do you take away?
 
+\item Practice obtaining predicted probabilities and marginal effects at representative values. Here, we will use the \textit{stat} form of the \texttt{at()} option. Try obtaining predicted probabilities at various percentiles of age:\\
+\texttt{margins, at((p25) age)}\\
+\texttt{margins, at((median) age)}\\
+\texttt{margins, at((p75) age)}\\
+Then do the same for marginal effects of \texttt{pubemp}. You can also combine the \textit{stat} form with the \texttt{var=(values)} form from above to specify interesting combinations of multiple variables. See \texttt{help margins} for more details.
 
-%\item Install the \texttt{prvalue} program by typing \texttt{findit spostado} into Stata and following the on-screen instructions to install \texttt{install spost9\_ado}.
-% Goodness of fit statistics \texttt{fitstat}
-
-% other types of models???
+\item Use \texttt{margins} to calculate various marginal effects at means (MEM), marginal effects at representative values (MER), and average marginal effects (AME) for both logit and probit models. Use \texttt{marginsplot} to produce additional interpretations and consider including additional variables, interactions, and non-linear terms in your model specification in order to understand the full functionality of \texttt{margins} and \texttt{marginsplot}.
 
 
 \end{enumerate}
