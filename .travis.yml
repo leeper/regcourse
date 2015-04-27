@@ -1,6 +1,6 @@
 language: ruby
 script: "bundle exec jekyll build"
-
+sudo: required
 branches:
   only:
     - gh-pages
