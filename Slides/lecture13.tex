@@ -1,0 +1,282 @@
+\input{preamble}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+%\usetikzlibrary{decorations.pathreplacing}
+
+\title{Panel GLMs}
+
+\date[]{May 12, 2015}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\frame{\tableofcontents}
+
+
+\section{Review of Panel Data}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+    \frametitle{Segue From Event-History Analysis}
+    \begin{itemize}\itemsep1em
+    \item Event history analysis involves the analysis of durations and probabilities of state changes over time across many units
+    \item Each unit's trajectory or history can begin at an arbitrary point in time
+        \begin{itemize}
+        \item Ex. 1: Colony's time to independence after 1900
+        \item Ex. 2: Durability of democratic government after independence
+        \end{itemize}
+    \item In problems (like Ex. 1), we are interested in studying units over the \textit{same period of time}
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Panel Analysis}
+    \begin{itemize}\itemsep1em
+    \item In event history analysis, time is our key variable
+    \item In panel analysis:
+        \begin{itemize}
+        \item unit characteristics are our key variables
+        \item observations exist simultaneously
+        \end{itemize}
+    \item We are interested in effects of changes in $X$ on $Y$
+    \end{itemize}
+}
+
+
+% terminology
+\frame{
+    \frametitle{Terminology}
+    \begin{itemize}\itemsep1em
+    \item<2-> \textit{Panel}
+    \item<3-> \textit{Wide} versus \textit{Long} data
+    \item<4-> \textit{Time-varying} versus \textit{time-invariant}
+    \item<5-> \textit{Balanced} versus \textit{Unbalanced} panel
+    \item<6-> \textit{Fixed effects}
+    \item<7-> \textit{Random effects}
+    \end{itemize}
+}
+
+
+\frame{
+    \frametitle{Panel versus Time-Series}
+    \begin{itemize}\itemsep1em
+    \item Cross-sectional data involve many units observed at one time
+    \item Panel data involve many units over at multiple points in time
+    \item Time-series data involve one (or more) units observed at multiple points time
+    \item Time-Series, Cross-Sectional (TSCS) data are panel data
+        \begin{itemize}
+        \item Sometimes the units are aggregations
+        \end{itemize}
+    \item \textit{Within-subjects} is also a synonym for panel analysis
+    \end{itemize}
+}
+
+
+\frame{
+    \frametitle{Causal Inference}
+    \begin{itemize}\itemsep1em
+    \item What is the goal of causal inference?
+    \item How do we define a causal effect (in terms of counterfactuals)?
+    \vspace{1em}
+    \item<2-> If $X_i$ is time-varying, we observe $Y_i$ for the same unit $i$ when $X_i$ takes on different values
+    \item<3-> Is this the same as observing both $Y_0it$ and $Y_1it$?
+    \item<4-> Then why are panel data useful?
+    \end{itemize}
+}
+
+
+
+\section{Model Types}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+    \frametitle{Nonlinear Panel Models Examples}
+    \begin{itemize}
+    \item<2-> Binary outcome
+    \item<3-> Ordered outcome
+    \item<4-> Count outcome
+    \item<5-> Multinomial outcome
+    \item<6-> Censored
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Review: Basic Panel Approaches}
+    \begin{itemize}\itemsep2em
+    \item Pooled estimator
+    \item Fixed effects estimator
+    \item Random effects estimator
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Review: Basic Panel Approaches}
+    \begin{itemize}\itemsep2em
+    \item Varying intercepts
+    \item Vary slopes
+    \item Varying intercepts and slopes
+    \end{itemize}
+}
+
+
+
+\frame{
+    \frametitle{Estimation Issues}
+    \begin{itemize}
+    \item Cross-sectional OLS models are easy to estimate
+    \item Linear panel models are fairly easy to estimate
+    \item<2-> Cross-sectional GLMs are hard to estimate
+        \begin{itemize}
+        \item No closed-form solution
+        \item Often rely on maximization algorithms
+        \end{itemize}
+    \item<3-> Nonlinear panel models are also hard to estimate
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Who cares?}
+    \begin{itemize}\itemsep2em
+    \item If Stata can give us numbers, who cares what's happening?
+    \item More difficult problem means greater diversity of solutions
+        \begin{itemize}
+        \item No obvious best solution
+        \item Terminology overload
+        \item Assumptions!
+        \end{itemize}
+    \item<2-> Be cautious when treading into unfamiliar waters
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Terms You Will See}
+    \begin{itemize}
+    \item Quadrature
+    \item Conditional Likelihood
+    \item Simulated Likelihood
+    \item Generalized Estimating Equation (GEE)
+    \item Generalized Method of Moments (GMM)
+    \end{itemize}
+}
+
+
+% binary (logit/probit)
+%% Wawro article
+
+
+% ordered (logit/prboit)
+
+
+% count models
+%% Seeberg article
+
+
+
+
+
+
+\frame{\frametitle{Questions?}}
+
+
+
+\section[Next Steps]{Review and Looking Forward}
+\frame{\tableofcontents[currentsection]}
+
+\frame{
+    \frametitle{Where have we been?}
+    \begin{itemize}\itemsep2em
+    \item What have we learned in this course?
+    \item What haven't we learned in this course?
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{What have we learned?}
+    \begin{itemize}\itemsep1em
+    \item<2-> Thinking about causality as counterfactuals
+    \item<2-> How to obtain causal inference from observational data
+    \item<2-> Analyzing continuous outcome data
+    \item<2-> Analyzing binary, ordered, and count outcome data
+    \item<2-> Analyzing event histories
+    \item<2-> Analyzing data over time
+    \item<2-> Managing complex data structures
+    \item<2-> Data interpretation!
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{What should I learn next?}
+    \begin{itemize}
+    \item<2-> Measurement: factor analysis, principal components, IRT
+    \item<3-> Design: surveys, experiments, data gathering
+    \item<4-> Classification: regression trees, classifiers, SVM
+    \item<5-> Clustering: K-means, hierarchical clustering
+    \item<6-> Nonparametric statistics
+    \item<7-> Bayesian statistics
+    \item<8-> Time series analysis
+    \item<9-> Data visualization
+    \item<10-> ``Big data''
+    \end{itemize}
+}
+
+
+\frame{
+    \frametitle{Goals for this course}
+    \begin{itemize}
+    \item Describe politically relevant research questions and hypotheses
+    \item Evaluate and deduce observable implications from political science theories 
+    \item Explain statistical procedures and their appropriate usages
+    \item Apply statistical procedures to relevant research problems
+    \item Synthesize results from statistical analyses into well-written and well-structured essays
+    \item Demonstrate how to use Stata for statistical analysis
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Exam}
+    \begin{itemize}\itemsep1em
+    \item Standard 7-day home assignment
+    \item We will give you a question and data
+    \item You write an essay that answers that question
+    \item To do well:
+        \begin{itemize}
+        \item Understand your analysis
+        \item Justify your analysis
+        \item Interpret your analysis
+        \end{itemize}
+    \end{itemize}
+}
+
+\frame{\frametitle{Questions?}}
+
+
+\section{}
+
+\frame{
+    \frametitle{Course Evaluations}
+    \begin{itemize}\itemsep2em
+    \item What went well in this course?
+    \item What would you like to have gone differently?
+    \vspace{1em}
+    \item<2-> \url{http://www.survey-xact.dk/LinkCollector?key=YAV25A9Q359N}
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Preview}
+    \begin{itemize}\itemsep2em
+    \item Tomorrow: More panel GLMs in Stata
+        \begin{itemize}\itemsep1em
+        \item Predicted probabilities
+        \item Marginal effects
+        \item Graphing
+        \end{itemize}
+    \item Next week: Wrap-up/Final Questions
+    \end{itemize}
+}
+
+\appendix
+\frame{}
+
+\end{document}
