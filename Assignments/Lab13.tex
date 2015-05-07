@@ -1,0 +1,110 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+\textbf{Panel GLM Lab}
+\end{center}
+
+\noindent We will be working with a somewhat famous political behavior dataset called ``The Political Socialization Panel,'' which is a multi-generational, multi-year survey research project begun in 1965 by M. Kent Jennings and Richard G. Niemi. They originally interviewed graduating high school students and their parents in 1965. They then re-interviewed the students in 1973, 1982, and 1997. Numerous books and articles have been published on the data by these authors and their collaborators on topics ranging from political participation, tolerance, opinion change, parent-child political socialization, partisanship, ideology, and so forth.
+
+The data are useful to us this week because they provide a four-wave panel dataset that includes numerous binary, ordered, and count variables to analyze. You can obtain the data from Blackboard at \texttt{Additional materials > Data > SocializationPanel.dta}. These data are in \textit{wide} format, so that folder also contains a do-file (\texttt{SocializationPanel.do}) that relabels the variables and restructures the data to \textit{long}. A codebook for the original, wide dataset is also provided (\texttt{SocializationPanel.pdf}).
+
+\begin{enumerate}\itemsep1em
+
+\item Before working with these data, you may want to work through Cameron and Trivedi Ch.18 to get a sense of what's about to happen.
+
+\item Load the data file into Stata.
+
+\item Open and run \texttt{SocializationPanel.do}. You can add the following analyses to that file.
+
+\item Use \texttt{xtset} to specify \texttt{respondent} and \texttt{year} as the features of the panel structure. Recall you can use \texttt{tab} (by \texttt{year}) and/or \texttt{xtsum} to obtain various summaries of panel data.
+
+\section{Binary Outcomes}
+
+\item We will start by trying to model whether a respondent has a university degree (see \texttt{edudegree}). This variable is categorical and missing values mean no \textit{new} university degree since the last panel interview wave. Create a new variable \texttt{degree} that is 1 for anyone who has a degree from the current or any previous wave and 0 in all waves where they have not yet earned a degree. For someone who never earns a degree, all of their values 0; for someone who earns a degree before 1973, all of their values are 1; for someone who earns a degree between 1973 and 1982, their value is 0 in 1973 and 1 thereafter. Note that no one has a degree in 1965. You will have to reshape the data back to wide to do this, create year-specific new variables (named following the 65, 73, 82, 97 convention) and then use \texttt{reshape long} to return to long format, but you will have to add your new variable to the varlist in that command:
+
+\begin{alltt}
+reshape wide
+gen degree65 = 0
+recode edudegree73 (.=0) (else=1), gen(degree73)
+recode edudegree82 (.=0) (else=1), gen(degree82)
+recode edudegree97 (.=0) (else=1), gen(degree97)
+replace degree82 = 1 if degree73 == 1
+replace degree97 = 1 if degree82 == 1
+reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy ///
+             ptrust trust trustgov knowledge tola tolb working indexa indexb polinfo ///
+             sex race class relig home incomef incomep thunion thbus thwhite thblack state degree, i(respondent) j(year)
+\end{alltt}
+
+\item Now look at \texttt{tab degree year} to see the development of education.\footnote{Note: You could also try analyzing these data as an event history by returning the data to wide format and creating a new variable specifying the time at which each person earned their degree.}
+
+\item Use \texttt{logit} and \texttt{probit} to obtained pooled estimates (ignoring the panel structure) of the effect of family income (\texttt{incomef}, recoded to drop 0 and 97 values) and any other variables of your choice on the outcome. Interpret the effects using \texttt{margins}.
+
+\item Now obtain fixed and random effects estimates using \texttt{xtlogit}. See discussion in Cameron and Trivedi (p.630) about the options for interpretation. In general, our usual fallback on \texttt{margins} does not provide straightforward interpretation.
+
+
+
+
+
+
+
+
+\item You can now try these procedures again for other binary outcome variables, such as whether someone owns their own home (\texttt{home}) or whether a respondent thinks most other people can be trust (\texttt{trust}).
+
+\section{Ordered Outcomes}
+
+\item There are several variables in the dataset that might be considered ordinal, such as \texttt{tola} and \texttt{tolb} (items about one's level of political tolerance), \texttt{trustgov} (a three-item measure of trust in the government), etc. You can use whichever variables you think can be treated ordinally to perform these analyses. We'll focus on the \texttt{trustgov}.
+
+\item \texttt{trustgov} has three categories coded 1,3,5. Create a new measure, \texttt{trustgov2}, that ranges from 0 to 2:\\
+\texttt{recode trustgov (1=2) (3=1) (5=0), gen(trustgovb)}
+
+\item How do levels of trust in the same vary over time?
+
+\item Performed pooled OLS and pooled ordered logit and probit analyses on these data, with whatever putatively causal variables you so choose. Interpret using \texttt{margins}. Specify a dummy variable for each respondent to manually obtain fixed effects estimates (use respondent-clustered standard errors in this case).
+
+\item Now, respect the panel data structure and use \texttt{xtreg} to obtain estimates and interpret the results in substantive terms using \texttt{margins}.
+
+\item We can obtain random effects estimates using \texttt{xtologit} and \texttt{xtoprobit}, which estimate random effects models.
+
+
+
+
+
+
+
+
+\texttt{xtoprobit} and \texttt{xtoprobit} fit random effects models.
+
+\section{Count Outcomes}
+
+\item There are three variables in the dataset that are explicitly counts: \texttt{knowledge}, \texttt{indexa}, and \texttt{indexb}. The latter two are measures of numbers of participatory events (i.e., how many acts of political participation the respondent has engaged in at each panel wave).
+
+\item \texttt{knowledge} is coded 1--7, where 1 means zero correct answers to questions about political information and 7 represents 6 correct answers. Use \texttt{replace} to recode knowledge to range from 0-6.
+
+\item Begin by estimating a simple pooled OLS model, with knowledge as a function of gender (you should create a new variable \texttt{female} that is 1 for women and 0 for men). How much more knowledgeable do men appear to be than women? Now estimate a fixed-effects model using \texttt{xtreg} with the \texttt{, fe} option. Why can't you estimate the effect of gender?
+
+\item Now estimate the model using a random effect specification. What is the effect of gender on knowledge?
+
+\item Now model in a Poisson framework (i.e., use \texttt{poisson} to obtain a pooled estimate that ignores panel structure). Keep in mind the need for robust standard errors. You may want to use clustered or robust standard errors here. Use \texttt{margins} to interpret the effect of gender. How much less knowledgeable are men than women? How does this effect vary across years, if at all?
+
+\item A concern with Poisson is overdispersion. Test for this (e.g., using the test described on p.575 of Cameron and Trivedi). Does there seem to be overdispersion? If so, what do you do?
+
+\item One strategy for dealing with overdispersion is to use negative-binomial regression. Again, estimate a pooled model ignoring panel structure using the \texttt{nbreg} command. How much less knowledgeable are women than men? Is that something that can be readily interpreted from the coefficient estimates?
+
+\item Now, re-estimate these models (OLS, Poisson, and negative-binomial) respecting the panel structure. 
+
+    \begin{itemize}
+    \item Start with OLS using a random effects specification: \texttt{xtreg knowledge female, vce(robust)}. Interpret the effect of gender using \texttt{margins}.
+    
+    \item Re-estimate using Poisson: \texttt{xtpoisson knowledge female, vce(robust)}. Interpret using \texttt{margins}. What's going on here? The default behavior of \texttt{margins} maybe unexpected; try again using the \texttt{, predict(nu0)} option.
+    
+    \item Re-estimate using negative-binomial (with \texttt{xtnbreg}): \texttt{xtnbreg knowledge female}. What happens? Why?
+    \end{itemize}
+
+\item Okay, okay, the above results have been hard on women. Let's focus on something else and, in particular, let's focus on a variable that is time-varying at the unit-level. Estimate a model that looks for the effect of education on knowledge. The education variable \texttt{educ} is categorical; recode it so that it represents any education (all categories are 1 and missing is recoded to 0). Use a pooled specification, fixed effect, and random effects and use OLS, Poisson, and negative-binomial alternatives. Compare the results using \texttt{margins}.
+
+\end{enumerate}
+
+\end{document}
