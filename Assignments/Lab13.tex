@@ -1,5 +1,7 @@
 \documentclass[a4paper,12pt]{article}
-\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{alltt}
 
 \begin{document}
 
@@ -44,6 +46,13 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
 
 \item Now obtain fixed and random effects estimates using \texttt{xtlogit}. See discussion in Cameron and Trivedi (p.630) about the options for interpretation. In general, our usual fallback on \texttt{margins} does not provide straightforward interpretation.
 
+\item Use a Hausman test to decide whether to use fixed or random effects (i.e., estimate using random effects, then fixed effects, storing coefficients each time, and then perform \texttt{hausman} on the stored estimates). The null hypothesis being tested is that the fixed effects are uncorrelated with other covariates. Rejecting it means that we should use the fixed effects approach.
+% webuse union
+% xtlogit union age grade not_smsa south southXt , i(id) re nolog
+% estimates store re
+% xtlogit union age grade not_smsa south southXt , i(id) fe nolog
+% estimates store fe
+% hausman fe re, eq(1:1)
 
 
 
@@ -66,12 +75,9 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
 
 \item Now, respect the panel data structure and use \texttt{xtreg} to obtain estimates and interpret the results in substantive terms using \texttt{margins}.
 
-\item We can obtain random effects estimates using \texttt{xtologit} and \texttt{xtoprobit}, which estimate random effects models.
+\item We can obtain random effects estimates using \texttt{xtologit} and \texttt{xtoprobit}, which estimate random effects models. Try this and attempt to make substantive interpretations using \texttt{predict} (with the \texttt{, pu0} option, for predicted probabilities) or \texttt{margins} (on the scale of the linear predictor). These interpretations will assume that the random effects are 0. You will need to move to a mixed effects framework in any other situation.
 
-
-
-
-
+\item Repeat this process looking at the measures of tolerance. Assess whether the difference between the measures is substantively consequential.
 
 
 
@@ -104,6 +110,10 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
     \end{itemize}
 
 \item Okay, okay, the above results have been hard on women. Let's focus on something else and, in particular, let's focus on a variable that is time-varying at the unit-level. Estimate a model that looks for the effect of education on knowledge. The education variable \texttt{educ} is categorical; recode it so that it represents any education (all categories are 1 and missing is recoded to 0). Use a pooled specification, fixed effect, and random effects and use OLS, Poisson, and negative-binomial alternatives. Compare the results using \texttt{margins}.
+
+\section{Multilevel Approach}
+
+\item Recall that panel data are a particular kind of hierarchical data structure where units are observed within time periods and the same cases are observed multiple times. (This differs from a repeated cross-sectional data structure, which is also hierarchical with units observed within time periods but where units are only observed once.) You could use a mixed effects, hierarchical regression approach to analyze panel data. If you're interested, you can examine the functions \texttt{xtmelogit} and \texttt{meprobit} (for binary outcomes), \texttt{meologit} and \texttt{meoprobit} (for ordered outcomes), and \texttt{mepoisson} and \texttt{menbreg} (for count outcomes). You're welcome to pursue any of these approaches on your own. The Stata Multilevel Mixed-Effects Reference Manual (\url{http://www.stata.com/manuals13/me.pdf}) provides some guidance.
 
 \end{enumerate}
 
