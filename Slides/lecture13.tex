@@ -18,7 +18,7 @@
 \frame{\tableofcontents[currentsection]}
 
 \frame{
-    \frametitle{Segue From Event-History Analysis}
+    \frametitle{Segue From Event-History}
     \begin{itemize}\itemsep1em
     \item Event history analysis involves the analysis of durations and probabilities of state changes over time across many units
     \item Each unit's trajectory or history can begin at an arbitrary point in time
@@ -32,14 +32,14 @@
 
 \frame{
     \frametitle{Panel Analysis}
-    \begin{itemize}\itemsep1em
+    \begin{itemize}\itemsep2em
     \item In event history analysis, time is our key variable
     \item In panel analysis:
         \begin{itemize}
         \item unit characteristics are our key variables
         \item observations exist simultaneously
         \end{itemize}
-    \item We are interested in effects of changes in $X$ on $Y$
+    \item We are interested in effects of $X$ on $Y$
     \end{itemize}
 }
 
@@ -68,7 +68,7 @@
         \begin{itemize}
         \item Sometimes the units are aggregations
         \end{itemize}
-    \item \textit{Within-subjects} is also a synonym for panel analysis
+    \item \textit{Within-subjects} analysis is panel analysis
     \end{itemize}
 }
 
@@ -92,7 +92,7 @@
 
 \frame{
     \frametitle{Nonlinear Panel Models Examples}
-    \begin{itemize}
+    \begin{itemize}\itemsep1em
     \item<2-> Binary outcome
     \item<3-> Ordered outcome
     \item<4-> Count outcome
@@ -126,20 +126,23 @@
     \item Pooled estimator
     \item Fixed effects estimator
     \item Random effects estimator
+    \vspace{1em}
+    \item<2-> We'll focus on binary models first
     \end{itemize}
 }
 
+
 \frame{
     \frametitle{Estimation Issues}
-    \begin{itemize}
+    \begin{itemize}\itemsep1em
     \item Cross-sectional OLS models are easy to estimate
     \item Linear panel models are fairly easy to estimate
-    \item<2-> Cross-sectional GLMs are hard to estimate
+    \item<2-> Cross-sectional GLMs are modestly hard to estimate
         \begin{itemize}
         \item No closed-form solution
         \item Often rely on maximization algorithms
         \end{itemize}
-    \item<3-> Nonlinear panel models are also hard to estimate
+    \item<3-> Nonlinear panel models are harder to estimate
     \end{itemize}
 }
 
@@ -153,13 +156,13 @@
         \item Terminology overload
         \item Assumptions!
         \end{itemize}
-    \item<2-> Be cautious when treading into unfamiliar waters
+    \item<2-> Be cautious when treading into unfamiliar waters!
     \end{itemize}
 }
 
 \frame{
-    \frametitle{Terms You Will See}
-    \begin{itemize}
+    \frametitle{Terms You Might See}
+    \begin{itemize}\itemsep1em
     \item Quadrature
     \item Conditional Likelihood
     \item Simulated Likelihood
@@ -168,53 +171,352 @@
     \end{itemize}
 }
 
-\frame{\frametitle{Questions?}}
-
 
 
 
 \frame{
     \frametitle{Pooled Estimator}
     \begin{itemize}\itemsep1em
-    \item 
+    \item $y_{it} = \beta_0 + \beta_1 x_{it} + \dots + \epsilon_{it}$
+    \item Ignores panel structure (interdependence)
+    \item Ignores heterogeneity between units
+    \item But, we can actually easily estimate and interpret this model!
+    \item Estimation uses ``generalized estimating equations'' (GEE)
+    \item Note: Also called \textit{population-averaged} model
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Pooled Estimator}
+    \begin{itemize}\itemsep1em
+    \item Continuous outcomes:\\
+        $y_{it} = \beta_0 + \beta_1 x_{it} + \dots + \epsilon_{it}$
+    \item Binary outcomes:\\
+        $y_{it}\ast = \beta_0 + \beta_1 x_{it} + \dots + \epsilon_{it}$\\
+        $y_{it} = 1$ if $y_{it}\ast > 0$, and 0 otherwise
+    \item Link functions are the same in panel as in cross-sectional
+        \begin{itemize}
+        \item Logit
+        \item Probit
+        \end{itemize}
+    \item Use clustered standard errors
+    \end{itemize}
+}
+
+
+
+
+
+\frame{
+    \frametitle{Respecting the Panel Structure}
+    \begin{itemize}\itemsep1em
+    \item With a panel structure, $\epsilon_{it}$ can be decomposed into two parts:
+        \begin{itemize}
+        \item $\upsilon_{it}$
+        \item $u_i$
+        \end{itemize}
+    \item If we assume $u_i$ is unrelated to $X$: fixed effects
+    \item If we allow a correlation: random effects
     \end{itemize}
 }
 
 \frame{
     \frametitle{Fixed Effects Estimator}
     \begin{itemize}\itemsep1em
-    \item 
+    \item This gives us:\\
+        \begin{equation}
+        \begin{array}{ll}
+        y_{it} & = \beta_{0} + \beta_1 x_{it} + \dots + \upsilon_{it} + u_i\\
+        y_{it} & = \beta_{0i}d_{it} + \beta_1 x_{it} + \dots + \upsilon_{it}
+        \end{array}
+        \end{equation}
+    \item Varying intercepts (one for each unit)
+    \item Can generalize to other specifications (e.g., fixed period effects)
+    \end{itemize}
+}
+
+
+\frame{
+    \frametitle{Fixed Effects Estimator}
+    \begin{itemize}\itemsep1em
+    \item Fixed effects terms absorb all time-invariant between-unit heterogeneity
+    \item Effects of time-invariant variables cannot be estimated
+    \item Each unit is its own control (``within'' estimation)
+    \item Two ways to estimate this:
+        \begin{itemize}
+        \item Unconditional maximum likelihood
+        \item Conditional maximum likelihood
+        \end{itemize}
+    \item Both are problematic
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Fixed Effects Estimator}
+    \begin{itemize}\itemsep1em
+    \item Unconditional maximum likelihood
+        \begin{itemize}
+        \item From OLS: dummy variables for each unit
+        \item Number of parameters to estimate increases with sample size
+        \item For logit/probit: \textit{incidental parameters problem}
+        \item Estimate become inconsistent
+        \end{itemize}
+    \item Conditional maximum likelihood
+        \begin{itemize}
+        \item From OLS: ``De-meaned'' data to avoid estimating unit-specific intercepts
+        \item For logit: condition on $Pr(Y_i=1)$ across all $t$ periods
+        \item Does not work for probit!
+        \end{itemize}
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Conditional MLE}
+    \begin{itemize}\itemsep1em
+    \item Estimates only based on units that change in $Y$
+    \item Effects of time-invariant variables are not estimable
+    \item Observations with time-invariant outcome are dropped
+    \item<2-> Estimation of two-wave panel using fixed-effects logistic regression is same as a pooled logistic regression where the outcome is direction of change regressed on time-differenced explanatory variables
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Fixed Effects Estimator}
+    \begin{itemize}\itemsep1em
+    \item Interpretation is difficult
+    \item Use \texttt{predict} to get fitted values on the latent scale
+    \item \texttt{margins, dydx()} is also problematic
+        \begin{itemize}
+        \item Use \texttt{, predict(xb)} to obtain log-odds marginal effects
+        \item Use \texttt{, predict(pu0)} to assume fixed effect is zero
+        \item Neither of those is the default
+        \end{itemize}
+    \end{itemize}
+}
+
+\frame{\frametitle{Questions?}}
+
+
+
+
+\frame{
+    \frametitle{Random Effects Estimator}
+    \begin{itemize}\itemsep1em
+    \item If we are willing to assume that unit-specific error term is uncorrelated with other variables
+    \item Why might this not be the case?
+    \item<2-> Pooled estimator also makes this assumption
+    \item<2-> But that estimator ignores panel structure (non-independence)
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Estimation hell!}
+    \begin{itemize}\itemsep0.5em
+    \item<2-> Due to \textit{incidental parameters problem} we cannot consistently estimate both the regression coefficients and the unit-specific effects
+    \item<3-> We have to make some assumptions about the unit-specific error terms
+    \item<3-> But assumptions get us to a likelihood function that can only be maximized via \textit{integration} of a complicated function
+    \item<3-> Quadrature (a form of numerical approximation of an integral) is therefore used (costly!)
     \end{itemize}
 }
 
 \frame{
     \frametitle{Random Effects Estimator}
     \begin{itemize}\itemsep1em
-    \item 
+    \item Can be used with logit or probit
+    \item Interpretation is messy because unit-specific error terms are unobserved
+    \item Thus marginal effects calculation must make an assumption of about the random effects:
+        \begin{itemize}
+        \item Predict log-odds: \texttt{margins, dydx(*)}
+        \item Assume they are 0: \texttt{, predict(pu0)}
+        \end{itemize}
     \end{itemize}
 }
 
 
+\frame{
+    \frametitle{Random versus Fixed Effects}
+    \begin{itemize}\itemsep1em
+    \item Different assumptions
+    \item Very different estimation strategies
+        \begin{itemize}
+        \item These are consequential for interpretation
+        \end{itemize}
+    \item Use Hausman test to decide between estimators:
+        {\small
+        \begin{alltt}
+        xtlogit \dots, fe\\
+        estimates store \textit{fixed}\\
+        xtlogit \dots, re\\
+        estimates store \textit{random}\\
+        hausman \textit{fixed} \textit{random}
+        \end{alltt}
+        }
+    \item Use FE if $H_0$ rejected
+    \end{itemize}
+}
 
 
+\frame{
+    \frametitle{Reminder!}
+    \begin{itemize}\itemsep1em
+    \item Some outcomes are binary but are constant before and after an ``event''
+        \begin{itemize}
+        \item Individual graduates from university
+        \item Country transitions to democracy
+        \end{itemize}
+    \item We can analyze these using binary outcome panel models \textit{or} using event-history methods from last week
+    \item Either might be appropriate, depending on the research question, hypothesis, and data
+    \end{itemize}
+}
+
+\frame{\frametitle{Questions about Binary Models?}}
 
 
-% binary (logit/probit)
-%% Wawro article
+\frame{
+    \frametitle{Example: Wawro}
+    \begin{itemize}\itemsep1em
+    \item Form groups of three
+    \item Discuss:\\
+        \begin{itemize}\itemsep1em
+        \item What is the research question?
+        \item What is the method used?
+        \item What are the results?
+        \end{itemize}
+    \end{itemize}
+
+}
 
 
-% ordered (logit/prboit)
+\frame{
+    \frametitle{Ordered Outcome Models}
+    \begin{itemize}\itemsep1em
+    \item Estimators exist, but only random effects is implemented in Stata
+        \begin{itemize}
+        \item Logit and probit available
+        \end{itemize}
+    \item Other possible analysis strategies:
+        \begin{itemize}\itemsep0.5em
+        \item Use a linear panel specification (\texttt{xtreg})
+        \item Estimate a pooled model (\texttt{ologit}/\texttt{oprobit}) with clustered SEs
+        \item Recode categories to binary and use \texttt{xtlogit}
+        \item Use a mixed effects specification (\texttt{meologit}/\texttt{meoprobit})
+        \end{itemize}
+    \end{itemize}
+}
 
 
-% count models
-%% Seeberg article
+\frame{
+    \frametitle{Count Outcome Models}
+    \begin{itemize}\itemsep1em
+    \item Count outcome models are somewhat easier to estimate than binary outcome models
+    \item Still have pooled, fixed effects, and random effects strategies
+    \item As in cross-sectional data, prefer negative binomial regression over Poisson regression when there is \textit{overdispersion}
+    \item Methods using unconditional maximum likelihood (fixed effects) are computationally expensive
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Interpreting Count Models}
+    \begin{itemize}\itemsep1em
+    \item Predict the linear/latent scale:\\
+        \texttt{margins, predict(xb)}
+    \item Predict outcomes, assuming fixed/random effect is zero:\\
+        \texttt{margins, predict(nu0)}
+    \item With RE, assuming random effect is zero:\\
+        \texttt{margins, predict(pr0(\textit{n}))}, where \texttt{\textit{n}} is number of events
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Interpreting Count Models}
+    \begin{itemize}\itemsep1em
+    \item Coefficients can be translated into \textit{incidence rate ratios} using \texttt{, irr} option in Stata
+    \item This is sort of like the odds-ratio interpretation for binary outcome models
+    \item Meaning: a unit change in $x$ produces a change in the incidence rate for the outcome
+        \begin{itemize}
+        \item If $IRR > 1$: unit change in $x$ increases rate of $y$
+        \item If $IRR < 1$: unit change in $x$ decreases rate of $y$
+        \end{itemize}
+    \item May be helpful, may not. You can choose for yourself.
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Example: Seeberg}
+    \begin{itemize}\itemsep1em
+    \item Form groups of three
+    \item Discuss:\\
+        \begin{itemize}\itemsep1em
+        \item What is the research question?
+        \item What is the method used?
+        \item What are the results?
+        \end{itemize}
+    \end{itemize}
+
+}
+
+\frame{\frametitle{Questions about Count Models?}}
 
 
+\frame{
+    \frametitle{Standard Errors}
+    \begin{itemize}\itemsep1em
+    \item Standard errors can be complicated
+    \item For pooled model, use standard errors clustered by unit
+        \begin{itemize}
+        \item \texttt{vce(robust)}
+        \item \texttt{vce(cluster id)}
+        \end{itemize}
+    \item For random effects, you may want bootstrapped standard errors
+    \item Always check for robustness
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Interpretation: Quick Review}
+    \begin{itemize}\itemsep1em
+    \item Usual rules don't apply
+    \item Estimation via an MLE variant usually means marginal effects are undefined
+    \item Depending on model specification, predicted values may also be \textit{conditional}
+    \item We have to make further assumptions to create an interpretable quantity of interest from the model
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Intepretation: Trade-offs}
+    \begin{itemize}\itemsep1em
+    \item Analytic trade-off between model choice and interpretability
+    \item Pooled estimates are interpretable in conventional ways, but use assumptions
+        \begin{itemize}
+        \item Ignores panel structure
+        \item No unobserved confounding/heterogeneity
+        \end{itemize}
+    \item Other models are harder to estimate and interpret, but may be more ``correct,'' though:
+        \begin{itemize}
+        \item RE assumes heterogeneity is not confounding
+        \item FE disallows effects of time-invariant variables
+        \end{itemize}
+    \end{itemize}
+}
+
+\frame{
+    \frametitle{Mixed Effects}
+    \begin{itemize}\itemsep1em
+    \item We can also estimate mixed effects models for non-linear outcomes
+    \item This works more or less as with linear outcomes
+        \begin{itemize}
+        \item Binary: \texttt{melogit}, \texttt{meprobit}
+        \item Ordered: \texttt{meologit}, \texttt{meoprobit}
+        \item Count: \texttt{mepoisson}, \texttt{menbreg}
+        \item Linear: \texttt{mixed}
+        \end{itemize}
+    \item Estimation and interpretation is similar to hierarchical linear models
+    \end{itemize}
+
+}
 
 
-
-
-\frame{\frametitle{Questions?}}
+\frame{\frametitle{Questions about anything?}}
 
 
 
@@ -231,15 +533,15 @@
 
 \frame{
     \frametitle{What have we learned?}
-    \begin{itemize}\itemsep1em
+    \begin{itemize}\itemsep0.5em
     \item<2-> Thinking about causality as counterfactuals
-    \item<2-> How to obtain causal inference from observational data
-    \item<2-> Analyzing continuous outcome data
-    \item<2-> Analyzing binary, ordered, and count outcome data
-    \item<2-> Analyzing event histories
-    \item<2-> Analyzing data over time
-    \item<2-> Managing complex data structures
-    \item<2-> Data interpretation!
+    \item<3-> How to obtain causal inference from observational data
+    \item<4-> Analyzing continuous outcome data
+    \item<5-> Analyzing binary, ordered, and count outcome data
+    \item<6-> Analyzing event histories
+    \item<7-> Analyzing data over time
+    \item<8-> Managing complex data structures
+    \item<9-> Data interpretation!
     \end{itemize}
 }
 
@@ -262,12 +564,12 @@
 \frame{
     \frametitle{Goals for this course}
     \begin{itemize}
-    \item Describe politically relevant research questions and hypotheses
-    \item Evaluate and deduce observable implications from political science theories 
-    \item Explain statistical procedures and their appropriate usages
-    \item Apply statistical procedures to relevant research problems
-    \item Synthesize results from statistical analyses into well-written and well-structured essays
-    \item Demonstrate how to use Stata for statistical analysis
+    \item<2-> Describe politically relevant research questions and hypotheses
+    \item<3-> Evaluate and deduce observable implications from political science theories 
+    \item<4-> Explain statistical procedures and their appropriate usages
+    \item<5-> Apply statistical procedures to relevant research problems
+    \item<6-> Synthesize results from statistical analyses into well-written and well-structured essays
+    \item<7-> Demonstrate how to use Stata for statistical analysis
     \end{itemize}
 }
 
@@ -306,13 +608,13 @@
     \frametitle{Preview}
     \begin{itemize}\itemsep2em
     \item Tomorrow: More panel GLMs in Stata
-        \begin{itemize}\itemsep1em
-        \item Predicted probabilities
-        \item Marginal effects
-        \item Graphing
+    \item Next week:
+        \begin{itemize}
+        \item Optional Q/A Session (14:15--15:00)
+        \item In this room
+        \item Readings test your knowledge on complex articles
         \end{itemize}
-    \item Next week: Optional Q/A Session
-    \item Readings: Test your knowledge on complex articles
+    \item PhD Students: meet here next week at 15:00
     \end{itemize}
 }
 

@@ -2,18 +2,26 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \usepackage{alltt}
+\usepackage{setspace}
+
+\vspace{-2em}
+
+\title{Panel GLM Lab}
 
 \begin{document}
 
-\begin{center}
-\textbf{Panel GLM Lab}
-\end{center}
+\maketitle
 
+{\onehalfspacing
 \noindent We will be working with a somewhat famous political behavior dataset called ``The Political Socialization Panel,'' which is a multi-generational, multi-year survey research project begun in 1965 by M. Kent Jennings and Richard G. Niemi. They originally interviewed graduating high school students and their parents in 1965. They then re-interviewed the students in 1973, 1982, and 1997. Numerous books and articles have been published on the data by these authors and their collaborators on topics ranging from political participation, tolerance, opinion change, parent-child political socialization, partisanship, ideology, and so forth.
 
 The data are useful to us this week because they provide a four-wave panel dataset that includes numerous binary, ordered, and count variables to analyze. You can obtain the data from Blackboard at \texttt{Additional materials > Data > SocializationPanel.dta}. These data are in \textit{wide} format, so that folder also contains a do-file (\texttt{SocializationPanel.do}) that relabels the variables and restructures the data to \textit{long}. A codebook for the original, wide dataset is also provided (\texttt{SocializationPanel.pdf}).
 
+}
+
 \begin{enumerate}\itemsep1em
+
+\section{Getting Started}
 
 \item Before working with these data, you may want to work through Cameron and Trivedi Ch.18 to get a sense of what's about to happen.
 
@@ -21,7 +29,7 @@ The data are useful to us this week because they provide a four-wave panel datas
 
 \item Open and run \texttt{SocializationPanel.do}. You can add the following analyses to that file.
 
-\item Use \texttt{xtset} to specify \texttt{respondent} and \texttt{year} as the features of the panel structure. Recall you can use \texttt{tab} (by \texttt{year}) and/or \texttt{xtsum} to obtain various summaries of panel data.
+\item Use \texttt{xtset} to specify \texttt{respondent} and \texttt{year} as the features of the panel structure. Recall you can use \texttt{tab} (by \texttt{year}), \texttt{xttab}, \texttt{xttrans}, \texttt{xtdescribe}, and \texttt{xtsum} to obtain various summaries of panel data.
 
 \section{Binary Outcomes}
 
@@ -35,16 +43,31 @@ recode edudegree82 (.=0) (else=1), gen(degree82)
 recode edudegree97 (.=0) (else=1), gen(degree97)
 replace degree82 = 1 if degree73 == 1
 replace degree97 = 1 if degree82 == 1
-reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy ///
-             ptrust trust trustgov knowledge tola tolb working indexa indexb polinfo ///
-             sex race class relig home incomef incomep thunion thbus thwhite thblack state degree, i(respondent) j(year)
+reshape long educ edudegree partyid spedu spid ideology intefficacy ///
+             extefficacy ptrust trust trustgov knowledge tola tolb ///
+             working indexa indexb polinfo sex race class relig ///
+             home incomef incomep thunion thbus thwhite thblack ///
+             state degree, i(respondent) j(year)
 \end{alltt}
 
 \item Now look at \texttt{tab degree year} to see the development of education.\footnote{Note: You could also try analyzing these data as an event history by returning the data to wide format and creating a new variable specifying the time at which each person earned their degree.}
 
-\item Use \texttt{logit} and \texttt{probit} to obtained pooled estimates (ignoring the panel structure) of the effect of family income (\texttt{incomef}, recoded to drop 0 and 97 values) and any other variables of your choice on the outcome. Interpret the effects using \texttt{margins}.
+\item Use \texttt{logit} and \texttt{probit} to obtained pooled estimates (ignoring the panel structure) of the effect of family income (\texttt{incomef}, recoded to drop 0 and 97 values) and any other variables of your choice on the outcome. Use clustered standard errors.
 
-\item Now obtain fixed and random effects estimates using \texttt{xtlogit}. See discussion in Cameron and Trivedi (p.630) about the options for interpretation. In general, our usual fallback on \texttt{margins} does not provide straightforward interpretation.
+\item Interpret the effects using \texttt{margins}. You can also obtain pooled estimates using \texttt{xtlogit} or \texttt{xtprobit} with the \texttt{, pa} option. Coefficients may differ to some extent from what you just estimated.
+
+\item Now obtain fixed and random effects estimates using \texttt{xtlogit} with the \texttt{, fe} and \texttt{, re} options.
+
+\item Attempt to interpret these results using the following approaches:
+
+    \begin{itemize}
+    \item Use \texttt{margins, predict(xb)} to obtain predicted log-odds
+    \item Use \texttt{margins, dydx(*) predict(pu0)} to obtain predicted probabilities, assuming the fixed or random effect is zero
+    \item Use \texttt{margins, dydx(*) predict(xb)} to obtain marginal effects in log-odds terms
+    \item Use \texttt{margins, dydx(*) predict(pu0)} to obtain marginal effects in probability terms, assuming the fixed or random effect is zero
+    \end{itemize}
+
+See discussion in Cameron and Trivedi (p.630) or \texttt{help xtlogit postestimation} about the options for interpretation. In general, our usual fallback on \texttt{margins} does not provide the same straightforward interpretation as in cross-sectional analyses.
 
 \item Use a Hausman test to decide whether to use fixed or random effects (i.e., estimate using random effects, then fixed effects, storing coefficients each time, and then perform \texttt{hausman} on the stored estimates). The null hypothesis being tested is that the fixed effects are uncorrelated with other covariates. Rejecting it means that we should use the fixed effects approach.
 % webuse union
@@ -54,13 +77,11 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
 % estimates store fe
 % hausman fe re, eq(1:1)
 
+\item It is not possible to estimate a fixed-effects probit model, but you can estimate a random effects model using \texttt{xtprobit, re}. Try this and attempt to interpret the results.
 
+\item Recall you can also estimate an event-history model for the \texttt{degree} variable because it only changes once for each respondent. Feel free to apply methods from last week to achieve this, if you so desire.
 
-
-
-
-
-\item You can now try these procedures again for other binary outcome variables, such as whether someone owns their own home (\texttt{home}) or whether a respondent thinks most other people can be trust (\texttt{trust}).
+\item You can now try any of these procedures again for other binary outcome variables, such as whether someone owns their own home (\texttt{home}) or whether a respondent thinks most other people can be trust (\texttt{trust}).
 
 \section{Ordered Outcomes}
 
@@ -75,13 +96,12 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
 
 \item Now, respect the panel data structure and use \texttt{xtreg} to obtain estimates and interpret the results in substantive terms using \texttt{margins}.
 
-\item We can obtain random effects estimates using \texttt{xtologit} and \texttt{xtoprobit}, which estimate random effects models. Try this and attempt to make substantive interpretations using \texttt{predict} (with the \texttt{, pu0} option, for predicted probabilities) or \texttt{margins} (on the scale of the linear predictor). These interpretations will assume that the random effects are 0. You will need to move to a mixed effects framework in any other situation.
+\item We can obtain random effects estimates using \texttt{xtologit} and \texttt{xtoprobit}. These commands only estimate random effects models, so you don't need to specify \texttt{, re}.
+
+\item Attempt to make substantive interpretations using the \texttt{margins} command with the options described for binary outcome models.\footnote{You will need to move to a linear outcome model, mixed effects estimation, or a pooled model in order to make other kind of substantive interpretations.}
 
 \item Repeat this process looking at the measures of tolerance. Assess whether the difference between the measures is substantively consequential.
 
-
-
-\texttt{xtoprobit} and \texttt{xtoprobit} fit random effects models.
 
 \section{Count Outcomes}
 
@@ -89,11 +109,13 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
 
 \item \texttt{knowledge} is coded 1--7, where 1 means zero correct answers to questions about political information and 7 represents 6 correct answers. Use \texttt{replace} to recode knowledge to range from 0-6.
 
-\item Begin by estimating a simple pooled OLS model, with knowledge as a function of gender (you should create a new variable \texttt{female} that is 1 for women and 0 for men). How much more knowledgeable do men appear to be than women? Now estimate a fixed-effects model using \texttt{xtreg} with the \texttt{, fe} option. Why can't you estimate the effect of gender?
+\item Begin by estimating a simple pooled OLS model, with knowledge as a function of gender (you should create a new variable \texttt{female} that is 1 for women and 0 for men). How much more knowledgeable do men appear to be than women?
+
+\item Now estimate a fixed-effects model using \texttt{xtreg} with the \texttt{, fe} option. Why can't you estimate the effect of gender?
 
 \item Now estimate the model using a random effect specification. What is the effect of gender on knowledge?
 
-\item Now model in a Poisson framework (i.e., use \texttt{poisson} to obtain a pooled estimate that ignores panel structure). Keep in mind the need for robust standard errors. You may want to use clustered or robust standard errors here. Use \texttt{margins} to interpret the effect of gender. How much less knowledgeable are men than women? How does this effect vary across years, if at all?
+\item Now model this in a Poisson framework (i.e., use \texttt{poisson} to obtain a pooled estimate that ignores panel structure). Keep in mind the need for clustered standard errors. Use \texttt{margins} to interpret the effect of gender. How much less knowledgeable are men than women? How does this effect vary across years, if at all?
 
 \item A concern with Poisson is overdispersion. Test for this (e.g., using the test described on p.575 of Cameron and Trivedi). Does there seem to be overdispersion? If so, what do you do?
 
@@ -109,11 +131,15 @@ reshape long educ edudegree partyid spedu spid ideology intefficacy extefficacy 
     \item Re-estimate using negative-binomial (with \texttt{xtnbreg}): \texttt{xtnbreg knowledge female}. What happens? Why?
     \end{itemize}
 
-\item Okay, okay, the above results have been hard on women. Let's focus on something else and, in particular, let's focus on a variable that is time-varying at the unit-level. Estimate a model that looks for the effect of education on knowledge. The education variable \texttt{educ} is categorical; recode it so that it represents any education (all categories are 1 and missing is recoded to 0). Use a pooled specification, fixed effect, and random effects and use OLS, Poisson, and negative-binomial alternatives. Compare the results using \texttt{margins}.
+\item Okay, okay, the above results have been hard on women. Let's focus on something else and, in particular, let's focus on a variable that is time-varying at the unit-level. Estimate a model that looks for the effect of education on knowledge. The education variable \texttt{educ} is categorical; recode it so that it represents any education (all categories are 1 and missing is recoded to 0).
+
+\item Use a pooled specification, fixed effect, and random effects and use OLS, Poisson, and negative-binomial alternatives. Compare the results.
 
 \section{Multilevel Approach}
 
-\item Recall that panel data are a particular kind of hierarchical data structure where units are observed within time periods and the same cases are observed multiple times. (This differs from a repeated cross-sectional data structure, which is also hierarchical with units observed within time periods but where units are only observed once.) You could use a mixed effects, hierarchical regression approach to analyze panel data. If you're interested, you can examine the functions \texttt{xtmelogit} and \texttt{meprobit} (for binary outcomes), \texttt{meologit} and \texttt{meoprobit} (for ordered outcomes), and \texttt{mepoisson} and \texttt{menbreg} (for count outcomes). You're welcome to pursue any of these approaches on your own. The Stata Multilevel Mixed-Effects Reference Manual (\url{http://www.stata.com/manuals13/me.pdf}) provides some guidance.
+\item Recall that panel data are a particular kind of hierarchical data structure where units are observed within time periods and the same cases are observed multiple times. (This differs from a repeated cross-sectional data structure, which is also hierarchical with units observed within time periods but where units are only observed once.) You could use a mixed effects, hierarchical regression approach to analyze panel data.
+
+\item If you're interested, you can examine the functions \texttt{melogit} and \texttt{meprobit} (for binary outcomes), \texttt{meologit} and \texttt{meoprobit} (for ordered outcomes), and \texttt{mepoisson} and \texttt{menbreg} (for count outcomes), and \texttt{mixed} (for continuous outcomes). You're welcome to pursue any of these approaches on your own. The Stata Multilevel Mixed-Effects Reference Manual (\url{http://www.stata.com/manuals13/me.pdf}) provides some guidance.
 
 \end{enumerate}
 
